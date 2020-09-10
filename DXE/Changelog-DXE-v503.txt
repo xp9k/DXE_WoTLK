@@ -1,0 +1,24 @@
+tag v503
+67f1042077213ece3359250bd3e2438b0d08c5f5
+kollektiv <kollektiv@pc>
+2010-07-24 17:33:41 -0400
+
+Tagging as v503
+
+
+--------------------
+
+kollektiv:
+	- Validator: Add more error checking to stub RegisterEncounter
+	- Validator: Fix another leaked global
+	- Alerts: Fix leaked global. Any messages with localized "YOU" will no longer be
+	announced
+	- Validator: Fix variable typo
+	- Ticket #127: Sanitize color codes right before sending
+	- Validator: Add better error context messages
+	- Validator: nil out data after finishing and set correct upper bound on tracing.powers
+	- Complete rewrite of validator
+	- Remove blank tables
+	- Halion (15): Fix localization references
+	- Invoker: Fix variables names
+	- Invoker: Fix a typo dsflags -> dstflags
