@@ -1969,6 +1969,14 @@ options["You can fire local or raid bars. Local bars are only seen by you. Raid 
 options["You can output warning messages many different ways and they will only be seen by you. If you don't want to see these then click |cffffd200'None'|r"] = "Вы можете вывести предупреждающие сообщения множеством разных способов, и они будут видны только вам. Если вы не хотите видеть их, тогда кликните |cffffd200'None'|r"
 options["You can remove custom sounds labels. Select a sound label from the dropdown and then click remove"] = "Вы можете удалять собственные звуковые сигналы. Выберите необходимый сигнал из выпадающего меню и нажмите кнопку \"Убрать\"."
 options["You can send encounters to the entire raid or to a player. You can check versions by typing |cffffd200/dxe %s|r or by opening the version checker from the pane"] = "Вы можете отправить настройки босса всему рейду или отдельному игроку. Для проверки версий напишите |cffffd200/dxe %s|r или откройте проверку версий в панели"
+options["Enable Flump messages"] = "Выводить сообщения Flump"
+options["channel"] = "Канал"
+options["Channel"] = "Канал вывода"
+options["combat"] = "Только в бою"
+options["Only in combat"] = "Показывать сообщения только в бою"
+options["only_tanks"] = "Только танки"
+options["Only tanks"] = "Показывать сообщения только от танков"
+
 
 AL:GetLocale("DXE").options = AL:GetLocale("DXE Options")
 

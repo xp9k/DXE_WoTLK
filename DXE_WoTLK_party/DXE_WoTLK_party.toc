@@ -4,7 +4,7 @@
 ## Author: xp9k
 ## LoadOnDemand: 1
 ## Dependencies: DXE
-## X-DXE-Category: WoTLK_party
+## X-DXE-Category: Подземелья WoTLK
 ## X-DXE-Zone: WoTLK_party
 ## X-Curse-Packaged-Version: v503
 ## X-Curse-Project-Name: Deus Vox Encounters

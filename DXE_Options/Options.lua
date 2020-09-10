@@ -448,7 +448,73 @@ local function InitializeOptions()
 	-- FLUMP
 	---------------------------------------------
 	
+	local chats_loc = {
+		L["NONE"],
+		L["SELF"],
+		L["PARTY"],
+		L["RAID"],
+	}
+
+	local chats = {
+		"NONE",
+		"SELF",
+		"PARTY",
+		"RAID",
+	}
 	
+	do
+		local flump_group = {
+			type = "group",
+			name = "Flump",
+			order = 800,
+			args = {
+				description = {
+					type = "description",
+					name = L.options["Enable Flump messages"],
+					order = 1,
+		--			width = "full",
+					fontSize = "medium",
+				},
+				chat = {
+					type = "select",
+					name = L.options["channel"],
+					desc = L.options["Channel"],
+					order = 2,
+					values = chats_loc,
+		--			width = "half",
+					get = function(info) return db.profile[info[#info]] end,
+					set = function(info, index) db.profile[info[#info]] = index > 4 and nil or index end,
+				},
+				separator3 = {
+					type = "description",
+					name = " ",
+					order = 3,
+					width = "full",
+				},
+				incombat = {
+					type = "toggle",
+					name = L.options["combat"],
+					desc = L.options["Only in combat"],
+					order = 4,
+					values = incombat,
+		--			width = "half",
+					get = function() return db.profile.incombat end,
+					set = function(_, value) db.profile.incombat = value end,
+				},
+				onlytanks = {
+					type = "toggle",
+					name = L.options["only_tanks"],
+					desc = L.options["Only tanks"],
+					order = 5,
+					values = onlytanks,
+		--			width = "half",
+					get = function() return db.profile.onlytanks end,
+					set = function(_, value) db.profile.onlytanks = value end,
+				},
+			},
+		}
+		opts_args.flump_group = flump_group
+	end
 
 	---------------------------------------------
 	-- ABOUT
