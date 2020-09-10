@@ -181,6 +181,13 @@ do
 				icon = ST[70923],
 			},
 		},
+		announces = {
+			swarmingshadowsay = {
+				varname = format(L.alert["Say %s on self"],SN[71265]),
+				type = "SAY",
+				msg = format(L.alert["%s on Me"],SN[71265]).."!",
+			},
+		},
 		windows = {
 			proxwindow = true,
 		},
@@ -255,6 +262,7 @@ do
 					{
 						"expect",{"#4#","==","&playerguid&"},
 						"quash","swarmingshadowself",
+						"announce","swarmingshadowsay",
 					},
 				},
 			},
