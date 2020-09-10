@@ -77,7 +77,7 @@ do
 				text = format("%s: %s!",SN[70126],L.alert["YOU"]).."!",
 				time = 3,
 				icon = ST[70126],
-				sound = "ALERT7",
+				sound = "ALERT3",
 				flashscreen = true,
 			},
 			icygripcd = {
@@ -96,7 +96,7 @@ do
 				time = 5,
 				flashtime = 5,
 				color1 = "ORANGE",
-				sound = "ALERT2",
+--				sound = "ALERT2",
 				icon = ST[71047],
 			},
 			unchainedself = {
@@ -107,7 +107,7 @@ do
 				flashtime = 30,
 				color1 = "TURQUOISE",
 				flashscreen = true,
-				sound = "ALERT3",
+				sound = "ALERT2",
 				icon = ST[69762],
 			},
 			unchainedcd = {
@@ -117,7 +117,7 @@ do
 				time = "<unchainedtime>",
 				flashtime = 10,
 				color1 = "WHITE",
-				sound = "ALERT5",
+--				sound = "ALERT5",
 				icon = ST[69762],
 			},
 			instabilityself = {
@@ -130,11 +130,12 @@ do
 				icon = ST[69766],
 			},
 			chilledstackself = {
-				varname = format(L.alert["%s Stacks"],L.alert["Chilled"]).." == 4",
+				varname = format(L.alert["%s Stacks"],L.alert["Chilled"]).." >= 4",
 				type = "simple",
 				text = format("%d "..L.alert["%s Stacks"].."! %s!",4,L.alert["Chilled"],L.alert["CAREFUL"]),
 				time = 3,
 				color1 = "CYAN",
+				sound = "ALERT1",
 				icon = ST[70106],
 				flashscreen = true,
 			},
@@ -172,7 +173,7 @@ do
 				time = 5.85, -- average: ranges from 5.3 to 6.5
 				flashtime = 5.85,
 				color1 = "BLUE",
-				sound = "ALERT5",
+--				sound = "ALERT5",
 				icon = ST[71053],
 				throttle = 3,
 			},
@@ -629,7 +630,7 @@ do
 						"quash","chilledself",
 						"set",{chilledtext = format("%s: %s! %s!",L.alert["Chilled"],L.alert["YOU"],format(L.alert["%s Stacks"],"#11#"))},
 						"alert","chilledself",
-						"expect",{"#11#","==","4"},
+						"expect",{"#11#",">=","4"},
 						"alert","chilledstackself",
 					},
 				},

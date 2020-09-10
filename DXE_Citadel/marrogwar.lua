@@ -45,6 +45,7 @@ do
 				color1 = "BLACK",
 				icon = "Interface\\Icons\\Achievement_Boss_LordMarrowgar",
 				throttle = 5,
+				enabled = false,
 			},
 			bonestormwarn = {
 				varname = format(L.alert["%s Casting"],SN[69076]),
@@ -53,7 +54,7 @@ do
 				time = 3,
 				flashtime = 3,
 				color1 = "GREEN",
-				sound = "ALERT5",
+--				sound = "ALERT5",
 				icon = ST[69076],
 			},
 			bonestormdur = {
@@ -72,7 +73,7 @@ do
 				time = "<bonetime>",
 				flashtime = 10,
 				color1 = "BLUE",
-				sound = "ALERT1",
+--				sound = "ALERT1",
 				icon = ST[69076],
 			},
 			coldflameself = {
@@ -81,7 +82,7 @@ do
 				text = format("%s: %s! %s!",SN[70823],L.alert["YOU"],L.alert["MOVE AWAY"]),
 				time = 3,
 				color1 = "INDIGO",
-				sound = "ALERT2",
+				sound = "ALERT1",
 				icon = ST[70823],
 				flashscreen = true,
 			},
@@ -92,7 +93,7 @@ do
 				time = 3,
 				flashtime = 3,
 				color1 = "GREY",
-				sound = "ALERT3",
+--				sound = "ALERT3",
 				icon = ST[70826],
 			},
 			graveyardcd = {

@@ -80,7 +80,7 @@ do
 				text = format(L.alert["%s Cooldown"],SN[69705]),
 				time = "<belowzerotime>",
 				flashtime = 10,
-				sound = "ALERT2",
+--				sound = "ALERT2",
 				color1 = "INDIGO",
 				icon = ST[69705],
 			},
@@ -91,7 +91,7 @@ do
 				time = 900,
 				flashtime = 900,
 				color1 = "BLUE",
-				sound = "ALERT5",
+--				sound = "ALERT5",
 				icon = ST[69705],
 			},
 			portalcd = {
@@ -101,7 +101,7 @@ do
 				time = "<portaltime>",
 				flashtime = 10,
 				color1 = "GOLD",
-				sound = "ALERT1",
+--				sound = "ALERT1",
 				icon = portal_icon,
 			},
 			battlefurydur = {

@@ -89,9 +89,9 @@ local defaults = {
 			IconPosition = "LEFT",
 		},
 		Sounds = {
-			ALERT1 = "Bell Toll Alliance",
-			ALERT2 = "Bell Toll Horde",
-			ALERT3 = "Low Mana",
+			ALERT1 = "PvP Flag Taken",
+			ALERT2 = "Warning",
+			ALERT3 = "Run Away",
 			ALERT4 = "Low Health",
 			ALERT5 = "Zing Alarm",
 			ALERT6 = "Wobble",
