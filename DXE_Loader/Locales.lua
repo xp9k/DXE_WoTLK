@@ -40,6 +40,7 @@ zone["The Ruby Sanctum"] = "Das Rubinsanktum"
 zone["Trial of the Crusader"] = "Prüfung des Kreuzfahrers"
 zone["Ulduar"] = "Ulduar"
 zone["Vault of Archavon"] = "Archavons Kammer"
+zone["WoTLK_party"] = "WoTLK party"
 
 
 AL:GetLocale("DXE").zone = AL:GetLocale("DXE Zone")
@@ -197,6 +198,7 @@ zone["Trial of the Crusader"] = "Испытание крестоносца"
 zone["Ulduar"] = "Ульдуар"
 zone["Vault of Archavon"] = "Склеп Аркавона"
 zone["WoTLK Party"] = "Поздемелья WoTLK"
+zone["WoTLK_party"] = "Поздемелья WoTLK"
 zone["The Forge of Souls"] = "Кузня Душ"
 
 AL:GetLocale("DXE").zone = AL:GetLocale("DXE Zone")

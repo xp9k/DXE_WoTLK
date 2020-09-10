@@ -12,13 +12,12 @@ do
 		category = L.zone["WoTLK Party"],
 		name = L.npc_wotlk_party["Bronjahm"],
 		triggers = {
-			yell = L.chat_wotlk_party["^Finally"],
-			scan = {
-				36497, 36498, -- Bronjahm
-			},
+			scan = {36497} -- Bronjahm
 		},
 		onactivate = {
 			tracing = {36497}, -- Bronjahm
+			tracerstart = true,
+			tracerstop = true,
 			combatstop = true,
 			defeat = 36497,
 		},
@@ -40,20 +39,20 @@ do
 			},
 			corruptsoulother = {
 				varname = format(L.alert["%s on others"],SN[68839]),
-				text = format("%s: %s!",SN[68839],L.alert["YOU"]),
+				text = format("%s: %s! %s!",SN[68839],L.alert["YOU"],L.alert["MOVE AWAY"]),
 				type = "centerpopup",
 				time = 4,
 				flashtime = 4,
 				sound = "ALERT4",
 				color1 = "MAGENTA",
 				icon = ST[68839],
-				flashscreen = true,
+				flashscreen = false,
 			},
 			corruptsoulcd = {
 				varname = format(L.alert["%s Cooldown"],SN[68839]),
 				type = "dropdown",
 				text = format(L.alert["%s Cooldown"],SN[68839]),
-				time = 40,
+				time = 25,
 				flashtime = 10,
 				color1 = "PURPLE",
 				icon = ST[68839],
@@ -79,21 +78,41 @@ do
 			-- Corrupt Soul
 			{
 				type = "combatevent",
-				eventtype = "SPELL_CAST_START",
+				eventtype = "SPELL_AURA_APPLIED",
 				spellid = 68839,
 				execute = {
 					{
-						"expect",{"#4#","==","&playerguid&"},
-						"alert", "corruptsoulcd",
-						"alert", "corruptsoulself",
 						"raidicon","corruptsoulmark",
+					},
+					{
+						"expect",{"#4#","==","&playerguid&"},
+						"alert", "corruptsoulself",						
 						"announce", "corruptsoulsay",
 					},
 					{
 						"expect",{"#4#","~=","&playerguid&"},
 						"alert", "corruptsoulother",
+					},
+				},
+			},
+			{
+				type = "combatevent",
+				eventtype = "SPELL_AURA_REMOVED",
+				spellid = 68839,
+				execute = {
+					{
 						"alert", "corruptsoulcd",
-						"raidicon","corruptsoulmark",
+					},
+				},
+			},
+			-- Soulstorm
+			{
+				type = "combatevent",
+				eventtype = "SPELL_CAST_START",
+				spellid = 68872,
+				execute = {
+					{
+						"quash", "corruptsoulcd",
 					},
 				},
 			},

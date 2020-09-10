@@ -20,6 +20,8 @@ AL:GetLocale("DXE").npc_wotlk_party = AL:GetLocale("DXE NPC WoTLK Party")
 if GetLocale() == "enUS" or GetLocale() == "enGB" then return end
 end
 
+
+
 local L = AL:NewLocale("DXE", "ruRU")
 if L then
 
@@ -32,6 +34,7 @@ AL:GetLocale("DXE").chat_wotlk_party = AL:GetLocale("DXE Chat WoTLK Party")
 -- NPC names
 local npc_wotlk_party = AL:NewLocale("DXE NPC WoTLK Party", "ruRU")
 npc_wotlk_party["Bronjahm"] = "Броньям"
+npc_wotlk_party["Devourer of Souls"] = "Пожиратель Душ"
 
 AL:GetLocale("DXE").npc_wotlk_party = AL:GetLocale("DXE NPC WoTLK Party")
 return
