@@ -1,19 +1,21 @@
 -------------------------------------------------------------------------------
--- Module Declaration
+-- flump Declaration
 --
 
-local plugin = BigWigs:NewPlugin("Flump")
-if not plugin then print("plugin not loaded") return end
+local addon,L = DXE,DXE.L
+local EDB = addon.EDB
+local flump = CreateFrame("Frame")
+local module = addon:NewModule("Flump")
+
+addon.Flump = module
 
 -------------------------------------------------------------------------------
 -- Locals
 --
 
-local L = LibStub("AceLocale-3.0"):GetLocale("Big Wigs: Plugins")
+local L = LibStub("AceLocale-3.0"):GetLocale("DXE")
 
-local db = nil
-
---local plugin = CreateFrame("frame")
+local db = addon.db
 
 local OUTPUT = "SELF"			-- Which channel should the announcements be sent to?
 local MIN_TANK_HP = 55000		-- How much health must a player have to be considered a tank?
@@ -30,7 +32,7 @@ local sw	 = "%s заканчивается на %s%s!"
 local cast	 = "%s%s применяет %s на %s%s!"
 local fade	 = "На %s%s заканчивается %s от %s%s!"
 local feast  = "%s%s готовит %s!"
-local gs	 = "%s%s's %s consumed: %d heal!"
+local gs	 = "%s%s's %s прокнул: %d отлечено!"
 local ad	 = "%s%s's %s consumed!"
 local res	 = "%s%s применяет %s на %s%s!"
 local portal = "%s%s открыл(а) %s!"
@@ -189,69 +191,19 @@ local chats = {
 -- Initialization
 --
 
-local function get(info)
-	local key = info[#info]
-	if not plugin.db.profile[key] then return 1
-	else return plugin.db.profile[key] end
-end
-local function set(info, index)
-	plugin.db.profile[info[#info]] = index > 4 and nil or index
-end
+-- local function get(info)
+	-- local key = info[#info]
+	-- if not flump.db.profile[key] then return 1
+	-- else return flump.db.profile[key] end
+-- end
+-- local function set(info, index)
+	-- flump.db.profile[info[#info]] = index > 4 and nil or index
+-- end
 
-plugin.defaultDB = {
+flump.defaultDB = {
 	chat = 1,
 	onlytanks = true,
 	incombat = true,
-}
-
-plugin.pluginOptions = {
-	type = "group",
-	name = "Flump",
-	args = {
-		description = {
-			type = "description",
-			name = L["flumpDescription"],
-			order = 1,
---			width = "full",
-			fontSize = "medium",
-		},
-		chat = {
-			type = "select",
-			name = L["channel"],
-			desc = L["channel_desc"],
-			order = 2,
-			values = chats_loc,
---			width = "half",
-			get = function(info) return plugin.db.profile[info[#info]] end,
-			set = function(info, index) plugin.db.profile[info[#info]] = index > 4 and nil or index end,
-		},
-		separator3 = {
-			type = "description",
-			name = " ",
-			order = 3,
-			width = "full",
-		},
-		incombat = {
-			type = "toggle",
-			name = L["combat"],
-			desc = L["combat_desc"],
-			order = 4,
-			values = incombat,
---			width = "half",
-			get = function() return plugin.db.profile.incombat end,
-			set = function(_, value) plugin.db.profile.incombat = value end,
-		},
-		onlytanks = {
-			type = "toggle",
-			name = L["only_tanks"],
-			desc = L["only_tanks_desc"],
-			order = 5,
-			values = onlytanks,
---			width = "half",
-			get = function() return plugin.db.profile.onlytanks end,
-			set = function(_, value) plugin.db.profile.onlytanks = value end,
-		},
-	},
 }
 
 --for i, j in pairs(port) do
@@ -259,7 +211,7 @@ plugin.pluginOptions = {
 --end
 
 --[[
-plugin:SetScript("OnEvent", function(self, event, ...)
+flump:SetScript("OnEvent", function(self, event, ...)
 	self[event](self, ...)
 end)
 ]]--
@@ -279,7 +231,7 @@ local function icon(name)
 end
 
 --[[
-function plugin:PLAYER_ENTERING_WORLD()
+function flump:PLAYER_ENTERING_WORLD()
 	local _, instance = IsInInstance()
 	if FlumpEnabled then
 		self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
@@ -294,8 +246,8 @@ function IsTank(srcName)
 	return  UnitHealthMax(srcName) >= MIN_TANK_HP or not db.onlytanks
 end
 
-function plugin:COMBAT_LOG_EVENT_UNFILTERED(_, timestamp, event, srcGUID, srcName, srcFlags, destGUID, destName, destFlags, spellID, spellName, school, ...)
-	if not BigWigs.db.profile.flump then return end
+function flump:COMBAT_LOG_EVENT_UNFILTERED(_, timestamp, event, srcGUID, srcName, srcFlags, destGUID, destName, destFlags, spellID, spellName, school, ...)
+	if not addon.db.profile.flump then return end
 
 	OUTPUT = chats[db.chat]
 --[[	
@@ -431,11 +383,11 @@ function plugin:COMBAT_LOG_EVENT_UNFILTERED(_, timestamp, event, srcGUID, srcNam
 	end	
 end
 
-function plugin:FlumpCombatLog(timestamp, event, srcGUID, srcName, srcFlags, destGUID, destName, destFlags, spellID, spellName, school, ...)
+function flump:FlumpCombatLog(timestamp, event, srcGUID, srcName, srcFlags, destGUID, destName, destFlags, spellID, spellName, school, ...)
 	self:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, srcFlags, destGUID, destName, destFlags, spellID, spellName, school, ...)
 end
 
-function plugin:OnPluginEnable()
+function flump:OnflumpEnable()
 	
 --	self:RegisterMessage("BigWigs_ProfileUpdate", updateProfile)
 
@@ -447,25 +399,44 @@ function plugin:OnPluginEnable()
 	end]]--
 end
 
-function plugin:Enable()
+function flump:Enable()
 	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", self:FlumpCombatLog(timestamp, event, srcGUID, srcName, srcFlags, destGUID, destName, destFlags, spellID, spellName, school))
 end
 
-function plugin:Disable()
+function flump:Disable()
 	self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 end
 
-function plugin:OnRegister()	
---	self:RegisterMessage("BigWigs_ProfileUpdate", updateProfile)
-	db = self.db.profile
-	
-	FlumpEnabled = BigWigs.db.profile.flump
-	chat = db.chat
-	OUTPUT = chats[db.chat]
-	inCombat = db.incombat
---	print(inCombat)
+function flump:Init()
+	-- FlumpEnabled = db.profile.flump
+	-- chat = db.chat
+	-- OUTPUT = chats[db.chat]
+	-- inCombat = db.incombat
+	-- print(inCombat)
 end
 
 local function updateProfile()
 	db = self.db.profile
 end
+
+function flump:ADDON_LOADED(name)
+	if name == "DXE_Flump" then
+		flump:Init()
+	elseif name == CORE_ADDON then
+		addon = DXE
+		addon.Flump = flump
+	end
+--	if not B_MODS and not Z_MODS then self:UnregisterEvent("ADDON_LOADED"); self.ADDON_LOADED = nil end
+end
+
+function module:OnInitialize()
+	flump:Init()
+	print(db)
+	print(db.profile)
+	print(db.profile.Flump)
+	print(db.profile.Flump.Chat)
+end
+
+flump:SetScript("OnEvent",function(self,event,...) self[event](self,...) end)
+flump:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+flump:RegisterEvent("ADDON_LOADED")

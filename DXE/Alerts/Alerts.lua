@@ -839,6 +839,14 @@ function module:QuashAll()
 	for bar in pairs(Active) do bar:Destroy() end
 end
 
+function module:QuashLFGInvite()
+	for bar in pairs(Active) do
+		if bar:GetID() == DXE_LFG_INVITE then
+			bar:Destroy()
+		end
+	end
+end
+
 function module:QuashByPattern(pattern)
 	for bar in pairs(Active) do
 		if bar:GetID() and find(bar:GetID(),pattern) then

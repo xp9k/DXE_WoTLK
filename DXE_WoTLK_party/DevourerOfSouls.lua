@@ -36,9 +36,10 @@ do
 				icon = ST[68982],
 				flashscreen = false,
 			},
-			mirroredsoulself = {
-				varname = format(L.alert["%s on self"],SN[69051]),
-				text = format("%s: %s!",SN[69051],L.alert["YOU"]),
+			mirroredsoulwarn = {
+				varname = format(L.alert["%s Duration"],SN[69051]),
+				type = "centerpopup",
+				text = format(L.alert["%s Duration"],SN[69051]),
 				type = "centerpopup",
 				time = 8,
 				flashtime = 8,
@@ -47,17 +48,6 @@ do
 				color2 = "YELLOW",
 				icon = ST[69051],
 				flashscreen = true,
-			},
-			mirroredsoulother = {
-				varname = format(L.alert["%s on others"],SN[69051]),
-				text = format("%s: %s! %s!",SN[69051],L.alert["YOU"],L.alert["MOVE AWAY"]),
-				type = "centerpopup",
-				time = 8,
-				flashtime = 8,
-				sound = "ALERT2",
-				color1 = "MAGENTA",
-				icon = ST[69051],
-				flashscreen = false,
 			},
 			mirroredsoulcd = {
 				varname = format(L.alert["%s Cooldown"],SN[69051]),
@@ -94,16 +84,25 @@ do
 				execute = {
 					{
 						"raidicon","mirroredsoulmark",
-						"alert", "mirroredsoulcd",
+						"alert", "mirroredsoulwarn",
 					},
 					{
 						"expect",{"#4#","==","&playerguid&"},
-						"alert", "mirroredsoulself",						
 						"announce", "mirroredsoulsay",
 					},
+				},
+			},
+			{
+				type = "combatevent",
+				eventtype = "SPELL_AURA_REMOVED",
+				spellid = 69051,
+				execute = {
 					{
-						"expect",{"#4#","~=","&playerguid&"},
-						"alert", "mirroredsoulother",
+						"removeraidicon","mirroredsoulmark",
+					},
+					{
+						"expect",{"#4#","==","&playerguid&"},
+						"alert", "mirroredsoulcd",
 					},
 				},
 			},

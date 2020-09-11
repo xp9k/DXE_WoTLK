@@ -52,7 +52,7 @@ do
 				varname = format(L.alert["%s Cooldown"],SN[68839]),
 				type = "dropdown",
 				text = format(L.alert["%s Cooldown"],SN[68839]),
-				time = 25,
+				time = 30,
 				flashtime = 10,
 				color1 = "PURPLE",
 				icon = ST[68839],
@@ -100,6 +100,9 @@ do
 				eventtype = "SPELL_AURA_REMOVED",
 				spellid = 68839,
 				execute = {
+					{
+						"removeraidicon","corruptsoulmark",
+					},
 					{
 						"alert", "corruptsoulcd",
 					},
