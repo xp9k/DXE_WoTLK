@@ -466,15 +466,14 @@ local function InitializeOptions()
 		local flump_group = {
 			type = "group",
 			name = "Flump",
---			get = function(info) return db.profile.Flump[info[#info]] end,
---			set = function(info,v) db.profile.Flump[info[#info]] = v end,
+			get = function(info) return db.profile.Flump[info[#info]] end,
+			set = function(info,v) db.profile.Flump[info[#info]] = v; addon:UpdateFlumpSettings() end,
 			order = 800,
 			args = {
 				description = {
 					type = "description",
 					name = L.options["Enable Flump messages"],
 					order = 1,
-		--			width = "full",
 					fontSize = "medium",
 				},
 				Enabled = {
@@ -484,8 +483,8 @@ local function InitializeOptions()
 					order = 2,
 					values = Enabled,
 					width = "full",
-					get = function() return db.profile.Flump.Enabled or false end,
-					set = function(_, value) db.profile.Flump.Enabled = value end,
+--					get = function() return db.profile.Flump.Enabled or false end,
+--					set = function(_, value) db.profile.Flump.Enabled = value end,
 				},
 				Chat = {
 					type = "select",
@@ -493,9 +492,8 @@ local function InitializeOptions()
 					desc = L.options["Channel"],
 					order = 3,
 					values = chats_loc,
-		--			width = "half",
 					get = function(info) return db.profile.Flump[info[#info]] end,
-					set = function(info, index) db.profile.Flump[info[#info]] = index > 4 and nil or index end,
+					set = function(info, index) db.profile.Flump[info[#info]] = index > 4 and nil or index; addon:UpdateFlumpSettings() end,
 				},
 				separator3 = {
 					type = "description",
@@ -509,9 +507,8 @@ local function InitializeOptions()
 					desc = L.options["Only in combat"],
 					order = 5,
 					values = InCombat,
-		--			width = "half",
-					get = function() return db.profile.Flump.InCombat or false end,
-					set = function(_, value) db.profile.Flump.incombat = value end,
+--					get = function() return db.profile.Flump.InCombat or false end,
+--					set = function(_, value) db.profile.Flump.incombat = value end,
 				},
 				OnlyTanks = {
 					type = "toggle",
@@ -519,9 +516,8 @@ local function InitializeOptions()
 					desc = L.options["Only tanks"],
 					order = 6,
 					values = OnlyTanks,
-		--			width = "half",
-					get = function() return db.profile.Flump.OnlyTanks or false end,
-					set = function(_, value) db.profile.Flump.OnlyTanks = value end,
+--					get = function() return db.profile.Flump.OnlyTanks or false end,
+--					set = function(_, value) db.profile.Flump.OnlyTanks = value end,
 				},
 			},
 		}

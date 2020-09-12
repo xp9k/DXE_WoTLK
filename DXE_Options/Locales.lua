@@ -1977,6 +1977,11 @@ options["Only in combat"] = "Показывать сообщения тольк�
 options["only_tanks"] = "Только танки"
 options["Only tanks"] = "Показывать сообщения только от танков"
 
+options["NONE"] = "НЕТ"
+options["SELF"] = "Себе"
+options["PARTY"] = "Группа"
+options["RAID"] = "Рейд"
+
 
 AL:GetLocale("DXE").options = AL:GetLocale("DXE Options")
 
