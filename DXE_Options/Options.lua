@@ -438,6 +438,14 @@ local function InitializeOptions()
 					order = 400,
 					width = "full",
 				},
+				AutoRC = {
+					type = "toggle",
+					name = L.options["Automatically accept ReadyCheck"],
+					order = 450,
+					width = "full",
+					get = function(info) return db.profile.Misc[info[#info]] end,
+					set = function(info,v) db.profile.Misc[info[#info]] = v; addon:UpdateAutoRCSettings() end,
+				},
 			},
 		}
 

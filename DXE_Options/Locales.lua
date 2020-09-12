@@ -1982,6 +1982,7 @@ options["SELF"] = "Себе"
 options["PARTY"] = "Группа"
 options["RAID"] = "Рейд"
 
+options["Automatically accept ReadyCheck"] = "Автоматически принимать проверку готовности"
 
 AL:GetLocale("DXE").options = AL:GetLocale("DXE Options")
 
