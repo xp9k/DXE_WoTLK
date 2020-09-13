@@ -6,7 +6,7 @@ local L,SN,ST = DXE.L,DXE.SN,DXE.ST
 
 do
 	local data = {
-		version = 1,
+		version = 5,
 		key = "Bronjahm",
 		zone = L.zone["The Forge of Souls"],
 		category = L.zone["WoTLK Party"],
@@ -20,6 +20,9 @@ do
 			tracerstop = true,
 			combatstop = true,
 			defeat = 36497,
+		},
+		userdata = {
+			corruptsoultext = "",
 		},
 		onstart = {
 			"alert","corruptsoulcd",
@@ -39,7 +42,7 @@ do
 			},
 			corruptsoulother = {
 				varname = format(L.alert["%s on others"],SN[68839]),
-				text = format("%s: %s! %s!",SN[68839],L.alert["YOU"],L.alert["MOVE AWAY"]),
+				text = format("%s: #5#!",SN[68839]),
 				type = "centerpopup",
 				time = 4,
 				flashtime = 4,
@@ -91,7 +94,8 @@ do
 					},
 					{
 						"expect",{"#4#","~=","&playerguid&"},
-						"alert", "corruptsoulother",
+						"set",{corruptsoultext = format(L.alert["%s Duration"],SN[68839])},
+						"alert", "corruptsoulother",						
 					},
 				},
 			},

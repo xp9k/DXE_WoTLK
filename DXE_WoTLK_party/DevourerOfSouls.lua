@@ -1,12 +1,12 @@
 local L,SN,ST = DXE.L,DXE.SN,DXE.ST
 
 ---------------------------------
--- Bronjahm
+-- Devourer of Souls
 ---------------------------------
 
 do
 	local data = {
-		version = 1,
+		version = 5,
 		key = "Devourer",
 		zone = L.zone["The Forge of Souls"],
 		category = L.zone["WoTLK Party"],
@@ -20,6 +20,9 @@ do
 			tracerstop = true,
 			combatstop = true,
 			defeat = 36502,
+		},
+		userdata = {
+			mirroredsoultext = "",
 		},
 		onstart = {
 			"alert","mirroredsoulcd",
@@ -53,7 +56,7 @@ do
 				varname = format(L.alert["%s Cooldown"],SN[69051]),
 				type = "dropdown",
 				text = format(L.alert["%s Cooldown"],SN[69051]),
-				time = 20,
+				time = 15,
 				flashtime = 10,
 				color1 = "PURPLE",
 				icon = ST[69051],
@@ -83,6 +86,7 @@ do
 				spellid = 69051,
 				execute = {
 					{
+						"expect",{"&npcid|#4#&","==","36502"},
 						"raidicon","mirroredsoulmark",
 						"alert", "mirroredsoulwarn",
 					},
@@ -101,7 +105,7 @@ do
 						"removeraidicon","mirroredsoulmark",
 					},
 					{
-						"expect",{"#4#","==","&playerguid&"},
+						"expect",{"&npcid|#4#&","~=","36502"},
 						"alert", "mirroredsoulcd",
 					},
 				},

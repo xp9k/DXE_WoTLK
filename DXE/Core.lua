@@ -472,6 +472,10 @@ end
 function addon:GetActiveEncounter()
 	return CE and CE.key or "default"
 end
+--- Get the data of the currently-active encounter
+function addon:GetActiveEncounterData()
+	return CE
+end
 
 function addon:SetCombat(flag,event,func)
 	if flag then self:RegisterEvent(event,func) end
@@ -877,7 +881,7 @@ end
 
 function addon:LFG_PROPOSAL_SHOW()
 	if DXE.Alerts then
-		DXE.Alerts.Dropdown("DXE_LFG_INVITE", DXE_LFG_INVITE, "Приглашение в подземелье", 40, 5, "DXE ALERT1", "DCYAN", nil, nil, addon.ST[72350])
+		DXE.Alerts.Dropdown("DXE_LFG_INVITE", DXE_LFG_INVITE, "Приглашение в подземелье", 45, 5, "DXE ALERT1", "DCYAN", nil, nil, addon.ST[72350], 5)
 	end
 end
 

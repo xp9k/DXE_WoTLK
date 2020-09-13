@@ -221,6 +221,8 @@ end
 
 local function GetMessageEra(id)
 	local popup,before
+	
+	if id == nil then return popup,before end
 
 	if find(id,"cd$") then
 		popup = pfl.CdPopupMessage

@@ -47,7 +47,9 @@ Plugins["miscellaneous"] = "%s применяет %s"
 
 	--AutoRC
 Plugins["Automatically accept ReadyCheck"] = "Автоматически принимать проверку готовности"
+Plugins["Automatically reply for whisps while boss Encounter"] = "Автоматически отвечать на личные сообщения при битве с боссами"
 Plugins["|cffff2020Auto-accepted a Ready Check at |r"] = "|cffff2020Автоподтверждение готовности сработало в |r"
+Plugins["%s is in combat with %s"] = "%s Сейчас не может ответить. Он в бою с %s"
 
 AL:GetLocale("DXE").Plugins = AL:GetLocale("DXE Plugins")
 
