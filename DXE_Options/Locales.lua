@@ -1982,7 +1982,8 @@ options["SELF"] = "Себе"
 options["PARTY"] = "Группа"
 options["RAID"] = "Рейд"
 
-options["Automatically accept ReadyCheck"] = "Автоматически принимать проверку готовности"
+options["Flump enabled"] = "Flump включен"
+options["Flump messages enabled"] = "Включить сообщения Flump"
 
 AL:GetLocale("DXE").options = AL:GetLocale("DXE Options")
 

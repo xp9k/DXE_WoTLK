@@ -438,14 +438,6 @@ local function InitializeOptions()
 					order = 400,
 					width = "full",
 				},
-				AutoRC = {
-					type = "toggle",
-					name = L.options["Automatically accept ReadyCheck"],
-					order = 450,
-					width = "full",
-					get = function(info) return db.profile.Misc[info[#info]] end,
-					set = function(info,v) db.profile.Misc[info[#info]] = v; addon:UpdateAutoRCSettings() end,
-				},
 			},
 		}
 
@@ -457,10 +449,10 @@ local function InitializeOptions()
 	---------------------------------------------
 	
 	local chats_loc = {
-		L["NONE"],
-		L["SELF"],
-		L["PARTY"],
-		L["RAID"],
+		L.options["NONE"],
+		L.options["SELF"],
+		L.options["PARTY"],
+		L.options["RAID"],
 	}
 
 	local chats = {
@@ -540,11 +532,11 @@ local function InitializeOptions()
 		local about_group = {
 			type = "group",
 			name = L.options["About"],
-			order = -2,
+			order = -5,
 			args = {
 				authors_desc = {
 					type = "description",
-					name = format("%s : %s",L.options["Authors"],"|cffffd200Kollektiv|r, |cffffd200Fariel|r"),
+					name = format("%s : %s",L.options["Authors"],"|cffffd200Kollektiv|r, |cffffd200Fariel|r, |cffffd200xp9k|r"),
 					order = 100,
 				},
 				blank1 = genblank(150),

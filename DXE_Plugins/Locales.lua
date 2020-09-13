@@ -25,10 +25,11 @@ end
 
 local L = AL:NewLocale("DXE", "ruRU")
 if L then
--- Plugins
-
---Flump
+	-- Plugins
 local Plugins = AL:NewLocale("DXE Plugins", "ruRU")
+Plugins["Plugins"] = "Расширения"
+
+	--Flump
 Plugins["bot"]	 = "%s%s ставит %s!"
 Plugins["used"]	 = "%s%s использовал(а) %s!"
 Plugins["sw"]	 = "%s заканчивается на %s%s!"
@@ -44,9 +45,9 @@ Plugins["dispel"] = "%s%s's %s failed to dispel %s%s's %s!"
 Plugins["ss"]	 = "%s умер с %s!"
 Plugins["miscellaneous"] = "%s применяет %s"
 
---AutoRC
-
-Plugins["|cffffd200Auto-accepted a Ready Check at |r"] = "|cffffd200Автоподтверждение готовности сработало в |r"
+	--AutoRC
+Plugins["Automatically accept ReadyCheck"] = "Автоматически принимать проверку готовности"
+Plugins["|cffff2020Auto-accepted a Ready Check at |r"] = "|cffff2020Автоподтверждение готовности сработало в |r"
 
 AL:GetLocale("DXE").Plugins = AL:GetLocale("DXE Plugins")
 
