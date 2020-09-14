@@ -28,6 +28,7 @@ if L then
 	-- Plugins
 local Plugins = AL:NewLocale("DXE Plugins", "ruRU")
 Plugins["Plugins"] = "Расширения"
+Plugins["LFG Invitation"] = "Приглашение в подземелье"
 
 	--Flump
 Plugins["bot"]	 = "%s%s ставит %s!"

@@ -880,22 +880,7 @@ function addon:PLAYER_ENTERING_WORLD()
 	self:StopEncounter()
 end
 
-function addon:LFG_PROPOSAL_SHOW()
-	if DXE.Alerts then
-		DXE.Alerts.Dropdown("DXE_LFG_INVITE", DXE_LFG_INVITE, "Приглашение в подземелье", 45, 5, "DXE ALERT1", "DCYAN", nil, nil, addon.ST[72350], 5)
-	end
-end
 
-function addon:LFG_PROPOSAL_FAILED()
-	if DXE.Alerts then
-		DXE.Alerts.QuashLFGInvite()
-	end
-end
-function addon:LFG_PROPOSAL_SUCCEEDED()
-	if DXE.Alerts then
-		DXE.Alerts.QuashLFGInvite()
-	end
-end
 
 ---------------------------------------------
 -- WARNING BLOCKS
@@ -1079,9 +1064,6 @@ function addon:OnEnable()
 	self:RAID_ROSTER_UPDATE()
 	self:RegisterEvent("ZONE_CHANGED_NEW_AREA","UpdateTriggers")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
-	self:RegisterEvent("LFG_PROPOSAL_SHOW")
-	self:RegisterEvent("LFG_PROPOSAL_FAILED")
-	self:RegisterEvent("LFG_PROPOSAL_SUCCEEDED")
 
 	self:SetActiveEncounter("default")
 	self:EnableAllModules()
