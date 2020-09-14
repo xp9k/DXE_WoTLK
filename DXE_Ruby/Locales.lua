@@ -101,6 +101,7 @@ if L then
 
 -- Chat triggers
 local chat_ruby = AL:NewLocale("DXE Chat Ruby", "ruRU")
+chat_ruby["^Twice the pain and half the fun"] = "^Вдвое сильнее страдание"
 chat_ruby["^Relish this victory, mortals, for it will"] = "^Это ваша последняя победа. Насладитесь сполна ее вкусом"
 chat_ruby["^The heavens burn!"] = "^Небеса в огне!"
 chat_ruby["^The orbiting spheres pulse with"] = "^Во вращающихся сферах пульсирует темная энергия"
@@ -112,6 +113,7 @@ local npc_ruby = AL:NewLocale("DXE NPC Ruby", "ruRU")
 
 npc_ruby["Halion"] = "Халион"
 npc_ruby["Saviana"] = "Савиана"
+npc_ruby["Baltharus"] = "Балтар Рожденный в Битве"
 
 AL:GetLocale("DXE").npc_ruby = AL:GetLocale("DXE NPC Ruby")
 return
