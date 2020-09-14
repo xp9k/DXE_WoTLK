@@ -23,6 +23,8 @@ do
 		},
 		onstart = {
 			"alert", "enragecd",
+			"alert", {"flamebeaconcd", time = 27},
+			"alert", {"enragecd", time = 17},
 		},
 		alerts = {
 			enragedur = {
