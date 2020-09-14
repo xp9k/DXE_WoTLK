@@ -201,6 +201,7 @@ zone["Vault of Archavon"] = "Склеп Аркавона"
 zone["WoTLK Party"] = "Поздемелья WoTLK"
 zone["WoTLK_party"] = "Поздемелья WoTLK"
 zone["The Forge of Souls"] = "Кузня Душ"
+zone["Pit of Saron"] = "Яма Сарона"
 
 AL:GetLocale("DXE").zone = AL:GetLocale("DXE Zone")
 -- Loader

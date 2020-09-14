@@ -39,10 +39,10 @@ do
 				icon = ST[68982],
 				flashscreen = false,
 			},
-			mirroredsoulwarn = {
+			mirroredsouldur = {
 				varname = format(L.alert["%s Duration"],SN[69051]),
 				type = "centerpopup",
-				text = format(L.alert["%s Duration"],SN[69051]),
+				text = format("%s: #5#!",SN[68839]),
 				type = "centerpopup",
 				time = 8,
 				flashtime = 8,
@@ -56,7 +56,7 @@ do
 				varname = format(L.alert["%s Cooldown"],SN[69051]),
 				type = "dropdown",
 				text = format(L.alert["%s Cooldown"],SN[69051]),
-				time = 15,
+				time = 14,
 				flashtime = 10,
 				color1 = "PURPLE",
 				icon = ST[69051],
@@ -86,9 +86,9 @@ do
 				spellid = 69051,
 				execute = {
 					{
-						"expect",{"&npcid|#4#&","==","36502"},
+						"expect",{"&npcid|#4#&","~=","36502"},
 						"raidicon","mirroredsoulmark",
-						"alert", "mirroredsoulwarn",
+						"alert", "mirroredsouldur",
 					},
 					{
 						"expect",{"#4#","==","&playerguid&"},

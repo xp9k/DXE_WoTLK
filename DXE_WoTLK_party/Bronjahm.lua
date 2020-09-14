@@ -55,7 +55,7 @@ do
 				varname = format(L.alert["%s Cooldown"],SN[68839]),
 				type = "dropdown",
 				text = format(L.alert["%s Cooldown"],SN[68839]),
-				time = 30,
+				time = 27,
 				flashtime = 10,
 				color1 = "PURPLE",
 				icon = ST[68839],
