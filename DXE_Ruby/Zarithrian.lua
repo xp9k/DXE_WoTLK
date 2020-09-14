@@ -23,6 +23,7 @@ do
 		},
 		onstart = {
 			"alert", {"intimidatingroarcd", time = 14},
+			"alert", {"summonaddscd", time = 16},
 		},
 		alerts = {
 			intimidatingroardur = {
@@ -46,22 +47,17 @@ do
 				audiocd = 5,
 			},
 			summonaddscd = {
-				varname = format(L.alert["%s Cooldown"],SN[74384]),
+				varname = format(L.alert["%s Cooldown"],SN[74398]),
 				type = "dropdown",
-				text = format(L.alert["%s Cooldown"],SN[74384]),
-				time = 33,
+				text = format(L.alert["%s Cooldown"],SN[74398]),
+				time = 45,
 				flashtime = 5,
-				color1 = "PURPLE",
-				icon = ST[74384],
-				audiocd = 5,
+				color1 = "CYAN",
+				icon = ST[74398],
 			},
 		},
-		windows = {
-			proxwindow = true,
-			proxrange = 12,
-		},
 		events = {
-			-- Blade Tempest
+			-- Устрашающий рев
 			{
 				type = "combatevent",
 				eventtype = "SPELL_AURA_APPLIED",
@@ -70,20 +66,9 @@ do
 					{
 						"alert", "intimidatingroardur",
 						"alert", "intimidatingroarcd",
+						"alert", "summonaddscd",
 					},
 				},
-			},
-			-- Summon copy
-			{
-				type = "event",
-				event = "YELL",
-				execute = {
-					{
-						"expect",{"#1#","find",L.chat_ruby["^Twice the pain and half the fun"]},
-						"quash","bladetempestcd",
-						"alert", "bladetempestcd",
-					},
-				}
 			},
 		},
 	}
