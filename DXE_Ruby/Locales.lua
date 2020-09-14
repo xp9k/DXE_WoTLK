@@ -112,8 +112,9 @@ AL:GetLocale("DXE").chat_ruby = AL:GetLocale("DXE Chat Ruby")
 local npc_ruby = AL:NewLocale("DXE NPC Ruby", "ruRU")
 
 npc_ruby["Halion"] = "Халион"
-npc_ruby["Saviana"] = "Савиана"
+npc_ruby["Saviana"] = "Савиана Огненная Пропасть"
 npc_ruby["Baltharus"] = "Балтар Рожденный в Битве"
+npc_ruby["Zarithrian"] = "Генерал Заритриан"
 
 AL:GetLocale("DXE").npc_ruby = AL:GetLocale("DXE NPC Ruby")
 return
