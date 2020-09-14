@@ -6,13 +6,13 @@ local L,SN,ST = DXE.L,DXE.SN,DXE.ST
 
 do
 	local data = {
-		version = 5,
+		version = 1,
 		key = "Devourer",
 		zone = L.zone["The Forge of Souls"],
 		category = L.zone["WoTLK Party"],
 		name = L.npc_wotlk_party["Devourer of Souls"],
 		triggers = {
-			scan = {36502} -- Devourer of Souls
+			scan = 36502, -- Devourer of Souls
 		},
 		onactivate = {
 			tracing = {36502}, -- Devourer of Souls

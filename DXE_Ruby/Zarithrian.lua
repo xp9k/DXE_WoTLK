@@ -45,6 +45,16 @@ do
 				icon = ST[74384],
 				audiocd = 5,
 			},
+			summonaddscd = {
+				varname = format(L.alert["%s Cooldown"],SN[74384]),
+				type = "dropdown",
+				text = format(L.alert["%s Cooldown"],SN[74384]),
+				time = 33,
+				flashtime = 5,
+				color1 = "PURPLE",
+				icon = ST[74384],
+				audiocd = 5,
+			},
 		},
 		windows = {
 			proxwindow = true,

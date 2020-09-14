@@ -184,7 +184,7 @@ if L then
 
 -- Zone names
 local zone = AL:NewLocale("DXE Zone", "ruRU")
-zone["Citadel"] = "Цитадель"
+zone["Citadel"] = "Цитадель Ледяной Короны"
 zone["Coliseum"] = "Колизей"
 zone["Icecrown Citadel"] = "Цитадель Ледяной Короны"
 zone["Kalimdor"] = "Калимдор"
@@ -194,7 +194,7 @@ zone["Onyxia's Lair"] = "Логово Ониксии"
 zone["The Eye of Eternity"] = "Око Вечности"
 zone["The Obsidian Sanctum"] = "Обсидиановое святилище"
 zone["The Ruby Sanctum"] = "Рубиновое святилище"
-zone["Ruby"] = "РС"
+zone["Ruby"] = "Рубиновое Святилище"
 zone["Trial of the Crusader"] = "Испытание крестоносца"
 zone["Ulduar"] = "Ульдуар"
 zone["Vault of Archavon"] = "Склеп Аркавона"

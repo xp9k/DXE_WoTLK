@@ -438,6 +438,7 @@ function addon:RegisterEncounter(data)
 			end
 		else
 			-- RDB version is higher
+			print("RDB version is higher")
 			return
 		end
 	end

@@ -6,13 +6,13 @@ local L,SN,ST = DXE.L,DXE.SN,DXE.ST
 
 do
 	local data = {
-		version = 5,
+		version = 1,
 		key = "Bronjahm",
 		zone = L.zone["The Forge of Souls"],
 		category = L.zone["WoTLK Party"],
 		name = L.npc_wotlk_party["Bronjahm"],
 		triggers = {
-			scan = {36497} -- Bronjahm
+			scan = 36497, -- Bronjahm
 		},
 		onactivate = {
 			tracing = {36497}, -- Bronjahm
@@ -25,7 +25,7 @@ do
 			corruptsoultext = "",
 		},
 		onstart = {
-			"alert","corruptsoulcd",
+			"alert", "corruptsoulcd",
 		},
 		alerts = {
 			corruptsoulself = {
