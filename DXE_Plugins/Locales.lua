@@ -25,12 +25,12 @@ end
 
 local L = AL:NewLocale("DXE", "ruRU")
 if L then
-	-- Plugins
+--	Plugins
 local Plugins = AL:NewLocale("DXE Plugins", "ruRU")
 Plugins["Plugins"] = "Расширения"
 Plugins["LFG Invitation"] = "Приглашение в подземелье"
 
-	--Flump
+--	Flump
 Plugins["bot"]	 = "%s%s ставит %s!"
 Plugins["used"]	 = "%s%s использовал(а) %s!"
 Plugins["sw"]	 = "%s заканчивается на %s%s!"
@@ -46,7 +46,7 @@ Plugins["dispel"] = "%s%s's %s failed to dispel %s%s's %s!"
 Plugins["ss"]	 = "%s умер с %s!"
 Plugins["miscellaneous"] = "%s применяет %s"
 
-	--AutoRC
+--	Plugins Options
 Plugins["Automatically accept ReadyCheck"] = "Автоматически принимать проверку готовности"
 Plugins["Automatically reply for whisps while boss Encounter"] = "Автоматически отвечать на личные сообщения при битве с боссами"
 Plugins["Intercept DBM Pull and Puzza Timers"] = "Перехватывать сообщения DBM для Перерыва и Пулла"
