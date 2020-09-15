@@ -13,6 +13,7 @@ addon.Plugins = module
 
 local AutoRCEnabled = false
 local BossReplyEnabled = false
+local DBMInterceptTimersEnabled = true
 local Options = nil
 local plugins_group = {}
 
@@ -31,6 +32,15 @@ function Plugins:CHAT_MSG_WHISPER(arg1, arg2, ...)
 		if CE.key ~= "default" then 
 			print(CE.triggers.scan)
 			SendChatMessage(ReplyMessage:format(UnitName("player"), CE.name), "WHISPER", nil, arg2);
+		end
+	end
+end
+
+function Plugins:CHAT_MSG_ADDON(prefix, message, ...)
+	if DBMInterceptTimersEnabled and prefix == "DBMv4-Pizza" then 
+		local dbm_time, dbm_message = strsplit("\t", message)
+		if DXE.Alerts then
+			DXE.Alerts.Dropdown("DXE_LFG_INVITE", DXE_LFG_INVITE, dbm_message, tonumber(dbm_time), 5, "DXE ALERT1", "DCYAN", nil, nil, addon.ST[72350], 5)
 		end
 	end
 end
@@ -65,6 +75,14 @@ local function InitializeOptions()
 					get = function(info) return db.profile.Plugins[info[#info]] end,
 					set = function(info,v) db.profile.Plugins[info[#info]] = v; addon:UpdatePluginsSettings() end,
 				},
+				DBMInterceptTimers = {
+					type = "toggle",
+					name = L.Plugins["Intercept DBM Pull and Puzza Timers"],
+					order = 15,
+					width = "full",
+					get = function(info) return db.profile.Plugins[info[#info]] end,
+					set = function(info,v) db.profile.Plugins[info[#info]] = v; addon:UpdatePluginsSettings() end,
+				},
 		},
 	}
 	Options = addon.Options.opts.args
@@ -79,6 +97,7 @@ end
 function addon:UpdatePluginsSettings()
 	AutoRCEnabled = db.profile.Plugins.AutoRC	
 	BossReplyEnabled = db.profile.Plugins.BossReply	
+	DBMInterceptTimersEnabled = db.profile.Plugins.DBMInterceptTimers		
 end
 
 local function RefreshProfile(db)
@@ -91,3 +110,4 @@ addon:AddToRefreshProfile(RefreshProfile)
 Plugins:SetScript("OnEvent",function(self,event,...) self[event](self,...) end)
 Plugins:RegisterEvent("READY_CHECK")
 Plugins:RegisterEvent("CHAT_MSG_WHISPER")
+Plugins:RegisterEvent("CHAT_MSG_ADDON")
