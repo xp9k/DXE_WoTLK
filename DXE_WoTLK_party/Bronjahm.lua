@@ -13,7 +13,7 @@ do
 		name = L.npc_wotlk_party["Bronjahm"],
 		triggers = {
 			scan = {36497}, -- Bronjahm
-			yell = L.chat_wotlk_party["^Finally"],
+			yell = L.chat_wotlk_party["^Finally, a captive audience!"],
 		},
 		onactivate = {
 			tracing = {36497}, -- Bronjahm
