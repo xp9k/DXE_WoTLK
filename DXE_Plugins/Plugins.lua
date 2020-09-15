@@ -36,12 +36,12 @@ function Plugins:CHAT_MSG_WHISPER(arg1, arg2, ...)
 	end
 end
 
-function Plugins:CHAT_MSG_ADDON(prefix, message, ...)
+function Plugins:CHAT_MSG_ADDON(prefix, message, _, sender)
 	if DBMInterceptTimersEnabled and prefix == "DBMv4-Pizza" then 
 		local dbm_time, dbm_message = strsplit("\t", message)
 		if DXE.Alerts then
 			DXE.Alerts.QuashAll()
-			DXE.Alerts.Dropdown(_, "DXE_DBM_PIZZA", dbm_message, tonumber(dbm_time), 5, "DXE ALERT1", "DCYAN", nil, nil, addon.ST[72350], 5)
+			DXE.Alerts.Dropdown(_, "DXE_DBM_PIZZA", sender .. ": " .. dbm_message, tonumber(dbm_time), 5, "DXE ALERT1", "DCYAN", nil, nil, addon.ST[72350], 5)
 		end
 	end
 end

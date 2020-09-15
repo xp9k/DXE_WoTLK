@@ -27,7 +27,7 @@ do
 		},
 		onstart = {
 			{
-				"expect",{"#1#","find",L.chat_citadel["^So the Light's vaunted justice has finally arrived"]},
+				"expect",{"#1#","find",L.chat_wotlk_party["^Alas, brave, brave adventurers"]},
 				"alert","zerotoonecd",
 			}
 		},
@@ -85,14 +85,14 @@ do
 				icon = ST[69172],
 			},
 			unholypowerwarn = {
-				varname = format(L.alert["%s Duration"],SN[69167]),
-				text = format("%s: &dstname_or_YOU&",SN[69167]),
+				varname = format(L.alert["%s Duration"],SN[69629]),
+				text = format("%s: &dstname_or_YOU&",SN[69629]),
 				type = "centerpopup",
 				time = 10,
 				flashtime = 10,
 				sound = "ALERT5",
 				color1 = "INDIGO",
-				icon = ST[69167],
+				icon = ST[69629],
 			},
 		},
 		raidicons = {
@@ -124,6 +124,7 @@ do
 					{
 						"expect",{"#4#","==","&playerguid&"},
 						"alert", "markofrimefangself",
+						"announce", "markofrimefangsay",
 					},
 					{
 						"expect",{"#4#","~=","&playerguid&"},
@@ -149,8 +150,7 @@ do
 				execute = {
 					{
 						"expect",{"#4#","==","&playerguid&"},
-						"alert", "overlordsbrandself",						
-						"announce", "markofrimefangsay",
+						"alert", "overlordsbrandself",				
 					},
 					{
 						"expect",{"#4#","~=","&playerguid&"},
@@ -162,7 +162,7 @@ do
 			{
 				type = "combatevent",
 				eventtype = "SPELL_AURA_APPLIED",
-				spellid = 69167,
+				spellid = 69629,
 				execute = {
 					{
 						"alert", "unholypowerwarn",						
