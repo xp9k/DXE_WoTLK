@@ -73,6 +73,7 @@ do
 				icon = ST[70337],
 				counter = true,
 				behavior = "overwrite",
+				audiocd = 5,
 			},
 			necroplaguedur = {
 				varname = format(L.alert["%s Duration"],SN[70337]),
@@ -90,7 +91,7 @@ do
 				time = 5,
 				flashtime = 5,
 				color1 = "GREEN",
-				sound = "ALERT10",
+				sound = "ALERT3",
 				icon = ST[70337],
 				flashscreen = true,
 			},
@@ -100,6 +101,7 @@ do
 				text = SN[70372].."!",
 				time = 1,
 				color1 = "WHITE",
+				sound = "ALERT5",
 				icon = ST[70372],
 			},
 			shamblinghorrorcd = {
@@ -109,7 +111,6 @@ do
 				time = 60,
 				flashtime = 10,
 				color1 = "BROWN",
-				sound = "ALERT1",
 				icon = ST[70372],
 				behavior = "overwrite",
 			},
@@ -119,6 +120,7 @@ do
 				text = format("%s: %s",SN[72143],L.npc_citadel["Shambling Horror"]),
 				time = 5,
 				color1 = "PEACH",
+				sound = "ALERT4",
 				icon = ST[72143],
 			},
 			defilewarn = {
@@ -128,8 +130,6 @@ do
 				time = 2,
 				flashtime = 2,
 				color1 = "PURPLE",
-				flashscreen = true,
-				sound = "ALERT2",
 				icon = ST[72762],
 			},
 			defileselfwarn = {
@@ -140,8 +140,8 @@ do
 				time = 2,
 				flashtime = 2,
 				color1 = "PURPLE",
+				sound = "ALERT3",
 				flashscreen = true,
-				sound = "ALERT2",
 				icon = ST[72762],
 			},
 			defileself = {
@@ -164,6 +164,7 @@ do
 				color1 = "PURPLE",
 				throttle = 2,
 				icon = ST[72762],
+				audiocd = 5,
 			},
 			remorsewarn = {
 				varname = format(L.alert["%s Casting"],SN[68981]),
@@ -171,7 +172,7 @@ do
 				text = format(L.alert["%s Casting"],SN[68981]),
 				time = 2.5,
 				color1 = "INDIGO",
-				sound = "ALERT4",
+				sound = "ALERT5",
 				icon = ST[68981],
 			},
 			remorseself = {
@@ -180,7 +181,6 @@ do
 				text = format("%s: %s! %s!",SN[68981],L.alert["YOU"],L.alert["MOVE AWAY"]),
 				time = 3,
 				throttle = 4,
-				sound = "ALERT11",
 				icon = ST[68981],
 				flashscreen = true,
 			},
@@ -207,7 +207,7 @@ do
 				type = "simple",
 				text = SN[71843].."!",
 				time = 4,
-				sound = "ALERT6",
+				sound = "ALERT5",
 				icon = ST[71843],
 				throttle = 4.5,
 			},
@@ -245,7 +245,6 @@ do
 				text = format("%s: &dstname_or_YOU&",SN[69409]),
 				time = 5,
 				color1 = "ORANGE",
-				sound = "ALERT7",
 				icon = ST[69409],
 			},
 			ragingspiritself = {
@@ -254,7 +253,7 @@ do
 				text = format("%s: %s! %s!",SN[69200],L.alert["YOU"],L.alert["MOVE"]),
 				time = 4,
 				color1 = "BLACK",
-				sound = "ALERT8",
+				sound = "ALERT5",
 				flashscreen = true,
 				icon = ST[69200],
 			},
@@ -264,7 +263,7 @@ do
 				text = format("%s: #5#!",SN[69200]),
 				time = 4,
 				color1 = "BLACK",
-				sound = "ALERT8",
+				sound = "ALERT5",
 				icon = ST[69200],
 			},
 			ragingspiritcd = {
@@ -275,7 +274,6 @@ do
 				time2 = 18, -- after P1|P2
 				time3 = 6, -- after T2
 				flashtime = 5,
-				sound = "ALERT6",
 				color1 = "YELLOW",
 				icon = ST[69200],
 				behavior = "overwrite",
@@ -298,7 +296,6 @@ do
 				text = format(L.alert["%s Casting"],SN[70541]),
 				time = 2,
 				color1 = "YELLOW",
-				sound = "ALERT3",
 				icon = ST[70541],
 			},
 			vilespiritwarn = {
@@ -307,7 +304,7 @@ do
 				text = format(L.alert["%s Casting"],SN[70498]),
 				time = 5.5,
 				color1 = "MAGENTA",
-				sound = "ALERT9",
+				sound = "ALERT5",
 				icon = ST[70498],
 			},
 			vilespiritcd = {
@@ -327,7 +324,7 @@ do
 				text2 = format(L.alert["%s Warning"],SN[74297]),
 				color1 = "BLACK",
 				time = 6,
-				sound = "ALERT10",
+				sound = "ALERT4",
 				icon = ST[68980],
 			},
 			harvestsoulcd = {
@@ -339,7 +336,6 @@ do
 				time2 = {12.5,55,loop = false, type = "series"},
 				flashtime = 10,
 				color1 = "BROWN",
-				sound = "ALERT1",
 				icon = ST[68980],
 			},
 			restoresoulwarn = {
@@ -359,7 +355,7 @@ do
 				text3 = format(L.alert["%s Casting"],L.alert["Shadow Trap"]),
 				time = 3,
 				color1 = "BLACK",
-				sound = "ALERT8",
+				sound = "ALERT2",
 				icon = ST[73539],
 				flashscreen = true,
 			},
@@ -370,7 +366,6 @@ do
 				time = {16.1,15.5,loop = false, type = "series"},
 				flashtime = 7,
 				color1 = "INDIGO",
-				sound = "ALERT3",
 				icon = ST[73539],
 				behavior = "overwrite",
 			},

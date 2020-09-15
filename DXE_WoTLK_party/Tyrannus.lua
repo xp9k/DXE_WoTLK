@@ -89,7 +89,7 @@ do
 			},
 		},
 		events = {
-			-- Corrupt Soul
+			-- Метка Инея
 			{
 				type = "combatevent",
 				eventtype = "SPELL_AURA_APPLIED",
