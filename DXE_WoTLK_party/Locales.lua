@@ -28,7 +28,10 @@ if L then
 -- Chat triggers
 local chat_wotlk_party = AL:NewLocale("DXE Chat WoTLK Party", "ruRU")
 
-chat_wotlk_party["^Finally"] = "^Наконец"
+chat_wotlk_party["^Finally, a captive audience!"] = "^Наконец-то гости пожаловали!"
+chat_wotlk_party["^You dare look upon the host of souls?"] = "^Вы осмелились взглянуть на вместилище душ?"
+chat_wotlk_party["^Alas, brave, brave adventurers"] = "^Увы, бесстрашные герои"
+
 AL:GetLocale("DXE").chat_wotlk_party = AL:GetLocale("DXE Chat WoTLK Party")
 
 -- NPC names

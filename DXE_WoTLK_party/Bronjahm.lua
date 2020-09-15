@@ -12,7 +12,8 @@ do
 		category = L.zone["WoTLK Party"],
 		name = L.npc_wotlk_party["Bronjahm"],
 		triggers = {
-			scan = 36497, -- Bronjahm
+			scan = {36497}, -- Bronjahm
+			yell = L.chat_wotlk_party["^Finally"],
 		},
 		onactivate = {
 			tracing = {36497}, -- Bronjahm

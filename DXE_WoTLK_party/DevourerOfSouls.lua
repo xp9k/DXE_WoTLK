@@ -12,7 +12,8 @@ do
 		category = L.zone["WoTLK Party"],
 		name = L.npc_wotlk_party["Devourer of Souls"],
 		triggers = {
-			scan = 36502, -- Devourer of Souls
+			scan = {36502}, -- Devourer of Souls
+			yell = L.chat_wotlk_party["^You dare look upon the host of souls?"],
 		},
 		onactivate = {
 			tracing = {36502}, -- Devourer of Souls

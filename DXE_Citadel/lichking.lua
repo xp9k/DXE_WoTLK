@@ -17,6 +17,7 @@ do
 		},
 		onactivate = {
 			tracerstart = true,
+			tracerstop = true,
 			combatstop = true,
 			tracing = {
 				36597, -- Lich King

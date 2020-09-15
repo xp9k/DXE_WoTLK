@@ -13,6 +13,7 @@ do
 		name = L.npc_wotlk_party["Tyrannus"],
 		triggers = {
 			scan = 36658, -- Tyrannus
+			yell = L.chat_wotlk_party["^Alas, brave, brave adventurers"],
 		},
 		onactivate = {
 			tracing = {36658}, -- Tyrannus
@@ -22,12 +23,24 @@ do
 			defeat = 36658,
 		},
 		userdata = {
-			corruptsoultext = "",
+			phase = "0",
 		},
 		onstart = {
-			"alert", "corruptsoulcd",
+			{
+				"expect",{"#1#","find",L.chat_citadel["^So the Light's vaunted justice has finally arrived"]},
+				"alert","zerotoonecd",
+			}
 		},
 		alerts = {
+			zerotoonecd = {
+				varname = format(L.alert["%s Timer"],L.alert["Phase One"]),
+				type = "centerpopup",
+				text = format(L.alert["%s Begins"],L.alert["Phase One"]),
+				time = 31,
+				flashtime = 10,
+				color1 = "MIDGREY",
+				icon = ST[3648],
+			},
 			markofrimefangself = {
 				varname = format(L.alert["%s on self"],SN[69275]),
 				text = format("%s: %s!",SN[69275],L.alert["YOU"]),
@@ -70,6 +83,16 @@ do
 				flashtime = 4,
 				color1 = "MAGENTA",
 				icon = ST[69172],
+			},
+			unholypowerwarn = {
+				varname = format(L.alert["%s Duration"],SN[69167]),
+				text = format("%s: &dstname_or_YOU&",SN[69167]),
+				type = "centerpopup",
+				time = 10,
+				flashtime = 10,
+				sound = "ALERT5",
+				color1 = "INDIGO",
+				icon = ST[69167],
 			},
 		},
 		raidicons = {
@@ -132,6 +155,17 @@ do
 					{
 						"expect",{"#4#","~=","&playerguid&"},
 						"alert", "overlordsbrandother",						
+					},
+				},
+			},
+			--	Unholy Power / Нечистая сила
+			{
+				type = "combatevent",
+				eventtype = "SPELL_AURA_APPLIED",
+				spellid = 69167,
+				execute = {
+					{
+						"alert", "unholypowerwarn",						
 					},
 				},
 			},
