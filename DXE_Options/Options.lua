@@ -15,6 +15,8 @@ local ACD = LibStub("AceConfigDialog-3.0")
 local ACR = LibStub("AceConfigRegistry-3.0")
 local SM = LibStub("LibSharedMedia-3.0")
 
+local Plugins = {}
+
 local function genblank(order) return {type = "description", name = "", order = order} end
 
 local function InitializeOptions()
@@ -2394,6 +2396,18 @@ local function InitializeOptions()
 		opts_args.sounds_group = sounds_group
 	end
 
+	opts_args.Plugins = {	
+		type = "group",
+		childGroups = "tab",
+		name = L.Plugins["Plugins"],
+		order = -10,
+		args = {},
+	}
+		
+	for i = 1, #Plugins do
+		local op = Plugins[i]:GetOptions()
+		opts_args.Plugins.args[Plugins[i].name] = op
+	end
 	---------------------------------------------
 	-- DEBUG
 	---------------------------------------------
@@ -2409,6 +2423,11 @@ local function InitializeOptions()
 	addon:AddDebugOptions(debug_group.args)
 	--@end-debug@]===]
 
+end
+
+function module:RegisterPlugin(plg_module)
+	print(plg_module.name)
+	tinsert(Plugins, plg_module)
 end
 
 ---------------------------------------------
@@ -2429,4 +2448,9 @@ function module:OnInitialize()
 	ACD:SetDefaultSize("DXE", DEFAULT_WIDTH, DEFAULT_HEIGHT)
 end
 
-function module:ToggleConfig() ACD[ACD.OpenFrames.DXE and "Close" or "Open"](ACD,"DXE") end
+function module:ToggleConfig() ACD[ACD.OpenFrames.DXE and "Close" or "Open"](ACD,"DXE")
+	-- for i = 1, #Plugins do
+		-- print(Plugins[i].name)
+		-- print(Plugins[i].plugins_group)
+	-- end
+end

@@ -247,7 +247,7 @@ do
 				text = format("%s: #5#!",SN[69483]),
 				time = 8,
 				color1 = "PURPLE",
-				sound = "ALERT4",
+				sound = "ALERT3",
 				icon = ST[69483],
 			},
 			darkreckoningself = {

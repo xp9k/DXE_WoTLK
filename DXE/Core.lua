@@ -1069,6 +1069,7 @@ function addon:OnEnable()
 	self:EnableAllModules()
 	self:RegisterComm("DXE")
 	self:UpdatePaneVisibility()
+	
 end
 
 function addon:OnDisable()
