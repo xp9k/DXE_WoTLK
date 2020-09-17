@@ -16,6 +16,7 @@ local ACR = LibStub("AceConfigRegistry-3.0")
 local SM = LibStub("LibSharedMedia-3.0")
 
 local Plugins = {}
+addon.plugins = Plugins
 
 local function genblank(order) return {type = "description", name = "", order = order} end
 
@@ -2396,18 +2397,20 @@ local function InitializeOptions()
 		opts_args.sounds_group = sounds_group
 	end
 
-	opts_args.Plugins = {	
+	do
+		local plugins_group = {	
 		type = "group",
 		childGroups = "tab",
 		name = L.Plugins["Plugins"],
 		order = -10,
-		args = {},
-	}
+			args = {},
+		}
 		
-	for i = 1, #Plugins do
-		local op = Plugins[i]:GetOptions()
-		opts_args.Plugins.args[Plugins[i].name] = op
+		plugins_group.args = GetPlugisOptions()
+		opts_args.plugins_group = plugins_group
+		print(tdump(plugins_group))
 	end
+
 	---------------------------------------------
 	-- DEBUG
 	---------------------------------------------
@@ -2425,9 +2428,35 @@ local function InitializeOptions()
 
 end
 
-function module:RegisterPlugin(plg_module)
-	print(plg_module.name)
-	tinsert(Plugins, plg_module)
+function module:RegisterPlugin(plg_module)	
+--	tinsert(Plugins, plg_module)
+	Plugins[#Plugins + 1] = plg_module
+--	InitializeOptions()	
+end
+
+function GetPlugisOptions()
+	local args = {}
+	local name
+	for key, value in ipairs(Plugins) do
+		name = value.name
+		args[name] = value:GetOptions()
+--		print(tostring(key) .. " " .. name)
+	end
+--	print(tdump(args))
+	return args
+end
+
+function tdump(o)
+   if type(o) == 'table' then
+      local s = '{\n\t'
+      for k,v in pairs(o) do
+         if type(k) ~= 'number' then k = '"'..k..'"' end
+         s = s .. '['..k..'] = ' .. tdump(v) .. ','
+      end
+      return s .. '}\n'
+   else
+      return tostring(o)
+   end
 end
 
 ---------------------------------------------
@@ -2437,7 +2466,7 @@ end
 function module:OnInitialize()
 	db = addon.db
 	InitializeOptions()
-	InitializeOptions = nil
+--	InitializeOptions = nil
 	self:FillEncounters()
 
 	opts_args.profile = LibStub("AceDBOptions-3.0"):GetOptionsTable(db)
@@ -2449,8 +2478,9 @@ function module:OnInitialize()
 end
 
 function module:ToggleConfig() ACD[ACD.OpenFrames.DXE and "Close" or "Open"](ACD,"DXE")
-	-- for i = 1, #Plugins do
-		-- print(Plugins[i].name)
-		-- print(Plugins[i].plugins_group)
+	-- for key, value in ipairs(Plugins) do 
+		-- opts_args.Plugins.args[value.name] = value:GetOptions()
+		-- print(value.name)
 	-- end
+	InitializeOptions()
 end

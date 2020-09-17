@@ -5,12 +5,12 @@
 local addon,L = DXE,DXE.L
 local CE
 
-local Plugins = CreateFrame("Frame")
+local addings = CreateFrame("Frame")
 local db = addon.db
 local pfl
 
-local module = addon:NewModule("Plugins")
-addon.Plugins = module
+local module = addon:NewModule("Addings")
+addon.plugins.Addings = module
 
 local Options = nil
 local plugins_group = {}
@@ -25,14 +25,14 @@ local defaults = {
 
 local ReplyMessage = L.Plugins["%s is in combat with %s"]
 
-function Plugins:READY_CHECK()
+function addings:READY_CHECK()
 	if pfl.AutoRC then
 		ConfirmReadyCheck(1)
 		print(L.Plugins["|cffff2020Auto-accepted a Ready Check at |r"] .. date("|cffffd200%H:%M:%S (%I:%M:%S %p)|r"))
 	end
 end
 
-function Plugins:CHAT_MSG_WHISPER(arg1, arg2, ...)
+function addings:CHAT_MSG_WHISPER(arg1, arg2, ...)
 	if pfl.BossReply and UnitAffectingCombat("player") then
 		CE = addon.GetActiveEncounterData()
 		if CE.key ~= "default" then 
@@ -42,7 +42,7 @@ function Plugins:CHAT_MSG_WHISPER(arg1, arg2, ...)
 	end
 end
 
-function Plugins:CHAT_MSG_ADDON(prefix, message, _, sender)
+function addings:CHAT_MSG_ADDON(prefix, message, _, sender)
 	if pfl.DBMInterceptTimers and prefix == "DBMv4-Pizza" then 
 		local dbm_time, dbm_message = strsplit("\t", message)
 		if DXE.Alerts then
@@ -61,10 +61,10 @@ local function InitializeOptions()
 		if select(6,GetAddOnInfo("DXE_Options")) == "MISSING" then addon:Print((L["Missing %s"]):format("DXE_Options")) return end
 		if not IsAddOnLoaded("DXE_Options") then addon.Loader:Load("DXE_Options") end
 	end	
-	local Plugs = {
+	local PluginsGroup = {
 		type = "group",
-		name = L.Plugins["Misc"],
-		order = -10,
+		name = L.Plugins["Plugs"],
+		order = 10,
 		args = {
 				AutoRC = {
 					type = "toggle",
@@ -85,14 +85,14 @@ local function InitializeOptions()
 				DBMInterceptTimers = {
 					type = "toggle",
 					name = L.Plugins["Intercept DBM Pull and Puzza Timers"],
-					order = 15,
+					order = 16,
 					width = "full",
 					get = function(info) return db.profile.Plugins[info[#info]] end,
 					set = function(info,v) db.profile.Plugins[info[#info]] = v; module:RefreshProfile() end,
 				},
 		},
 	}
-	module.plugins_group = Plugs
+	module.plugins_group = PluginsGroup
 	addon.Options:RegisterPlugin(module)
 end
 
@@ -101,7 +101,7 @@ function module:GetOptions()
 end
 
 function module:OnInitialize()	
-	self.db = addon.db:RegisterNamespace("Plugins", defaults)
+	self.db = addon.db:RegisterNamespace("Addings", defaults)
 	db = addon.db
 	pfl = db.profile.Plugins
 
@@ -116,7 +116,7 @@ function module:RefreshProfile() pfl = db.profile.Plugins end
 
 addon:AddToRefreshProfile(RefreshProfile)
 
-Plugins:SetScript("OnEvent",function(self,event,...) self[event](self,...) end)
-Plugins:RegisterEvent("READY_CHECK")
-Plugins:RegisterEvent("CHAT_MSG_WHISPER")
-Plugins:RegisterEvent("CHAT_MSG_ADDON")
+addings:SetScript("OnEvent",function(self,event,...) self[event](self,...) end)
+addings:RegisterEvent("READY_CHECK")
+addings:RegisterEvent("CHAT_MSG_WHISPER")
+addings:RegisterEvent("CHAT_MSG_ADDON")

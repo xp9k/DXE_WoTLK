@@ -1,43 +1,48 @@
 -------------------------------------------------------------------------------
--- Test Declaration
+-- Test2 Declaration
 --
 
 local addon,L = DXE,DXE.L
-local test = CreateFrame("Frame")
-local module = addon:NewModule("Test")
+local test2 = CreateFrame("Frame")
+local module = addon:NewModule("Test2")
 local db = addon.db
 local Options = nil
 
-addon.plugins.Test = module
+addon.plugins.Test2 = module
 local plugins_group = {}
 local defaults = {
 		profile = {
-			Test = false
+			Test2 = false
 		}
 	}
 
 local function InitializeOptions()
-
-	local TestGroup = {
+	
+	local Test2Group = {
 		type = "group",
-		name = L.Plugins["Test"],
-		order = 1,
+		name = L.Plugins["Test2"],
+		order = 3,
 		args = {
-				Test = {
+				Test2 = {
 					type = "toggle",
-					name = L.Plugins["TestTestTestTestTest"],
-					order = 2,
+					name = L.Plugins["Test2Test2Test2Test2Test2"],
+					order = 4,
 					width = "full",
 					get = function(info) return db.profile.Plugins[info[#info]] end,
 					set = function(info,v) db.profile.Plugins[info[#info]] = v; module:RefreshProfile() end,
 				},
 		},
 	}
-	module.plugins_group = TestGroup	
+	module.plugins_group = Test2Group
+	
 end
 
 function module:OnInitialize()
-	self.db = addon.db:RegisterNamespace("Test", defaults)
+	if not addon.Options then
+		if select(6,GetAddOnInfo("DXE_Options")) == "MISSING" then addon:Print((L["Missing %s"]):format("DXE_Options")) return end
+		if not IsAddOnLoaded("DXE_Options") then addon.Loader:Load("DXE_Options") end
+	end
+	self.db = addon.db:RegisterNamespace("Test2", defaults)
 	db = addon.db
 	pfl = db.profile.Plugins
 
@@ -45,12 +50,9 @@ function module:OnInitialize()
 	db.RegisterCallback(self, "OnProfileCopied", "RefreshProfile")
 	db.RegisterCallback(self, "OnProfileReset", "RefreshProfile")
 	
-	if not addon.Options then
-		if select(6,GetAddOnInfo("DXE_Options")) == "MISSING" then addon:Print((L["Missing %s"]):format("DXE_Options")) return end
-		if not IsAddOnLoaded("DXE_Options") then addon.Loader:Load("DXE_Options") end
-	end		
-	InitializeOptions()	
-	addon.Options:RegisterPlugin(module)
+	InitializeOptions()
+	
+	addon.Options:RegisterPlugin(module)	
 end
 
 function module:GetOptions()
@@ -58,4 +60,4 @@ function module:GetOptions()
 end
 
 function module:RefreshProfile() pfl = db.profile.Plugins end
-test:SetScript("OnEvent",function(self,event,...) self[event](self,...) end)
+test2:SetScript("OnEvent",function(self,event,...) self[event](self,...) end)
