@@ -1,12 +1,10 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\FrameXML\UI.xsd">
 
-<Script file="Flump.lua"/>
-
 <Script file="Test.lua"/>
-<Script file="Test2.lua"/>
-<Script file="Test3.lua"/>
+<Script file="Flump.lua"/>
 <Script file="Plugins.lua"/>
 <Script file="Fatality.lua"/>
+<Script file="AutoResponder.lua"/>
 </Ui>
 

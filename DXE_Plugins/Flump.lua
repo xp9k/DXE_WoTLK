@@ -444,7 +444,7 @@ local function InitializeOptions()
 				desc = L.options["Only tanks"],
 				order = 6,
 				values = OnlyTanks,
-			},
+			},		
 		},
 	}
 	module.plugins_group = flump_group	
