@@ -70,7 +70,7 @@ local defaults = {
 		},
 		Flump = {
 			Enabled = true,
-			Chat = 0,
+			Chat = 2,
 			InCombat = false,
 			OnlyTanks = false,
 		},

@@ -16,12 +16,10 @@ local Options = nil
 local plugins_group = {}
 
 local defaults = {
-	profile = {
 		AutoRC = false,
 		BossReply = false,
 		DBMInterceptTimers = true,
-		},
-}
+	}
 
 local ReplyMessage = L.Plugins["%s is in combat with %s"]
 
@@ -71,24 +69,24 @@ local function InitializeOptions()
 					name = L.Plugins["Automatically accept ReadyCheck"],
 					order = 10,
 					width = "full",
-					get = function(info) return db.profile.Plugins[info[#info]] end,
-					set = function(info,v) db.profile.Plugins[info[#info]] = v; module:RefreshProfile() end,
+					get = function(info) return db.profile.Plugins.Addings[info[#info]] end,
+					set = function(info,v) db.profile.Plugins.Addings[info[#info]] = v; module:RefreshProfile() end,
 				},
 				BossReply = {
 					type = "toggle",
 					name = L.Plugins["Automatically reply for whisps while boss Encounter"],
 					order = 15,
 					width = "full",
-					get = function(info) return db.profile.Plugins[info[#info]] end,
-					set = function(info,v) db.profile.Plugins[info[#info]] = v; module:RefreshProfile() end,
+					get = function(info) return db.profile.Plugins.Addings[info[#info]] end,
+					set = function(info,v) db.profile.Plugins.Addings[info[#info]] = v; module:RefreshProfile() end,
 				},
 				DBMInterceptTimers = {
 					type = "toggle",
 					name = L.Plugins["Intercept DBM Pull and Puzza Timers"],
 					order = 16,
 					width = "full",
-					get = function(info) return db.profile.Plugins[info[#info]] end,
-					set = function(info,v) db.profile.Plugins[info[#info]] = v; module:RefreshProfile() end,
+					get = function(info) return db.profile.Plugins.Addings[info[#info]] end,
+					set = function(info,v) db.profile.Plugins.Addings[info[#info]] = v; module:RefreshProfile() end,
 				},
 		},
 	}
@@ -101,9 +99,13 @@ function module:GetOptions()
 end
 
 function module:OnInitialize()	
-	self.db = addon.db:RegisterNamespace("Addings", defaults)
+--	self.db = addon.db:RegisterNamespace("Addings", defaults)
 	db = addon.db
-	pfl = db.profile.Plugins
+	if db.profile.Plugins.Addings == nil then
+		db.profile.Plugins.Addings = defaults
+	end
+	
+	module:RefreshProfile()
 
 	db.RegisterCallback(self, "OnProfileChanged", "RefreshProfile")
 	db.RegisterCallback(self, "OnProfileCopied", "RefreshProfile")
@@ -112,7 +114,7 @@ function module:OnInitialize()
 	InitializeOptions()	
 end
 
-function module:RefreshProfile() pfl = db.profile.Plugins end
+function module:RefreshProfile() pfl = db.profile.Plugins.Addings end
 
 addon:AddToRefreshProfile(RefreshProfile)
 

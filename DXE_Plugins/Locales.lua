@@ -47,6 +47,14 @@ Plugins["ss"]	 = "%s умер с %s!"
 Plugins["miscellaneous"] = "%s применяет %s"
 
 --	Plugins Options
+Plugins["NONE"] = "НЕТ"
+Plugins["SELF"] = "Себе"
+Plugins["PARTY"] = "Группа"
+Plugins["RAID"] = "Рейд"
+
+Plugins["Flump enabled"] = "Flump включен"
+Plugins["Flump messages enabled"] = "Включить сообщения Flump"
+Plugins["Channel"] = "Канал"
 Plugins["Automatically accept ReadyCheck"] = "Автоматически принимать проверку готовности"
 Plugins["Automatically reply for whisps while boss Encounter"] = "Автоматически отвечать на личные сообщения при битве с боссами"
 Plugins["Intercept DBM Pull and Puzza Timers"] = "Перехватывать сообщения DBM для Перерыва и Пулла"

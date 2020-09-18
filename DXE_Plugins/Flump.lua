@@ -7,7 +7,7 @@ local EDB = addon.EDB
 local flump = CreateFrame("Frame")
 local module = addon:NewModule("Flump")
 
-addon.Flump = module
+addon.plugins.Flump = module
 
 -------------------------------------------------------------------------------
 -- Locals
@@ -16,13 +16,7 @@ addon.Flump = module
 --local L = LibStub("AceLocale-3.0"):GetLocale("DXE")
 
 local db = addon.db
-
-local Options = {
-			Enabled = true,
-			Chat = 0,
-			OnlyTanks = false,
-			InCombat = false
-			}
+local pfl
 
 local OUTPUT = "SELF"			-- Which channel should the announcements be sent to?
 local MIN_TANK_HP = 55000		-- How much health must a player have to be considered a tank?
@@ -185,6 +179,29 @@ local chats = {
 	"RAID",
 }
 
+local chats_loc = {
+	L.Plugins["NONE"],
+	L.Plugins["SELF"],
+	L.Plugins["PARTY"],
+	L.Plugins["RAID"],
+}
+
+local plugins_group = {}
+
+local defaults = {
+		Enabled = true,
+		Chat = 2,
+		OnlyTanks = false,
+		InCombat = false,
+}
+
+-- local Options = {
+			-- Enabled = true,
+			-- Chat = 0,
+			-- OnlyTanks = false,
+			-- InCombat = false
+			-- }
+
 -------------------------------------------------------------------------------
 -- Initialization
 --
@@ -220,13 +237,13 @@ end
 ]]--
 
 function IsTank(srcName)
-	return not (Options.OnlyTanks and not (UnitHealthMax(srcName) >= MIN_TANK_HP) )
+	return not (pfl.OnlyTanks and not (UnitHealthMax(srcName) >= MIN_TANK_HP) )
 --	return  UnitHealthMax(srcName) >= MIN_TANK_HP or not Options.OnlyTanks
 end
 
 function flump:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, srcFlags, destGUID, destName, destFlags, spellID, spellName, school, ...)
 
-	if not Options.Enabled then return end
+	if not pfl.Enabled then return end
 
 	-- If the caster isn't in the raid group
 	if not (UnitInRaid(srcName) or UnitInParty(srcName))then return end
@@ -295,7 +312,7 @@ function flump:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, s
 	end
 
 	
-	if not (Options.InCombat and not UnitAffectingCombat(srcName)) then -- If the caster is in combat	
+	if not (pfl.InCombat and not UnitAffectingCombat(srcName)) then -- If the caster is in combat	
 		if event == "SPELL_CAST_SUCCESS" then
 			if spells[spellID] then
 				send(L.Plugins["cast"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName)) -- [X] cast [Y] on [Z]
@@ -375,10 +392,85 @@ local function EnableDisable()
 	end
 end
 
+local function InitializeOptions()
+	local flump_group = {
+		type = "group",
+		name = "Flump",
+		get = function(info) return db.profile.Plugins.Flump[info[#info]] end,
+		set = function(info,v) db.profile.Plugins.Flump[info[#info]] = v; module:RefreshProfile() end,
+		order = 800,
+		args = {
+			description = {
+				type = "description",
+				name = L.options["Enable Flump messages"],
+				order = 1,
+				fontSize = "medium",
+			},
+			Enabled = {
+				type = "toggle",
+				name = L.options["Flump enabled"],
+				desc = L.options["Flump messages enabled"],
+				order = 2,
+				values = Enabled,
+				width = "full",
+--					get = function() return db.profile.Flump.Enabled or false end,
+--					set = function(_, value) db.profile.Flump.Enabled = value end,
+			},
+			Chat = {
+				type = "select",
+				name = L.options["Channel"],
+				desc = L.options["Channel"],
+				order = 3,
+				values = chats_loc,
+				get = function(info) return db.profile.Plugins.Flump[info[#info]] end,
+				set = function(info, index) db.profile.Plugins.Flump[info[#info]] = index > 4 and nil or index; module:RefreshProfile() end,
+			},
+			separator3 = {
+				type = "description",
+				name = " ",
+				order = 4,
+				width = "full",
+			},
+			InCombat = {
+				type = "toggle",
+				name = L.options["combat"],
+				desc = L.options["Only in combat"],
+				order = 5,
+				values = InCombat,
+			},
+			OnlyTanks = {
+				type = "toggle",
+				name = L.options["only_tanks"],
+				desc = L.options["Only tanks"],
+				order = 6,
+				values = OnlyTanks,
+			},
+		},
+	}
+	module.plugins_group = flump_group	
+end
+
 function module:OnInitialize()
-	Options = db.profile.Flump
-	OUTPUT = chats[Options.Chat]
-	EnableDisable()
+--	self.db = addon.db:RegisterNamespace("Flump", defaults)
+	
+	db = addon.db
+	if db.profile.Plugins.Flump == nil then
+		db.profile.Plugins.Flump = defaults
+	end
+	
+	module:RefreshProfile()
+	OUTPUT = chats[pfl.Chat]
+
+	db.RegisterCallback(self, "OnProfileChanged", "RefreshProfile")
+	db.RegisterCallback(self, "OnProfileCopied", "RefreshProfile")
+	db.RegisterCallback(self, "OnProfileReset", "RefreshProfile")
+	
+	if not addon.Options then
+		if select(6,GetAddOnInfo("DXE_Options")) == "MISSING" then addon:Print((L["Missing %s"]):format("DXE_Options")) return end
+		if not IsAddOnLoaded("DXE_Options") then addon.Loader:Load("DXE_Options") end
+	end		
+	InitializeOptions()	
+	addon.Options:RegisterPlugin(module)
 end
 
 flump:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
@@ -398,6 +490,12 @@ local function RefreshProfile(db)
 	OUTPUT = chats[Options.Chat]
 	addon:UpdateFlumpSettings()
 end
+
+function module:GetOptions()
+	return module.plugins_group
+end
+
+function module:RefreshProfile() pfl = db.profile.Plugins.Flump end
 
 addon:AddToRefreshProfile(RefreshProfile)
 

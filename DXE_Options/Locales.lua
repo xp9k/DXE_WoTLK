@@ -1977,14 +1977,6 @@ options["Only in combat"] = "Показывать сообщения тольк�
 options["only_tanks"] = "Только танки"
 options["Only tanks"] = "Показывать сообщения только от танков"
 
-options["NONE"] = "НЕТ"
-options["SELF"] = "Себе"
-options["PARTY"] = "Группа"
-options["RAID"] = "Рейд"
-
-options["Flump enabled"] = "Flump включен"
-options["Flump messages enabled"] = "Включить сообщения Flump"
-
 AL:GetLocale("DXE").options = AL:GetLocale("DXE Options")
 
 return
