@@ -2350,6 +2350,7 @@ local function InitializeOptions()
 end
 
 function module:RegisterPlugin(plg_module)	
+	print(plg_module)
 	tinsert(Plugins, plg_module)
 --	Plugins[#Plugins + 1] = plg_module
 	InitializeOptions()

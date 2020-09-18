@@ -41,19 +41,19 @@ local function InitializeOptions()
 	local AutoResponder = addon.AutoResponder
 	local AR_group = {
 		type = "group",
-		name = L.options["Auto Responder"],
+		name = L.Plugins["Auto Responder"],
 		get = function(info) return db.profile.Plugins.AutoResponder[info[#info]] end,
 		set = function(info,v) db.profile.Plugins.AutoResponder[info[#info]] = v end,
-		order = 400,
+		order = 5,
 		args = {
 			header = {
 				type = "header",
-				name = L.options["Auto Responder"],
+				name = L.Plugins["Auto Responder"],
 				order = 1200,
 			},
 			desc = {
 				type = "description",
-				name = L.options["Activates the automatic responder for whispers during boss encounters and receive a short summary of the current fight (boss name, time elapsed, how many raid members are alive). The auto respnder works for normal and Battle.net whispers."],
+				name = L.Plugins["Activates the automatic responder for whispers during boss encounters and receive a short summary of the current fight (boss name, time elapsed, how many raid members are alive)."],
 				order = 1300,
 				width = "full",
 			},
@@ -61,20 +61,20 @@ local function InitializeOptions()
 			header = {
 				type = "group",
 				order = 1305,
-				name = L.options["Settings"],
+				name = L.Plugins["Settings"],
 				inline = true,
 				args = {				
 					enabled = {
 						type = "toggle",
-						name = L.options["Enable Auto Responder"],
+						name = L.Plugins["Enable Auto Responder"],
 						order = 1400,
 						width = "double",
 					},
 					blank2 = genblank(1500),
 					whisperfilter = {
 						type = "toggle",
-						name = L.options["Enable Whisper Filter"],
-						desc = L.options["This option filter the message dxestatus sent to player appearing to you, disable if you want to see it."],
+						name = L.Plugins["Enable Whisper Filter"],
+						desc = L.Plugins["This option filter the message dxestatus sent to player appearing to you, disable if you want to see it."],
 						order = 1600,
 						width = "double",
 					},	

@@ -9,6 +9,8 @@ local module = addon:NewModule("Flump")
 
 addon.plugins.Flump = module
 
+flump.name = "Flump"
+
 -------------------------------------------------------------------------------
 -- Locals
 --
@@ -224,18 +226,6 @@ local function icon(name)
 	return n and format("{rt%d}", n) or ""
 end
 
---[[
-function flump:PLAYER_ENTERING_WORLD()
-	local _, instance = IsInInstance()
-	if FlumpEnabled then
-		self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-		print("COMBAT_LOG_EVENT_UNFILTERED")
-	else
-		self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-	end
-end
-]]--
-
 function IsTank(srcName)
 	return not (pfl.OnlyTanks and not (UnitHealthMax(srcName) >= MIN_TANK_HP) )
 --	return  UnitHealthMax(srcName) >= MIN_TANK_HP or not Options.OnlyTanks
@@ -374,18 +364,8 @@ function flump:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, s
 		
 end
 
--- function flump:ADDON_LOADED(name)
-	-- if name == "DXE_Flump" then
-		-- flump:Init()
-	-- elseif name == CORE_ADDON then
-		-- addon = DXE
-		-- addon.Flump = flump
-	-- end
--- --	if not B_MODS and not Z_MODS then self:UnregisterEvent("ADDON_LOADED"); self.ADDON_LOADED = nil end
--- end
-
 local function EnableDisable()
-	if Options.Enabled then
+	if pfl.Enabled then
 		flump:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	else
 		flump:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
@@ -397,19 +377,18 @@ local function InitializeOptions()
 		type = "group",
 		name = "Flump",
 		get = function(info) return db.profile.Plugins.Flump[info[#info]] end,
-		set = function(info,v) db.profile.Plugins.Flump[info[#info]] = v; module:RefreshProfile() end,
-		order = 800,
+		set = function(info,v) db.profile.Plugins.Flump[info[#info]] = v; module:RefreshProfile(); flump:set() end,
+		order = 1,
 		args = {
 			description = {
-				type = "description",
-				name = L.options["Enable Flump messages"],
-				order = 1,
-				fontSize = "medium",
+				type = "header",
+				name = L.Plugins["Enable Flump messages"],
+				order = 0,
 			},
 			Enabled = {
 				type = "toggle",
-				name = L.options["Flump enabled"],
-				desc = L.options["Flump messages enabled"],
+				name = L.Plugins["Enable %s"]:format(flump.name),
+				desc = L.Plugins["Flump messages enabled"],
 				order = 2,
 				values = Enabled,
 				width = "full",
@@ -418,8 +397,8 @@ local function InitializeOptions()
 			},
 			Chat = {
 				type = "select",
-				name = L.options["Channel"],
-				desc = L.options["Channel"],
+				name = L.Plugins["Channel"],
+				desc = L.Plugins["Channel"],
 				order = 3,
 				values = chats_loc,
 				get = function(info) return db.profile.Plugins.Flump[info[#info]] end,
@@ -433,15 +412,15 @@ local function InitializeOptions()
 			},
 			InCombat = {
 				type = "toggle",
-				name = L.options["combat"],
-				desc = L.options["Only in combat"],
+				name = L.Plugins["combat"],
+				desc = L.Plugins["Only in combat"],
 				order = 5,
 				values = InCombat,
 			},
 			OnlyTanks = {
 				type = "toggle",
-				name = L.options["only_tanks"],
-				desc = L.options["Only tanks"],
+				name = L.Plugins["only_tanks"],
+				desc = L.Plugins["Only tanks"],
 				order = 6,
 				values = OnlyTanks,
 			},		
@@ -451,7 +430,6 @@ local function InitializeOptions()
 end
 
 function module:OnInitialize()
---	self.db = addon.db:RegisterNamespace("Flump", defaults)
 	
 	db = addon.db
 	if db.profile.Plugins.Flump == nil then
@@ -468,7 +446,8 @@ function module:OnInitialize()
 	if not addon.Options then
 		if select(6,GetAddOnInfo("DXE_Options")) == "MISSING" then addon:Print((L["Missing %s"]):format("DXE_Options")) return end
 		if not IsAddOnLoaded("DXE_Options") then addon.Loader:Load("DXE_Options") end
-	end		
+	end
+	
 	InitializeOptions()	
 	addon.Options:RegisterPlugin(module)
 end
@@ -479,23 +458,20 @@ flump:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 -- SETTINGS
 ---------------------------------------
 
-function addon:UpdateFlumpSettings()
-	Options = db.profile.Flump
-	OUTPUT = chats[Options.Chat]
-	EnableDisable()	
-end
-
-local function RefreshProfile(db)
-	Options = db.profile.Flump
-	OUTPUT = chats[Options.Chat]
-	addon:UpdateFlumpSettings()
-end
-
 function module:GetOptions()
 	return module.plugins_group
 end
 
-function module:RefreshProfile() pfl = db.profile.Plugins.Flump end
+function flump:set()
+	if pfl.Enabled then
+		print(format(status, "|cffff0000on|r"))
+	else
+		print(format(status, "|cffff0000off|r"))
+	end
+	EnableDisable()
+end
+
+function module:RefreshProfile() pfl = db.profile.Plugins.Flump;  end
 
 addon:AddToRefreshProfile(RefreshProfile)
 

@@ -7,24 +7,35 @@ local module = addon:NewModule("Fatality")
 local db = addon.db
 local Options = nil
 
-addon.Fatality = module
+addon.plugins.Fatality = module
 local plugins_group = {}
-local defaults = {
-		profile = {
-			Fatality = false
-		}
-	}
 
 ------------ CONFIGURATION -----------
-local LIMIT = 10					-- number of deaths to report per combat session (default: 10)
-local OUTPUT = "RAID"				-- announcement channel (default: "RAID")
-local CHANNEL_NAME = "fatality" 	-- name of the channel to report to [note: OUTPUT must be set to "CHANNEL"] (default: "fatality")
-local OVERKILL = true				-- toggle overkill (default: true)
-local RAID_ICONS = true				-- toggle raid icons (default: true)
-local SHORT_NUMBERS = true			-- toggle short numbers [i.e. 9431 = 9.4k] (default: true)
-local EVENT_HISTORY = 1				-- number of damage events to report per person (default: 1)
+local defaults = {
+	LIMIT = 10,						-- number of deaths to report per combat session (default: 10)
+	OUTPUT = "RAID"	,				-- announcement channel (default: "RAID")
+	CHANNEL_NAME = "fatality",		-- name of the channel to report to [note: OUTPUT must be set to "CHANNEL"] (default: "fatality")
+	OVERKILL = true,				-- toggle overkill (default: true)
+	RAID_ICONS = true,				-- toggle raid icons (default: true)
+	SHORT_NUMBERS = true,			-- toggle short numbers [i.e. 9431 = 9.4k] (default: true)
+	EVENT_HISTORY = 1,				-- number of damage events to report per person (default: 1)
+}
 
-local Fatality = CreateFrame("frame")
+local chats = {
+	"NONE",
+	"SELF",
+	"PARTY",
+	"RAID",
+}
+
+local chats_loc = {
+	L.Plugins["NONE"],
+	L.Plugins["SELF"],
+	L.Plugins["PARTY"],
+	L.Plugins["RAID"],
+}
+
+local fatality = CreateFrame("frame")
 local status, death, unknown = "|cff39d7e5Fatality: %s|r", "Fatality: %s > %s", "Fatality: %s%s > Unknown"
 local limit = "|cffffff00(%s) Report cannot be sent because it exceeds the maximum character limit of 255. To fix this, decrease EVENT_HISTORY in Fatality.lua and /reload your UI.|r"
 local special = { ["SPELL_DAMAGE"] = true, ["SPELL_PERIODIC_DAMAGE"] = true, ["RANGE_DAMAGE"] = true }
@@ -39,7 +50,7 @@ local UnitInRaid, UnitIsDead, UnitIsFeignDeath = UnitInRaid, UnitIsDead, UnitIsF
 local UnitClass, UnitGUID, UnitExists, UnitBuff = UnitClass, UnitGUID, UnitExists, UnitBuff
 local GetTime, format, wipe, type, band = GetTime, string.format, wipe, type, bit.band
 
-Fatality:SetScript("OnEvent", function(self, event, ...)
+fatality:SetScript("OnEvent", function(self, event, ...)
 	self[event](self, ...)
 end)
 
@@ -113,7 +124,7 @@ local function shuffle(t)
     end
 end
 
-function Fatality:FormatOutput(guid, known)
+function fatality:FormatOutput(guid, known)
 	
 	local c = candidates[guid]
 	local destName, destFlags = c[#c].destName, c[#c].destFlags
@@ -175,7 +186,7 @@ function Fatality:FormatOutput(guid, known)
 	
 end
 
-function Fatality:RecordDamage(now, srcGUID, srcName, srcFlags, destGUID, destName, destFlags, spellID, spellName, environment, amount, overkill, crit, crush)
+function fatality:RecordDamage(now, srcGUID, srcName, srcFlags, destGUID, destName, destFlags, spellID, spellName, environment, amount, overkill, crit, crush)
 	
 	-- If the table doesn't already exist, create it
 	if not candidates[destGUID] then
@@ -215,7 +226,7 @@ function Fatality:RecordDamage(now, srcGUID, srcName, srcFlags, destGUID, destNa
 	
 end
 
-function Fatality:ReportDeath(guid)
+function fatality:ReportDeath(guid)
 	if not candidates[guid] then return end
 	local report, now, candidate = "", GetTime(), candidates[guid]
 	local id = candidate[1].destGUID
@@ -233,7 +244,7 @@ function Fatality:ReportDeath(guid)
 	end
 end
 
-function Fatality:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, srcFlags, destGUID, destName, destFlags, ...)
+function fatality:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, srcFlags, destGUID, destName, destFlags, ...)
 	
 	if not UnitInRaid(destName) then return end
 	
@@ -260,12 +271,12 @@ function Fatality:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName
 	
 end
 
-function Fatality:ClearData()
+function fatality:ClearData()
 	count = 0
 	wipe(candidates)
 end
 
-function Fatality:RegisterEvents()
+function fatality:RegisterEvents()
 	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	if unit_health then
@@ -275,7 +286,7 @@ function Fatality:RegisterEvents()
 	channel_id = GetChannelName(CHANNEL_NAME)
 end
 
-function Fatality:UnregisterEvents()
+function fatality:UnregisterEvents()
 	self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	self:UnregisterEvent("PLAYER_REGEN_DISABLED")
 	if unit_health then
@@ -284,8 +295,8 @@ function Fatality:UnregisterEvents()
 	end
 end
 
-function Fatality:CheckEnable()
-	if not self.db.enabled then return end
+function fatality:CheckEnable()
+	if not pfl.Enabled then return end
 	local _, instance = IsInInstance()
 	if instance == "raid" then
 		unit_health = instances[GetRealZoneText()] -- Only use UNIT_HEALTH to determine deaths in predefined instances 
@@ -296,14 +307,14 @@ function Fatality:CheckEnable()
 	end
 end
 
-function Fatality:UNIT_HEALTH(unit)
+function fatality:UNIT_HEALTH(unit)
 	if not units[unit] then return end
 	if UnitIsDead(unit) or UnitBuff(unit, spirit) then
 		self:ReportDeath(UnitGUID(unit))
 	end
 end
 
-function Fatality:RAID_ROSTER_UPDATE()
+function fatality:RAID_ROSTER_UPDATE()
 	wipe(units)
 	local name, group
 	local max_group = 6 - (GetInstanceDifficulty() % 2) * 3
@@ -315,48 +326,30 @@ function Fatality:RAID_ROSTER_UPDATE()
 	end
 end
 
-function Fatality:PLAYER_REGEN_DISABLED()
+function fatality:PLAYER_REGEN_DISABLED()
 	self:ClearData()
 end
 
-function Fatality:ZONE_CHANGED()
+function fatality:ZONE_CHANGED()
 	self:CheckEnable()
 end
 
-function Fatality:PLAYER_LOGIN()
+function fatality:PLAYER_LOGIN()
 	self:CheckEnable()
 end
 
-function Fatality:ZONE_CHANGED_NEW_AREA()
+function fatality:ZONE_CHANGED_NEW_AREA()
 	self:CheckEnable()
 end
 
-function Fatality:PLAYER_ENTERING_WORLD()
+function fatality:PLAYER_ENTERING_WORLD()
 	if not unit_health then -- Just in case Z_C or Z_C_N_A fire before P_E_W
 		self:CheckEnable()
 	end
 end
 
-function Fatality:ADDON_LOADED(addon)
+function fatality:ADDON_LOADED(addon)
 	if addon ~= "Fatality" then return end
-	FatalityDB = FatalityDB or { enabled = true }
-	self.db = FatalityDB
-	SLASH_FATALITY1, SLASH_FATALITY2 = "/fatality", "/fat"
-	SlashCmdList.FATALITY = function()
-		if self.db.enabled then
-			self:UnregisterEvents()
-			self.db.enabled = false
-			print(format(status, "|cffff0000off|r"))
-		else
-			self:RegisterEvents()
-			self.db.enabled = true
-			print(format(status, "|cff00ff00on|r"))
-		end
-	end
-	self:RegisterEvent("PLAYER_LOGIN")
-	self:RegisterEvent("ZONE_CHANGED")
-	self:RegisterEvent("ZONE_CHANGED_NEW_AREA")
-	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 end
 
 local function InitializeOptions()
@@ -367,15 +360,90 @@ local function InitializeOptions()
 	local FatalityGroup = {
 		type = "group",
 		name = L.Plugins["Fatality"],
-		order = -10,
+		order = 2,
 		args = {
-				Fatality = {
+				description = {
+					type = "header",
+					name = L.Plugins["Enable Fatality messages"],
+					order = 0,
+				},
+				Enabled = {
 					type = "toggle",
-					name = L.Plugins["Enable Fatality plugin"],
+					name = L.Plugins["Enable %s"]:format("Fatality"),
+					order = 2,
+					width = "full",
+					get = function(info) return db.profile.Plugins.Fatality[info[#info]] end,
+					set = function(info,v) db.profile.Plugins.Fatality[info[#info]] = v; module:RefreshProfile(); fatality:set() end,
+				},
+				LIMIT = {
+					type = "range",
+					name = L.Plugins["LIMIT"],
+					order = 3,
+					min = 1,
+					max = 25,
+					step = 1,
+					width = "full",
+					get = function(info) return db.profile.Plugins.Fatality[info[#info]] end,
+					set = function(info,v) db.profile.Plugins.Fatality[info[#info]] = v; module:RefreshProfile() end,
+				},
+				OUTPUT = {
+					type = "select",
+					name = L.Plugins["OUTPUT"],
+					order = 4,
+					width = "normal",
+					values = chats_loc,
+--					get = function(info) return db.profile.Plugins.Fatality[info[#info]] end,
+--					set = function(info,v) db.profile.Plugins.Fatality[info[#info]] = v; module:RefreshProfile() end,
+				},
+				CHANNEL_NAME = {
+					type = "input",
+					name = L.Plugins["CHANNEL_NAME"],
+					usage = "fatality",
+					order = 5,
+					width = "normal",
+					get = function(info) return db.profile.Plugins.Fatality[info[#info]] end,
+					set = function(info,v) db.profile.Plugins.Fatality[info[#info]] = v; module:RefreshProfile() end,
+				},
+				BLANK = {
+					type = "description",
+					name = "",
+					order = 6,
+					width = "full",
+				},
+				OVERKILL = {
+					type = "toggle",
+					name = L.Plugins["OVERKILL"],
+					order = 7,
+					width = "normal",
+					get = function(info) return db.profile.Plugins.Fatality[info[#info]] end,
+					set = function(info,v) db.profile.Plugins.Fatality[info[#info]] = v; module:RefreshProfile() end,
+				},
+				RAID_ICONS = {
+					type = "toggle",
+					name = L.Plugins["RAID_ICONS"],
+					order = 8,
+					width = "normal",
+					get = function(info) return db.profile.Plugins.Fatality[info[#info]] end,
+					set = function(info,v) db.profile.Plugins.Fatality[info[#info]] = v; module:RefreshProfile() end,
+				},
+				SHORT_NUMBERS = {
+					type = "toggle",
+					name = L.Plugins["SHORT_NUMBERS"],
+					order = 9,
+					width = "normal",
+					get = function(info) return db.profile.Plugins.Fatality[info[#info]] end,
+					set = function(info,v) db.profile.Plugins.Fatality[info[#info]] = v; module:RefreshProfile() end,
+				},
+				EVENT_HISTORY = {
+					type = "range",
+					name = L.Plugins["EVENT_HISTORY"],
+					min = 1,
+					max = 10,
+					step = 1,
 					order = 10,
 					width = "full",
-					get = function(info) return db.profile.Plugins[info[#info]] end,
-					set = function(info,v) db.profile.Plugins[info[#info]] = v; module:RefreshProfile() end,
+					get = function(info) return db.profile.Plugins.Fatality[info[#info]] end,
+					set = function(info,v) db.profile.Plugins.Fatality[info[#info]] = v; module:RefreshProfile() end,
 				},
 		},
 	}
@@ -384,6 +452,17 @@ local function InitializeOptions()
 end
 
 function module:OnInitialize()
+	db = addon.db
+	if db.profile.Plugins.Fatality == nil then
+		db.profile.Plugins.Fatality = defaults
+	end
+	
+	module:RefreshProfile()
+	
+	db.RegisterCallback(self, "OnProfileChanged", "RefreshProfile")
+	db.RegisterCallback(self, "OnProfileCopied", "RefreshProfile")
+	db.RegisterCallback(self, "OnProfileReset", "RefreshProfile")
+	
 	InitializeOptions()	
 end
 
@@ -391,6 +470,14 @@ function module:GetOptions()
 	return module.plugins_group
 end
 
-function module:RefreshProfile() pfl = db.profile.Plugins end
+function fatality:set()
+	if pfl.Enabled then
+		print(format("|cff39d7e5Fatality: %s|r", "|cffff0000on|r"))
+	else
+		print(format("|cff39d7e5Fatality: %s|r", "|cffff0000off|r"))
+	end
+end
 
-Fatality:RegisterEvent("ADDON_LOADED")
+function module:RefreshProfile() pfl = db.profile.Plugins.Fatality; fatality:CheckEnable() end
+
+fatality:RegisterEvent("ADDON_LOADED")

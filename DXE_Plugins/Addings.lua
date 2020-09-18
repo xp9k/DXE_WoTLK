@@ -62,7 +62,7 @@ local function InitializeOptions()
 	local PluginsGroup = {
 		type = "group",
 		name = L.Plugins["Plugs"],
-		order = 10,
+		order = 4,
 		args = {
 				AutoRC = {
 					type = "toggle",
