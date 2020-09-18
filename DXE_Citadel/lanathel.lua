@@ -41,7 +41,7 @@ do
 				"alert","enragecd",
 				"alert","bloodboltcd",
 				"alert","inciteterrorcd",
-				"alert","pactcd",
+				"alert",{"pactcd", time = 15},
 				"alert","swarmingshadowcd",
 			},
 		},
@@ -137,10 +137,10 @@ do
 				varname = format(L.alert["%s Cooldown"],L.alert["Pact"]),
 				type = "dropdown",
 				text = format(L.alert["%s Cooldown"],L.alert["Pact"]),
-				time = "<pacttime>",
+				time = 30,
 				flashtime = 5,
 				color1 = "BLACK",
---				sound = "ALERT5",
+				audiocd = 5,
 				icon = ST[71340],
 			},
 			swarmingshadowcd = {
@@ -273,7 +273,8 @@ do
 				spellname = 71336, -- 10/25
 				execute = {
 					{
-						"alert","pactcd",
+						"quash", "pactcd",
+						"alert", "pactcd",
 					},
 				},
 			},
