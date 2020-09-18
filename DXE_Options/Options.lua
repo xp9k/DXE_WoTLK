@@ -2403,12 +2403,13 @@ local function InitializeOptions()
 		childGroups = "tab",
 		name = L.Plugins["Plugins"],
 		order = -10,
-			args = {},
+			args = {
+			},
 		}
 		
 		plugins_group.args = GetPlugisOptions()
 		opts_args.plugins_group = plugins_group
-		print(tdump(plugins_group))
+--		print(tdump(plugins_group))
 	end
 
 	---------------------------------------------
@@ -2429,20 +2430,27 @@ local function InitializeOptions()
 end
 
 function module:RegisterPlugin(plg_module)	
---	tinsert(Plugins, plg_module)
-	Plugins[#Plugins + 1] = plg_module
---	InitializeOptions()	
+	tinsert(Plugins, plg_module)
+--	Plugins[#Plugins + 1] = plg_module
+	InitializeOptions()
+	self:UpdateOptions()
+end
+
+
+function module:UpdateOptions()
+	if opts ~= nil then
+		AC:RegisterOptionsTable("DXE", opts)
+	end
 end
 
 function GetPlugisOptions()
-	local args = {}
-	local name
+	local args = {}	
+	
 	for key, value in ipairs(Plugins) do
 		name = value.name
 		args[name] = value:GetOptions()
 --		print(tostring(key) .. " " .. name)
 	end
---	print(tdump(args))
 	return args
 end
 
@@ -2481,6 +2489,7 @@ function module:ToggleConfig() ACD[ACD.OpenFrames.DXE and "Close" or "Open"](ACD
 	-- for key, value in ipairs(Plugins) do 
 		-- opts_args.Plugins.args[value.name] = value:GetOptions()
 		-- print(value.name)
-	-- end
-	InitializeOptions()
+	-- end	
+	
+--	self:UpdateOptions()	
 end
