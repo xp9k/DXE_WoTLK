@@ -364,13 +364,13 @@ function flump:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, s
 		
 end
 
-local function EnableDisable()
-	if pfl.Enabled then
-		flump:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-	else
-		flump:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-	end
-end
+-- local function EnableDisable()
+	-- if pfl.Enabled then
+		-- flump:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	-- else
+		-- flump:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	-- end
+-- end
 
 local function InitializeOptions()
 	local flump_group = {
@@ -392,8 +392,6 @@ local function InitializeOptions()
 				order = 2,
 				values = Enabled,
 				width = "full",
---					get = function() return db.profile.Flump.Enabled or false end,
---					set = function(_, value) db.profile.Flump.Enabled = value end,
 			},
 			Chat = {
 				type = "select",
@@ -465,13 +463,15 @@ end
 function flump:set()
 	if pfl.Enabled then
 		print(format(status, "|cffff0000on|r"))
+		flump:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	else
 		print(format(status, "|cffff0000off|r"))
+		flump:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	end
-	EnableDisable()
+--	EnableDisable()
 end
 
-function module:RefreshProfile() pfl = db.profile.Plugins.Flump;  end
+function module:RefreshProfile() pfl = db.profile.Plugins.Flump; OUTPUT = chats[pfl.Chat]; end
 
 addon:AddToRefreshProfile(RefreshProfile)
 

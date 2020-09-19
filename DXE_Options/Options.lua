@@ -2347,6 +2347,13 @@ local function InitializeOptions()
 	addon:AddDebugOptions(debug_group.args)
 	--@end-debug@]===]
 
+	db = addon.db
+	
+	opts_args.profile = LibStub("AceDBOptions-3.0"):GetOptionsTable(db)
+	if addon.LDS then addon.LDS:EnhanceOptions(opts_args.profile,db) end
+	opts_args.profile.order = -20
+	
+	AC:RegisterOptionsTable("DXE", opts)
 end
 
 function module:RegisterPlugin(plg_module)	
@@ -2354,14 +2361,17 @@ function module:RegisterPlugin(plg_module)
 	tinsert(Plugins, plg_module)
 --	Plugins[#Plugins + 1] = plg_module
 	InitializeOptions()
-	self:UpdateOptions()
+--	self:UpdateOptions()
 end
 
 
 function module:UpdateOptions()
-	if opts ~= nil then
+--	if opts ~= nil  then	
+		-- opts_args.profile = LibStub("AceDBOptions-3.0"):GetOptionsTable(db)
+		-- if addon.LDS then addon.LDS:EnhanceOptions(opts.args.profile, db) end
+--		opts_args.profile.order = -20		
 		AC:RegisterOptionsTable("DXE", opts)
-	end
+--	end
 end
 
 function GetPlugisOptions()
@@ -2398,9 +2408,9 @@ function module:OnInitialize()
 --	InitializeOptions = nil
 	self:FillEncounters()
 
-	opts_args.profile = LibStub("AceDBOptions-3.0"):GetOptionsTable(db)
-	if addon.LDS then addon.LDS:EnhanceOptions(opts_args.profile,db) end
-	opts_args.profile.order = -10
+	-- opts_args.profile = LibStub("AceDBOptions-3.0"):GetOptionsTable(db)
+	-- if addon.LDS then addon.LDS:EnhanceOptions(opts_args.profile,db) end
+	-- opts_args.profile.order = -20
 
 	AC:RegisterOptionsTable("DXE", opts)
 	ACD:SetDefaultSize("DXE", DEFAULT_WIDTH, DEFAULT_HEIGHT)

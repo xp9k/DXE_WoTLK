@@ -40,7 +40,7 @@ Plugins["sw"]	 = "%s заканчивается на %s%s!"
 Plugins["cast"]	 = "%s%s применяет %s на %s%s!"
 Plugins["fade"]	 = "На %s%s заканчивается %s от %s%s!"
 Plugins["feast"]  = "%s%s готовит %s!"
-Plugins["gs"]	 = "%s%s's %s прокнул: %d отлечено!"
+Plugins["gs"]	 = "У %s%s прокнул %s: %d отлечено!"
 Plugins["ad"]	 = "%s%s's %s consumed!"
 Plugins["res"]	 = "%s%s применяет %s на %s%s!"
 Plugins["portal"] = "%s%s открыл(а) %s!"
@@ -79,11 +79,13 @@ Plugins["This option filter the message dxestatus sent to player appearing to yo
 --	Fatality
 Plugins["Number of deaths to report per combat session (default: 10)"] = "Количество смертей в отчете за бой (По умолчанию: 10)"
 Plugins["Channel name"] = "Название канала"
-Plugins["Fatality_OVERKILL"] = "Оверкил"
+Plugins["Fatality_OVERKILL"] = "Избыточный урон"
 Plugins["Fatality_RAID_ICONS"] = "Рейдовые иконки"
 Plugins["Short Nnumbers (i.e. 9431 = 9.4k)"] = "Сокращенные числа (Напр. 9431 = 9.4k)"
 Plugins["Name of the channel to report to (note: OUTPUT must be set to CHANNEL)"] = "Название канала для отчета (Вывод должен быть установлен в Канал)"
-Plugins["Number of damage events to report per person (default: 1)"] = "Количество событий для отчета на игрока (По ум.: 1)"
+Plugins["Number of damage events to report per person (default: 1)"] = "Количество событий для отчета на игрока (По умолчанию: 1)"
+Plugins["Only in raid"] = "Только в рейде"
+Plugins["Show death only in raid"] = "Показывать смерти только в рейде"
 
 AL:GetLocale("DXE").Plugins = AL:GetLocale("DXE Plugins")
 

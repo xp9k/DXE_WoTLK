@@ -20,6 +20,7 @@ local defaults = {
 	RAID_ICONS = true,				-- toggle raid icons (default: true)
 	SHORT_NUMBERS = true,			-- toggle short numbers [i.e. 9431 = 9.4k] (default: true)
 	EVENT_HISTORY = 1,				-- number of damage events to report per person (default: 1)
+	RAID_ONLY = true,
 }
 
 local chats = {
@@ -249,7 +250,7 @@ end
 
 function fatality:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, srcFlags, destGUID, destName, destFlags, ...)
 	
-	if not UnitInRaid(destName) then return end
+	if (pfl.RAID_ONLY and not UnitInRaid(destName)) or (not UnitInParty(destName)) then return end
 	
 	local spellID, spellName, amount, overkill, environment, crit, crush
 	
@@ -301,10 +302,11 @@ end
 function fatality:CheckEnable()
 	if not pfl.Enabled then return end
 	local _, instance = IsInInstance()
-	if instance == "raid" then
+	if not (pfl.RAID_ONLY and not instance == "raid") then
 		unit_health = instances[GetRealZoneText()] -- Only use UNIT_HEALTH to determine deaths in predefined instances 
 		self:ClearData()
 		self:RegisterEvents()
+--		print(chats[pfl.OUTPUT])
 	else
 		self:UnregisterEvents()
 	end
@@ -352,7 +354,7 @@ function fatality:PLAYER_ENTERING_WORLD()
 end
 
 function fatality:ADDON_LOADED(addon)
-	if addon ~= "Fatality" then return end
+--	if addon ~= "Fatality" then return end
 end
 
 local function InitializeOptions()
@@ -376,7 +378,7 @@ local function InitializeOptions()
 					order = 2,
 					width = "full",
 					get = function(info) return db.profile.Plugins.Fatality[info[#info]] end,
-					set = function(info,v) db.profile.Plugins.Fatality[info[#info]] = v; module:RefreshProfile(); fatality:set() end,
+					set = function(info,v) db.profile.Plugins.Fatality[info[#info]] = v; module:RefreshProfile(); fatality:PrintStatus() end,
 				},
 				LIMIT = {
 					type = "range",
@@ -396,7 +398,7 @@ local function InitializeOptions()
 					width = "normal",
 					values = chats_loc,
 					get = function(info) return db.profile.Plugins.Fatality[info[#info]] end,
-					set = function(info, index) db.profile.Plugins.Fatality[info[#info]] = index > 5 and nil or index; module:RefreshProfile() end,
+					set = function(info, index) db.profile.Plugins.Fatality[info[#info]] = index > 5 and nil or index; module:RefreshProfile(); end,
 				},
 				CHANNEL_NAME = {
 					type = "input",
@@ -436,6 +438,15 @@ local function InitializeOptions()
 				SHORT_NUMBERS = {
 					type = "toggle",
 					name = L.Plugins["Short Nnumbers (i.e. 9431 = 9.4k)"],
+					order = 9,
+					width = "normal",
+					get = function(info) return db.profile.Plugins.Fatality[info[#info]] end,
+					set = function(info,v) db.profile.Plugins.Fatality[info[#info]] = v; module:RefreshProfile() end,
+				},
+				RAID_ONLY = {
+					type = "toggle",
+					name = L.Plugins["Only in raid"],
+					desc = L.Plugins["Show death only in raid"],
 					order = 9,
 					width = "normal",
 					get = function(info) return db.profile.Plugins.Fatality[info[#info]] end,
@@ -484,18 +495,19 @@ function module:OnInitialize()
 	db.RegisterCallback(self, "OnProfileReset", "RefreshProfile")
 	
 	InitializeOptions()	
+	fatality:CheckEnable()
 end
 
 function module:GetOptions()
 	return module.plugins_group
 end
 
-function fatality:set()
+function fatality:PrintStatus()
 	if pfl.Enabled then
 		print(format("|cff39d7e5Fatality: %s|r", "|cffff0000on|r"))
 	else
 		print(format("|cff39d7e5Fatality: %s|r", "|cffff0000off|r"))
-	end
+	end 
 end
 
 function module:RefreshProfile() pfl = db.profile.Plugins.Fatality; fatality:CheckEnable() end
