@@ -7,17 +7,18 @@ local CE
 
 local addings = CreateFrame("Frame")
 local db = addon.db
+local Options = addon.Options
 local pfl
 
 local module = addon:NewModule("Addings")
 addon.plugins.Addings = module
 
-local Options = nil
+
 local plugins_group = {}
 
 local defaults = {
 		AutoRC = false,
-		BossReply = false,
+		AchievementScreenshot = false,
 		DBMInterceptTimers = true,
 	}
 
@@ -30,15 +31,15 @@ function addings:READY_CHECK()
 	end
 end
 
-function addings:CHAT_MSG_WHISPER(arg1, arg2, ...)
-	if pfl.BossReply and UnitAffectingCombat("player") then
-		CE = addon.GetActiveEncounterData()
-		if CE.key ~= "default" then 
-			print(CE.triggers.scan)
-			SendChatMessage(ReplyMessage:format(UnitName("player"), CE.name), "WHISPER", nil, arg2);
-		end
-	end
-end
+-- function addings:CHAT_MSG_WHISPER(arg1, arg2, ...)
+	-- if pfl.BossReply and UnitAffectingCombat("player") then
+		-- CE = addon.GetActiveEncounterData()
+		-- if CE.key ~= "default" then 
+			-- print(CE.triggers.scan)
+			-- SendChatMessage(ReplyMessage:format(UnitName("player"), CE.name), "WHISPER", nil, arg2);
+		-- end
+	-- end
+-- end
 
 function addings:CHAT_MSG_ADDON(prefix, message, _, sender)
 	if pfl.DBMInterceptTimers and prefix == "DBMv4-Pizza" then 
@@ -47,6 +48,12 @@ function addings:CHAT_MSG_ADDON(prefix, message, _, sender)
 			DXE.Alerts.QuashAll()
 			DXE.Alerts.Dropdown(_, "DXE_DBM_PIZZA", sender .. ": " .. dbm_message, tonumber(dbm_time), 5, "DXE ALERT1", "DCYAN", nil, nil, addon.ST[72350], 5)
 		end
+	end
+end
+
+function addings:ACHIEVEMENT_EARNED()
+	if pfl.AchievementScreenshot then 
+		TakeScreenshot()
 	end
 end
 
@@ -72,9 +79,9 @@ local function InitializeOptions()
 					get = function(info) return db.profile.Plugins.Addings[info[#info]] end,
 					set = function(info,v) db.profile.Plugins.Addings[info[#info]] = v; module:RefreshProfile() end,
 				},
-				BossReply = {
+				AchievementScreenshot = {
 					type = "toggle",
-					name = L.Plugins["Automatically reply for whisps while boss Encounter"],
+					name = L.Plugins["Automatically take screenshots when achieve has earned"],
 					order = 15,
 					width = "full",
 					get = function(info) return db.profile.Plugins.Addings[info[#info]] end,
@@ -120,5 +127,6 @@ addon:AddToRefreshProfile(RefreshProfile)
 
 addings:SetScript("OnEvent",function(self,event,...) self[event](self,...) end)
 addings:RegisterEvent("READY_CHECK")
-addings:RegisterEvent("CHAT_MSG_WHISPER")
+-- addings:RegisterEvent("CHAT_MSG_WHISPER")
 addings:RegisterEvent("CHAT_MSG_ADDON")
+addings:RegisterEvent("ACHIEVEMENT_EARNED")

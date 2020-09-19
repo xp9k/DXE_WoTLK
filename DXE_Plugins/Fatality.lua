@@ -5,6 +5,7 @@
 local addon,L = DXE,DXE.L
 local module = addon:NewModule("Fatality")
 local db = addon.db
+local pfl
 local Options = nil
 
 addon.plugins.Fatality = module
@@ -26,6 +27,7 @@ local chats = {
 	"SELF",
 	"PARTY",
 	"RAID",
+	"CHANNEL",
 }
 
 local chats_loc = {
@@ -33,6 +35,7 @@ local chats_loc = {
 	L.Plugins["SELF"],
 	L.Plugins["PARTY"],
 	L.Plugins["RAID"],
+	L.Plugins["CHANNEL"],
 }
 
 local fatality = CreateFrame("frame")
@@ -58,7 +61,7 @@ local rt, path = "{rt%d}", "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_%d
 local rt1, rtmask = COMBATLOG_OBJECT_RAIDTARGET1, COMBATLOG_OBJECT_SPECIAL_MASK
 
 local function icon(flag)
-	if not RAID_ICONS then return "" end
+	if not pfl.RAID_ICONS then return "" end
 	local number, mask, mark
 	if band(flag, rtmask) ~= 0 then
 		for i=1,8 do
@@ -67,11 +70,11 @@ local function icon(flag)
 			if mark then number = i break end
 		end
 	end
-	return number and (OUTPUT == "SELF" and format(path, number) or format(rt, number)) or ""
+	return number and (chats[pfl.OUTPUT] == "SELF" and format(path, number) or format(rt, number)) or ""
 end
 
 local function shorten(n)
-	if not (SHORT_NUMBERS and type(n) == "number") then return n end
+	if not (pfl.SHORT_NUMBERS and type(n) == "number") then return n end
 	if n >= 10000000 then
 		return format("%.1fM", n/1000000)
 	elseif n >= 1000000 then
@@ -86,7 +89,7 @@ local function shorten(n)
 end
 
 local function color(name)
-	if OUTPUT ~= "SELF" then return name end
+	if chats[pfl.OUTPUT] ~= "SELF" then return name end
 	if not UnitExists(name) then return format("|cffff0000%s|r", name) end
 	local _, class = UnitClass(name)
 	local color = _G["RAID_CLASS_COLORS"][class]
@@ -94,14 +97,14 @@ local function color(name)
 end
 
 local function send(message)
-	if OUTPUT == "SELF" then
+	if chats[pfl.OUTPUT] == "SELF" then
 		print(message)
 	else
 		local where
-		if OUTPUT == "CHANNEL" then
+		if chats[pfl.OUTPUT] == "CHANNEL" then
 			where = channel_id
 		end
-		SendChatMessage(message, OUTPUT, nil, where)
+		SendChatMessage(message, chats[pfl.OUTPUT], nil, where)
 	end
 end
 
@@ -139,7 +142,7 @@ function fatality:FormatOutput(guid, known)
 	
 	local source, info, full
 	
-	for i=1,EVENT_HISTORY do
+	for i=1,pfl.EVENT_HISTORY do
 	
 		local e = c[i]
 		if not e then break end
@@ -154,8 +157,8 @@ function fatality:FormatOutput(guid, known)
 		local ability = (e.spellID and GetSpellLink(e.spellID)) or e.environment or "Melee"
 		
 		if e.amount > 0 then 
-			local amount = (OVERKILL and (e.amount - e.overkill)) or e.amount
-			local overkill = (OVERKILL and e.overkill > 0) and format(" (O: %s)", shorten(e.overkill)) or ""
+			local amount = (pfl.OVERKILL and (e.amount - e.overkill)) or e.amount
+			local overkill = (pfl.OVERKILL and e.overkill > 0) and format(" (O: %s)", shorten(e.overkill)) or ""
 			amount = shorten(amount)
 			if not e.environment then
 				local crit_crush = (e.crit and " (Critical)") or (e.crush and " (Crushing)") or ""
@@ -176,7 +179,7 @@ function fatality:FormatOutput(guid, known)
 	
 	local msg = format(death, dest, full)
 
-	if msg:len() > 255 and OUTPUT ~= "SELF" then
+	if msg:len() > 255 and chats[pfl.OUTPUT] ~= "SELF" then
 		local err = format(limit, destName)
 		print(format(status, err))
 		return
@@ -196,13 +199,13 @@ function fatality:RecordDamage(now, srcGUID, srcName, srcFlags, destGUID, destNa
 	-- Store the table in a temporary variable
 	local t = candidates[destGUID]
 
-	if EVENT_HISTORY == 1 then
+	if pfl.EVENT_HISTORY == 1 then
 		history = 1
-	elseif #t < EVENT_HISTORY then
+	elseif #t < pfl.EVENT_HISTORY then
         history = #t + 1
     else
         shuffle(t)
-        history = EVENT_HISTORY
+        history = pfl.EVENT_HISTORY
     end
 	
 	if not t[history] then
@@ -230,7 +233,7 @@ function fatality:ReportDeath(guid)
 	if not candidates[guid] then return end
 	local report, now, candidate = "", GetTime(), candidates[guid]
 	local id = candidate[1].destGUID
-	if candidate and count < LIMIT then
+	if candidate and count < pfl.LIMIT then
 		-- If the last damage event is more than 2 seconds before
 		-- UNIT_DIED fired, assume the cause of death is unknown
 		if (now - candidate[#candidate].time) < 2 then
@@ -283,7 +286,7 @@ function fatality:RegisterEvents()
 		self:RegisterEvent("UNIT_HEALTH")
 		self:RegisterEvent("RAID_ROSTER_UPDATE")
 	end
-	channel_id = GetChannelName(CHANNEL_NAME)
+	channel_id = GetChannelName(pfl.CHANNEL_NAME)
 end
 
 function fatality:UnregisterEvents()
@@ -377,7 +380,7 @@ local function InitializeOptions()
 				},
 				LIMIT = {
 					type = "range",
-					name = L.Plugins["LIMIT"],
+					name = L.Plugins["Number of deaths to report per combat session (default: 10)"],
 					order = 3,
 					min = 1,
 					max = 25,
@@ -388,21 +391,25 @@ local function InitializeOptions()
 				},
 				OUTPUT = {
 					type = "select",
-					name = L.Plugins["OUTPUT"],
+					name = L.Plugins["Channel"],
 					order = 4,
 					width = "normal",
 					values = chats_loc,
---					get = function(info) return db.profile.Plugins.Fatality[info[#info]] end,
---					set = function(info,v) db.profile.Plugins.Fatality[info[#info]] = v; module:RefreshProfile() end,
+					get = function(info) return db.profile.Plugins.Fatality[info[#info]] end,
+					set = function(info, index) db.profile.Plugins.Fatality[info[#info]] = index > 5 and nil or index; module:RefreshProfile() end,
 				},
 				CHANNEL_NAME = {
 					type = "input",
-					name = L.Plugins["CHANNEL_NAME"],
+					name = L.Plugins["Channel name"],
+					desc = L.Plugins["Name of the channel to report to (note: OUTPUT must be set to CHANNEL)"],
 					usage = "fatality",
 					order = 5,
 					width = "normal",
 					get = function(info) return db.profile.Plugins.Fatality[info[#info]] end,
 					set = function(info,v) db.profile.Plugins.Fatality[info[#info]] = v; module:RefreshProfile() end,
+					disabled = function(info)
+						return ((db.profile.Plugins.Fatality.OUTPUT ~= 5))
+					end,
 				},
 				BLANK = {
 					type = "description",
@@ -412,7 +419,7 @@ local function InitializeOptions()
 				},
 				OVERKILL = {
 					type = "toggle",
-					name = L.Plugins["OVERKILL"],
+					name = L.Plugins["Fatality_OVERKILL"],
 					order = 7,
 					width = "normal",
 					get = function(info) return db.profile.Plugins.Fatality[info[#info]] end,
@@ -420,7 +427,7 @@ local function InitializeOptions()
 				},
 				RAID_ICONS = {
 					type = "toggle",
-					name = L.Plugins["RAID_ICONS"],
+					name = L.Plugins["Fatality_RAID_ICONS"],
 					order = 8,
 					width = "normal",
 					get = function(info) return db.profile.Plugins.Fatality[info[#info]] end,
@@ -428,7 +435,7 @@ local function InitializeOptions()
 				},
 				SHORT_NUMBERS = {
 					type = "toggle",
-					name = L.Plugins["SHORT_NUMBERS"],
+					name = L.Plugins["Short Nnumbers (i.e. 9431 = 9.4k)"],
 					order = 9,
 					width = "normal",
 					get = function(info) return db.profile.Plugins.Fatality[info[#info]] end,
@@ -436,7 +443,7 @@ local function InitializeOptions()
 				},
 				EVENT_HISTORY = {
 					type = "range",
-					name = L.Plugins["EVENT_HISTORY"],
+					name = L.Plugins["Number of damage events to report per person (default: 1)"],
 					min = 1,
 					max = 10,
 					step = 1,
@@ -449,6 +456,19 @@ local function InitializeOptions()
 	}
 	module.plugins_group = FatalityGroup
 	addon.Options:RegisterPlugin(module)
+end
+
+function tdump(o)
+   if type(o) == 'table' then
+      local s = '{\n\t'
+      for k,v in pairs(o) do
+         if type(k) ~= 'number' then k = '"'..k..'"' end
+         s = s .. '['..k..'] = ' .. tdump(v) .. ','
+      end
+      return s .. '}\n'
+   else
+      return tostring(o)
+   end
 end
 
 function module:OnInitialize()

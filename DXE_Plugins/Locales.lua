@@ -31,6 +31,7 @@ Plugins["Plugins"] = "Расширения"
 Plugins["Plugs"] = "Свистелки-перделки"
 Plugins["Auto Responder"] = "Авто-ответчик"
 Plugins["LFG Invitation"] = "Приглашение в подземелье"
+Plugins["Settings"] = "Настройки"
 
 --	Flump
 Plugins["bot"]	 = "%s%s ставит %s!"
@@ -53,6 +54,7 @@ Plugins["NONE"] = "НЕТ"
 Plugins["SELF"] = "Себе"
 Plugins["PARTY"] = "Группа"
 Plugins["RAID"] = "Рейд"
+Plugins["CHANNEL"] = "Канал"
 
 Plugins["Enable %s"] = "Включить %s"
 Plugins["Flump messages enabled"] = "Включить сообщения Flump"
@@ -65,7 +67,7 @@ Plugins["Only in combat"] = "Показывать сообщения тольк�
 Plugins["only_tanks"] = "Только танки"
 Plugins["Only tanks"] = "Показывать сообщения только от танков"
 Plugins["Automatically accept ReadyCheck"] = "Автоматически принимать проверку готовности"
-Plugins["Automatically reply for whisps while boss Encounter"] = "Автоматически отвечать на личные сообщения при битве с боссами"
+Plugins["Automatically take screenshots when achieve has earned"] = "Автоматически делать скриншот, когда получено достижение"
 Plugins["Intercept DBM Pull and Puzza Timers"] = "Перехватывать сообщения DBM для Перерыва и Пулла"
 Plugins["|cffff2020Auto-accepted a Ready Check at |r"] = "|cffff2020Автоподтверждение готовности сработало в |r"
 Plugins["%s is in combat with %s"] = "%s Сейчас не может ответить. Он в бою с %s"
@@ -73,6 +75,15 @@ Plugins["Activates the automatic responder for whispers during boss encounters a
 Plugins["Enable Auto Responder"] = "Включить авто-ответчик"
 Plugins["Enable Whisper Filter"] = "Включить фильтр Личных сообщений"
 Plugins["This option filter the message dxestatus sent to player appearing to you, disable if you want to see it."] = "Эта опция фильтрует сообщение, отправленное игроку. Отключите, если хотите его видеть."
+
+--	Fatality
+Plugins["Number of deaths to report per combat session (default: 10)"] = "Количество смертей в отчете за бой (По умолчанию: 10)"
+Plugins["Channel name"] = "Название канала"
+Plugins["Fatality_OVERKILL"] = "Оверкил"
+Plugins["Fatality_RAID_ICONS"] = "Рейдовые иконки"
+Plugins["Short Nnumbers (i.e. 9431 = 9.4k)"] = "Сокращенные числа (Напр. 9431 = 9.4k)"
+Plugins["Name of the channel to report to (note: OUTPUT must be set to CHANNEL)"] = "Название канала для отчета (Вывод должен быть установлен в Канал)"
+Plugins["Number of damage events to report per person (default: 1)"] = "Количество событий для отчета на игрока (По ум.: 1)"
 
 AL:GetLocale("DXE").Plugins = AL:GetLocale("DXE Plugins")
 

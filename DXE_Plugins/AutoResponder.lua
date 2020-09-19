@@ -159,7 +159,6 @@ end
 function module:Stop()
 	self:UnregisterEvent("CHAT_MSG_WHISPER")
 	self:UnregisterEvent("CHAT_MSG_BN_WHISPER")
-
 end
 
 function module:RefreshProfile() pfl = db.profile.Plugins.AutoResponder end
