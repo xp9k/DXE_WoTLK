@@ -306,7 +306,6 @@ function fatality:CheckEnable()
 		unit_health = instances[GetRealZoneText()] -- Only use UNIT_HEALTH to determine deaths in predefined instances 
 		self:ClearData()
 		self:RegisterEvents()
---		print(chats[pfl.OUTPUT])
 	else
 		self:UnregisterEvents()
 	end
@@ -408,7 +407,7 @@ local function InitializeOptions()
 					order = 5,
 					width = "normal",
 					get = function(info) return db.profile.Plugins.Fatality[info[#info]] end,
-					set = function(info,v) db.profile.Plugins.Fatality[info[#info]] = v; module:RefreshProfile() end,
+					set = function(info,v) db.profile.Plugins.Fatality[info[#info]] = v; module:RefreshProfile(); fatality:CheckChannel() end,
 					disabled = function(info)
 						return ((db.profile.Plugins.Fatality.OUTPUT ~= 5))
 					end,
@@ -500,6 +499,14 @@ end
 
 function module:GetOptions()
 	return module.plugins_group
+end
+
+function fatality:CheckChannel()
+	channel_id = GetChannelName(pfl.CHANNEL_NAME)
+	if channel_id == 0 then
+		print(format("|cffff0000Channel not found.|r Channel |cff39d7e5%s|r was joined automatically", pfl.CHANNEL_NAME))
+		JoinChannelByName(pfl.CHANNEL_NAME)
+	end
 end
 
 function fatality:PrintStatus()

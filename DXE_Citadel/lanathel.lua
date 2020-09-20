@@ -267,23 +267,27 @@ do
 				},
 			},
 			-- Pact of the Darkfallen
-			{
-				type = "combatevent",
-				eventtype = "SPELL_CAST_SUCCESS",
-				spellname = 71336, -- 10/25
-				execute = {
-					{
-						"quash", "pactcd",
-						"alert", "pactcd",
-					},
-				},
-			},
+			-- {
+				-- type = "combatevent",
+				-- eventtype = "SPELL_CAST_SUCCESS",
+				-- spellname = 71336, -- 10/25
+				-- execute = {
+					-- {
+						-- "quash", "pactcd",
+						-- "alert", "pactcd",
+					-- },
+				-- },
+			-- },
 			-- Pact of the Darkfallen applications
 			{
 				type = "combatevent",
 				eventtype = "SPELL_AURA_APPLIED",
 				spellname = 71340,
 				execute = {
+					{
+						"quash", "pactcd",
+						"alert", "pactcd",
+					},
 					{
 						"expect",{"#4#","==","&playerguid&"},
 						"alert","pactself",
