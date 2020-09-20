@@ -372,12 +372,30 @@ end
 	-- end
 -- end
 
+local function GetPortals()
+	local portals = {}
+	for i, j in pairs(port) do
+		n = "port"..GetSpellInfo(i)
+		n = {
+			type = "toggle",
+			name = i,
+			desc = GetSpellInfo(i),
+			order = 100 + i,
+			values = j,
+		},
+		tinsert(portals, n)
+		print(GetSpellInfo(i), j)
+	end
+	return portals
+end
+
 local function InitializeOptions()
 	local flump_group = {
 		type = "group",
+		childGroups = "tab",
 		name = "Flump",
 		get = function(info) return db.profile.Plugins.Flump[info[#info]] end,
-		set = function(info,v) db.profile.Plugins.Flump[info[#info]] = v; module:RefreshProfile(); flump:set() end,
+		set = function(info,v) db.profile.Plugins.Flump[info[#info]] = v; module:RefreshProfile(); savetables() end,
 		order = 1,
 		args = {
 			description = {
@@ -392,6 +410,8 @@ local function InitializeOptions()
 				order = 2,
 				values = Enabled,
 				width = "full",
+				get = function(info) return db.profile.Plugins.Flump[info[#info]] end,
+				set = function(info,v) db.profile.Plugins.Flump[info[#info]] = v; module:RefreshProfile(); flump:set() end,
 			},
 			Chat = {
 				type = "select",
@@ -421,9 +441,116 @@ local function InitializeOptions()
 				desc = L.Plugins["Only tanks"],
 				order = 6,
 				values = OnlyTanks,
-			},		
+			},	
+			Portals = {
+				type = "group",
+				childGroups = "tab",
+				name = "Portals",
+				order = 20,
+				width = "full",
+					args = {},
+			},	
+			Spells = {
+				type = "group",
+				childGroups = "tab",
+				name = "Spells",
+				order = 20,
+				width = "full",
+					args = {},
+			},	
+			Bots = {
+				type = "group",
+				childGroups = "tab",
+				name = "Bots",
+				order = 20,
+				width = "full",
+					args = {},
+			},	
+			Use = {
+				type = "group",
+				childGroups = "tab",
+				name = "Use",
+				order = 20,
+				width = "full",
+					args = {},
+			},	
+			Rituals = {
+				type = "group",
+				childGroups = "tab",
+				name = "Rituals",
+				order = 20,
+				width = "full",
+					args = {},
+			},			
 		},
 	}
+	
+	db.profile.Plugins.Flump.Portals = {}
+	db.profile.Plugins.Flump.Spells = {}
+	db.profile.Plugins.Flump.Bots = {}
+	db.profile.Plugins.Flump.Use = {}
+	db.profile.Plugins.Flump.Rituals = {}
+	
+	for i, j in pairs(port) do
+		flump_group.args.Portals.args[tostring(i)] = {
+			type = "toggle",
+			name = GetSpellInfo(i),
+			desc = GetSpellInfo(i),
+			order = 100 + i,
+			get = function(info) return port[i] end,
+			set = function(info,v) port[i] = v; module:RefreshProfile(); savetables() end,
+		},
+		print(GetSpellInfo(i), j)
+	end
+	
+	for i, j in pairs(spells) do
+		flump_group.args.Spells.args[tostring(i)] = {
+			type = "toggle",
+			name = GetSpellInfo(i),
+			desc = GetSpellInfo(i),
+			order = 100 + i,
+			get = function(info) return spells[i] end,
+			set = function(info,v) spells[i] = v; module:RefreshProfile(); savetables() end,
+		},
+		print(GetSpellInfo(i), j)
+	end	
+	
+	for i, j in pairs(bots) do
+		flump_group.args.Bots.args[tostring(i)] = {
+			type = "toggle",
+			name = GetSpellInfo(i),
+			desc = GetSpellInfo(i),
+			order = 100 + i,
+			get = function(info) return bots[i] end,
+			set = function(info,v)  bots[i] = v; module:RefreshProfile(); savetables() end,
+		},
+		print(GetSpellInfo(i), j)
+	end
+	
+	for i, j in pairs(use) do
+		flump_group.args.Use.args[tostring(i)] = {
+			type = "toggle",
+			name = GetSpellInfo(i),
+			desc = GetSpellInfo(i),
+			order = 100 + i,
+			get = function(info) return use[i] end,
+			set = function(info,v)  use[i] = v; module:RefreshProfile(); savetables() end,
+		},
+		print(GetSpellInfo(i), j)
+	end
+	
+	for i, j in pairs(rituals) do
+		flump_group.args.Rituals.args[tostring(i)] = {
+			type = "toggle",
+			name = GetSpellInfo(i),
+			desc = GetSpellInfo(i),
+			order = 100 + i,
+			get = function(info) return rituals[i] end,
+			set = function(info,v)  rituals[i] = v; module:RefreshProfile(); savetables() end,
+		},
+		print(GetSpellInfo(i), j)
+	end
+
 	module.plugins_group = flump_group	
 end
 
@@ -432,6 +559,24 @@ function module:OnInitialize()
 	db = addon.db
 	if db.profile.Plugins.Flump == nil then
 		db.profile.Plugins.Flump = defaults
+	else
+		if next(db.profile.Plugins.Flump.Portals) ~= nil then
+			port = db.profile.Plugins.Flump.Portals
+		end
+		if next(db.profile.Plugins.Flump.Spells) ~= nil then
+			spells = db.profile.Plugins.Flump.Spells
+			print(spells)
+		end
+		if next(db.profile.Plugins.Flump.Bots) ~= nil then
+			bots = db.profile.Plugins.Flump.Bots
+		end
+		if next(db.profile.Plugins.Flump.Use) ~= nil then
+			use = db.profile.Plugins.Flump.Use
+		end
+		if (db.profile.Plugins.Flump.Rituals) ~= nil then
+			rituals = db.profile.Plugins.Flump.Rituals
+		end
+		
 	end
 	
 	module:RefreshProfile()
@@ -458,6 +603,34 @@ flump:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 
 function module:GetOptions()
 	return module.plugins_group
+end
+
+function saveportals()
+	db.profile.Plugins.Flump.Portals = port
+end
+
+function savespells()
+	db.profile.Plugins.Flump.Spells = spells
+end
+
+function savebots()
+	db.profile.Plugins.Flump.Bots = bots
+end
+
+function saveuse()
+	db.profile.Plugins.Flump.Use = use
+end
+
+function saverituals()
+	db.profile.Plugins.Flump.Rituals = rituals
+end
+
+function savetables()
+	saveportals()
+	savespells()
+	savebots()
+	saveuse()
+	saverituals()
 end
 
 function flump:set()

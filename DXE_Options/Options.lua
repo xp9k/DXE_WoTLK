@@ -2412,7 +2412,7 @@ function module:OnInitialize()
 	-- if addon.LDS then addon.LDS:EnhanceOptions(opts_args.profile,db) end
 	-- opts_args.profile.order = -20
 
-	AC:RegisterOptionsTable("DXE", opts)
+--	AC:RegisterOptionsTable("DXE", opts)
 	ACD:SetDefaultSize("DXE", DEFAULT_WIDTH, DEFAULT_HEIGHT)
 end
 
