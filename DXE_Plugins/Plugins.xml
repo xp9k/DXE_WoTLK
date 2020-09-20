@@ -6,5 +6,6 @@
 <Script file="Addings.lua"/>
 <Script file="Fatality.lua"/>
 <Script file="AutoResponder.lua"/>
+<Script file="LFGAlert.lua"/>
 </Ui>
 
