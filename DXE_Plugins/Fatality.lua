@@ -15,7 +15,7 @@ local plugins_group = {}
 local defaults = {
 	Enabled = true,
 	LIMIT = 10,						-- number of deaths to report per combat session (default: 10)
-	OUTPUT = "RAID"	,				-- announcement channel (default: "RAID")
+	OUTPUT = 2,		-- 2="SELF"		-- announcement channel (default: "RAID")
 	CHANNEL_NAME = "fatality",		-- name of the channel to report to [note: OUTPUT must be set to "CHANNEL"] (default: "fatality")
 	OVERKILL = true,				-- toggle overkill (default: true)
 	RAID_ICONS = true,				-- toggle raid icons (default: true)
@@ -469,7 +469,7 @@ local function InitializeOptions()
 	addon.Options:RegisterPlugin(module)
 end
 
-function tdump(o)
+function fatality:tdump(o)
    if type(o) == 'table' then
       local s = '{\n\t'
       for k,v in pairs(o) do
@@ -518,6 +518,6 @@ function fatality:PrintStatus()
 	end 
 end
 
-function module:RefreshProfile() pfl = db.profile.Plugins.Fatality; fatality:CheckEnable() end
+function module:RefreshProfile() pfl = db.profile.Plugins.Fatality; fatality:CheckEnable(); fatality:tdump(pfl) end
 
 fatality:RegisterEvent("ADDON_LOADED")
