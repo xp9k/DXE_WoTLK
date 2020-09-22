@@ -499,8 +499,7 @@ local function InitializeOptions()
 			order = 100 + i,
 			get = function(info) return port[i] end,
 			set = function(info,v) port[i] = v; module:RefreshProfile(); savetables() end,
-		},
-		print(GetSpellInfo(i), j)
+		}
 	end
 	
 	for i, j in pairs(spells) do
@@ -511,8 +510,7 @@ local function InitializeOptions()
 			order = 100 + i,
 			get = function(info) return spells[i] end,
 			set = function(info,v) spells[i] = v; module:RefreshProfile(); savetables() end,
-		},
-		print(GetSpellInfo(i), j)
+		}
 	end	
 	
 	for i, j in pairs(bots) do
@@ -523,8 +521,7 @@ local function InitializeOptions()
 			order = 100 + i,
 			get = function(info) return bots[i] end,
 			set = function(info,v)  bots[i] = v; module:RefreshProfile(); savetables() end,
-		},
-		print(GetSpellInfo(i), j)
+		}
 	end
 	
 	for i, j in pairs(use) do
@@ -535,8 +532,7 @@ local function InitializeOptions()
 			order = 100 + i,
 			get = function(info) return use[i] end,
 			set = function(info,v)  use[i] = v; module:RefreshProfile(); savetables() end,
-		},
-		print(GetSpellInfo(i), j)
+		}
 	end
 	
 	for i, j in pairs(rituals) do
@@ -547,8 +543,7 @@ local function InitializeOptions()
 			order = 100 + i,
 			get = function(info) return rituals[i] end,
 			set = function(info,v)  rituals[i] = v; module:RefreshProfile(); savetables() end,
-		},
-		print(GetSpellInfo(i), j)
+		}
 	end
 
 	module.plugins_group = flump_group	
@@ -573,7 +568,7 @@ function module:OnInitialize()
 		if next(db.profile.Plugins.Flump.Use) ~= nil then
 			use = db.profile.Plugins.Flump.Use
 		end
-		if (db.profile.Plugins.Flump.Rituals) ~= nil then
+		if next(db.profile.Plugins.Flump.Rituals) ~= nil then
 			rituals = db.profile.Plugins.Flump.Rituals
 		end
 		
@@ -635,7 +630,7 @@ end
 
 function flump:set()
 	if pfl.Enabled then
-		print(format(status, "|cffff0000on|r"))
+		print(format(status, "|cff00ff00on|r"))
 		flump:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	else
 		print(format(status, "|cffff0000off|r"))
