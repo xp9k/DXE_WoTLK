@@ -35,7 +35,7 @@ Plugins["Settings"] = "Настройки"
 
 --	Flump
 Plugins["bot"]	 = "%s%s ставит %s!"
-Plugins["used"]	 = "%s%s использовал(а) %s!"
+Plugins["used"]	 = "%s%s использует %s!"
 Plugins["sw"]	 = "%s заканчивается на %s%s!"
 Plugins["cast"]	 = "%s%s применяет %s на %s%s!"
 Plugins["fade"]	 = "На %s%s заканчивается %s от %s%s!"
@@ -46,7 +46,7 @@ Plugins["res"]	 = "%s%s применяет %s на %s%s!"
 Plugins["portal"] = "%s%s открыл(а) %s!"
 Plugins["create"] = "%s%s создал(а) %s!"
 Plugins["dispel"] = "%s%s's %s failed to dispel %s%s's %s!"
-Plugins["ss"]	 = "%s умер с %s!"
+Plugins["ss"]	 = "%s умерает с %s!"
 Plugins["miscellaneous"] = "%s применяет %s"
 
 --	Plugins Options

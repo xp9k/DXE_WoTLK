@@ -13,6 +13,7 @@ local plugins_group = {}
 
 ------------ CONFIGURATION -----------
 local defaults = {
+	Enabled = true,
 	LIMIT = 10,						-- number of deaths to report per combat session (default: 10)
 	OUTPUT = "RAID"	,				-- announcement channel (default: "RAID")
 	CHANNEL_NAME = "fatality",		-- name of the channel to report to [note: OUTPUT must be set to "CHANNEL"] (default: "fatality")
@@ -511,7 +512,7 @@ end
 
 function fatality:PrintStatus()
 	if pfl.Enabled then
-		print(format("|cff39d7e5Fatality: %s|r", "|cffff0000on|r"))
+		print(format("|cff39d7e5Fatality: %s|r", "|cff00ff00on|r"))
 	else
 		print(format("|cff39d7e5Fatality: %s|r", "|cffff0000off|r"))
 	end 

@@ -85,12 +85,16 @@ local rituals = {
 
 local spells = {
 	-- Paladin
-	[6940] 	= true,	-- Hand of Sacrifice
-	[20233] = true, -- Lay on Hands (Rank 1) [Fade]
-	[20236] = true, -- Lay on Hands (Rank 2) [Fade]
+	[48788] = true, -- Lay on Hands
+	[10278] = true, -- Длань защиты
+	[6940] = true,	-- Длань жертвенности
+	[1044] = true,	-- Длань свободы
+	[1038] = true,	-- Длань спасения
+	[19752] = true,	-- Божественное вмешательство
 	-- Priest
 	[47788] = true, -- Guardian Spirit
 	[33206] = true, -- Pain Suppression
+	[10060] = true,	-- Придание сил
 	--Druid
 	[29166] = true, -- Озарение
 	--DK
@@ -98,6 +102,8 @@ local spells = {
 	--Hunter
 	[20736] = true, -- Отвлекающий выстрел
 	[19801] = true, -- Усмиряющий выстрел
+	--Rogue
+	[57934] = true, -- Маленькие хитрости
 }
 
 local bots = {
@@ -120,10 +126,11 @@ local use = {
 	[61336] = true,	-- Survival Instincts
 	-- Warrior
 	[12975] = true,	-- Last Stand [Gain]
-	[12976] = true,	-- Last Stand [Fade]
 	[871] 	= true,	-- Shield Wall
 	-- Paladin
 	[498] 	= true, -- Divine Protection
+	-- Mage
+	[45438] = true,	-- Ледяная глыба
 }
 
 local misc = {
@@ -149,6 +156,17 @@ local trinkets = {
 	[67699] = UnitFactionGroup("player") == "Horde" and 47290 or 47080, -- Жизненная сила владыки мира
 	[67753] = UnitFactionGroup("player") == "Horde" and 47451 or 47088, -- Жизненная сила владыки мира Her.
 	}
+	
+local trinkets_opt = {
+	-- Trinkets
+	[71638] = true, -- Sindragosa's claw Heroic
+	[71635] = true, -- Sindragosa's claw
+	[71586] = true, -- Key
+	[75495] = true, -- Хиловская чешка гер
+	[75490] = true, -- Хиловская чешка
+	[67699] = true, -- Жизненная сила владыки мира
+	[67753] = true, -- Жизненная сила владыки мира Her.
+	}
 
 local feasts = {
 	[57426] = true, -- Fish Feast
@@ -161,6 +179,7 @@ local special = {
 	[31821] = true, -- Aura Mastery
 	-- Priest
 	[64843] = true, -- Divine Hymn
+	[64901] = true, -- Гимн надежды
 }
 
 local toys = {
@@ -481,6 +500,30 @@ local function InitializeOptions()
 				order = 20,
 				width = "full",
 					args = {},
+			},	
+			Trinkets = {
+				type = "group",
+				childGroups = "tab",
+				name = "Trinkets",
+				order = 20,
+				width = "full",
+					args = {},
+			},
+			Feasts = {
+				type = "group",
+				childGroups = "tab",
+				name = "Feasts",
+				order = 20,
+				width = "full",
+					args = {},
+			},
+			Misc = {
+				type = "group",
+				childGroups = "tab",
+				name = "Misc",
+				order = 20,
+				width = "full",
+					args = {},
 			},			
 		},
 	}
@@ -490,6 +533,9 @@ local function InitializeOptions()
 	db.profile.Plugins.Flump.Bots = {}
 	db.profile.Plugins.Flump.Use = {}
 	db.profile.Plugins.Flump.Rituals = {}
+	db.profile.Plugins.Flump.Trinkets = {}
+	db.profile.Plugins.Flump.Feasts = {}
+	db.profile.Plugins.Flump.Misc = {}
 	
 	for i, j in pairs(port) do
 		flump_group.args.Portals.args[tostring(i)] = {
@@ -545,6 +591,39 @@ local function InitializeOptions()
 			set = function(info,v)  rituals[i] = v; module:RefreshProfile(); savetables() end,
 		}
 	end
+	
+	for i, j in pairs(trinkets_opt) do
+		flump_group.args.Trinkets.args[tostring(i)] = {
+			type = "toggle",
+			name = select(2, GetItemInfo(trinkets[i])),
+			desc = GetItemInfo(trinkets[i]) .. " (" .. select(4, GetItemInfo(trinkets[i])) .. ")",
+			order = 100 + i,
+			get = function(info) return trinkets_opt[i] end,
+			set = function(info,v)  trinkets_opt[i] = v; module:RefreshProfile(); savetables() end,
+		}
+	end
+	
+	for i, j in pairs(feasts) do
+		flump_group.args.Feasts.args[tostring(i)] = {
+			type = "toggle",
+			name = GetSpellInfo(i),
+			desc = GetSpellInfo(i),
+			order = 100 + i,
+			get = function(info) return feasts[i] end,
+			set = function(info,v)  feasts[i] = v; module:RefreshProfile(); savetables() end,
+		}
+	end
+	
+	for i, j in pairs(misc) do
+		flump_group.args.Misc.args[tostring(i)] = {
+			type = "toggle",
+			name = GetSpellInfo(i),
+			desc = GetSpellInfo(i),
+			order = 100 + i,
+			get = function(info) return misc[i] end,
+			set = function(info,v)  misc[i] = v; module:RefreshProfile(); savetables() end,
+		}
+	end
 
 	module.plugins_group = flump_group	
 end
@@ -571,7 +650,21 @@ function module:OnInitialize()
 		if next(db.profile.Plugins.Flump.Rituals) ~= nil then
 			rituals = db.profile.Plugins.Flump.Rituals
 		end
-		
+		if db.profile.Plugins.Flump.Trinkets ~= nil then
+			if next(db.profile.Plugins.Flump.Trinkets) ~= nil then
+				trinkets_opt = db.profile.Plugins.Flump.Trinkets
+			end
+		end
+		if db.profile.Plugins.Flump.Feasts ~= nil then
+			if next(db.profile.Plugins.Flump.Feasts) ~= nil then
+				feasts = db.profile.Plugins.Flump.Feasts
+			end
+		end
+		if db.profile.Plugins.Flump.Misc ~= nil then
+			if next(db.profile.Plugins.Flump.Misc) ~= nil then
+				misc = db.profile.Plugins.Flump.Misc
+			end
+		end		
 	end
 	
 	module:RefreshProfile()
@@ -620,12 +713,27 @@ function saverituals()
 	db.profile.Plugins.Flump.Rituals = rituals
 end
 
+function savetrinkets()
+	db.profile.Plugins.Flump.Trinkets = trinkets_opt
+end
+
+function savefeasts()
+	db.profile.Plugins.Flump.Trinkets = feasts
+end
+
+function savemisc()
+	db.profile.Plugins.Flump.Trinkets = misc
+end
+
 function savetables()
 	saveportals()
 	savespells()
 	savebots()
 	saveuse()
 	saverituals()
+	savetrinkets()
+	savefeasts()
+	savemisc()
 end
 
 function flump:set()
