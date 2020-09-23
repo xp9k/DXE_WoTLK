@@ -638,21 +638,31 @@ function module:OnInitialize()
 	if db.profile.Plugins.Flump == nil then
 		db.profile.Plugins.Flump = defaults
 	else
-		if next(db.profile.Plugins.Flump.Portals) ~= nil then
-			port = db.profile.Plugins.Flump.Portals
+		if db.profile.Plugins.Flump.Portals ~= nil then
+			if next(db.profile.Plugins.Flump.Portals) ~= nil then
+				port = db.profile.Plugins.Flump.Portals
+			end
 		end
-		if next(db.profile.Plugins.Flump.Spells) ~= nil then
-			spells = db.profile.Plugins.Flump.Spells
-			print(spells)
+		if db.profile.Plugins.Flump.Spells ~= nil then
+			if next(db.profile.Plugins.Flump.Spells) ~= nil then
+				spells = db.profile.Plugins.Flump.Spells
+				print(spells)
+			end
 		end
-		if next(db.profile.Plugins.Flump.Bots) ~= nil then
-			bots = db.profile.Plugins.Flump.Bots
+		if db.profile.Plugins.Flump.Bots ~= nil then
+			if next(db.profile.Plugins.Flump.Bots) ~= nil then
+				bots = db.profile.Plugins.Flump.Bots
+			end
 		end
-		if next(db.profile.Plugins.Flump.Use) ~= nil then
-			use = db.profile.Plugins.Flump.Use
+		if db.profile.Plugins.Flump.Use ~= nil then
+			if next(db.profile.Plugins.Flump.Use) ~= nil then
+				use = db.profile.Plugins.Flump.Use
+			end
 		end
-		if next(db.profile.Plugins.Flump.Rituals) ~= nil then
-			rituals = db.profile.Plugins.Flump.Rituals
+		if db.profile.Plugins.Flump.Rituals ~= nil then
+			if next(db.profile.Plugins.Flump.Rituals) ~= nil then
+				rituals = db.profile.Plugins.Flump.Rituals
+			end
 		end
 		if db.profile.Plugins.Flump.Trinkets ~= nil then
 			if next(db.profile.Plugins.Flump.Trinkets) ~= nil then
@@ -751,7 +761,13 @@ function flump:set()
 --	EnableDisable()
 end
 
-function module:RefreshProfile() pfl = db.profile.Plugins.Flump; OUTPUT = chats[pfl.Chat]; end
+function module:RefreshProfile()
+	if db.profile.Plugins.Flump == nil then
+		db.profile.Plugins.Flump = defaults
+	end
+	pfl = db.profile.Plugins.Flump
+	OUTPUT = chats[pfl.Chat]
+end
 
 addon:AddToRefreshProfile(RefreshProfile)
 

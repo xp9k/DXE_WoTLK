@@ -34,11 +34,15 @@ local module = addon:NewModule("AutoResponder","AceEvent-3.0")
 addon.plugins.AutoResponder = module
 local db,pfl
 
-function module:RefreshProfile() pfl = db.profile end
+function module:RefreshProfile()
+	if db.profile.Plugins.AutoResponder == nil then
+		db.profile.Plugins.AutoResponder = defaults
+	end
+	pfl = db.profile
+end
 local function genblank(order) return {type = "description", name = "", order = order} end
 
 local function InitializeOptions()
-	local AutoResponder = addon.AutoResponder
 	local AR_group = {
 		type = "group",
 		name = L.Plugins["Auto Responder"],
@@ -84,6 +88,7 @@ local function InitializeOptions()
 	}
 
 	module.plugins_group = AR_group
+	addon.Options:RegisterPlugin(module)
 end
 
 function module:GetOptions()
@@ -113,7 +118,7 @@ function module:OnInitialize()
 	
 	InitializeOptions()	
 	
-	addon.Options:RegisterPlugin(module)
+--	addon.Options:RegisterPlugin(module)
 end
 
 ---------------------------------------------
@@ -161,7 +166,12 @@ function module:Stop()
 	self:UnregisterEvent("CHAT_MSG_BN_WHISPER")
 end
 
-function module:RefreshProfile() pfl = db.profile.Plugins.AutoResponder end
+function module:RefreshProfile()
+	if db.profile.Plugins.AutoResponder == nil then
+		db.profile.Plugins.AutoResponder = defaults
+	end
+	pfl = db.profile.Plugins.AutoResponder
+end
 
 addon:AddToRefreshProfile(RefreshProfile)
 

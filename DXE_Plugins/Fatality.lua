@@ -522,6 +522,9 @@ function fatality:PrintStatus()
 end
 
 function module:RefreshProfile()
+	if db.profile.Plugins.Fatality == nil then
+		db.profile.Plugins.Fatality = defaults
+	end
 	if db.profile.Plugins.Fatality.OUTPUT ~= 2 then
 		db.profile.Plugins.Fatality.EVENT_HISTORY = 1
 	end

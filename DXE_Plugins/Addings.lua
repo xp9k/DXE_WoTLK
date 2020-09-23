@@ -121,7 +121,12 @@ function module:OnInitialize()
 	InitializeOptions()	
 end
 
-function module:RefreshProfile() pfl = db.profile.Plugins.Addings end
+function module:RefreshProfile()
+	if db.profile.Plugins.Addings == nil then
+		db.profile.Plugins.Addings = defaults
+	end	
+	pfl = db.profile.Plugins.Addings
+end
 
 addon:AddToRefreshProfile(RefreshProfile)
 
