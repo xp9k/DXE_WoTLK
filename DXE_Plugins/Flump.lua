@@ -130,6 +130,7 @@ local use = {
 	[871] 	= true,	-- Shield Wall
 	-- Paladin
 	[498] 	= true, -- Divine Protection
+	[642]	= true, -- Бабл
 	-- Mage
 	[45438] = true,	-- Ледяная глыба
 }
@@ -393,6 +394,7 @@ end
 -- end
 
 local function InitializeOptions()
+	local add_use_label = ""
 	local flump_group = {
 		type = "group",
 		childGroups = "tab",
@@ -475,7 +477,24 @@ local function InitializeOptions()
 				name = "Use",
 				order = 20,
 				width = "full",
-					args = {},
+					args = {
+							-- add_use_input = {
+								-- type = "input",
+								-- name = L.options["Spell ID"],
+								-- order = -2,
+								-- get = function(info) return add_use_label end,
+								-- set = function(info,v) add_use_label = v end,
+							-- },
+							-- use_add = {
+								-- type = "execute",
+								-- name = L.options["Add"],
+								-- order = -1,
+								-- func = function()
+								-- print(add_use_label)
+									-- use[tonumber(add_use_label)] = true
+								-- end,
+							-- },					
+				},
 			},	
 			Rituals = {
 				type = "group",
@@ -507,7 +526,8 @@ local function InitializeOptions()
 				name = "Misc",
 				order = 20,
 				width = "full",
-					args = {},
+					args = {
+				},
 			},			
 		},
 	}
