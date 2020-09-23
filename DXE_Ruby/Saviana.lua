@@ -22,15 +22,19 @@ do
 			defeat = 39747,
 		},
 		onstart = {
+			"set", {flamebeacontime = 27, enragetime = 17},
 			"alert", "enragecd",
-			"alert", {"flamebeaconcd", time = 27},
-			"alert", {"enragecd", time = 17},
+			"alert", "flamebeaconcd",
+		},
+		userdata = {
+			flamebeacontime = 50,
+			enragetime = 17,
 		},
 		alerts = {
 			enragedur = {
 				varname = format(L.alert["%s Duration"],SN[78722]),
 				type = "centerpopup",
-				text = format("%s: &dstname_or_YOU&",SN[78722]),
+				text = format(L.alert["%s Duration"],SN[78722]),
 				time = 10,
 				flashtime = 4,
 				sound = "ALERT1",
@@ -42,7 +46,7 @@ do
 				varname = format(L.alert["%s Cooldown"],SN[78722]),
 				type = "dropdown",
 				text = format(L.alert["%s Cooldown"],SN[78722]),
-				time = 17,
+				time = "<enragetime>",
 				flashtime = 5,
 				color1 = "RED",
 				icon = ST[74453],
@@ -60,8 +64,8 @@ do
 			},
 			flamebeacondur = {
 				varname = format(L.alert["%s Duration"],SN[74453]),
-				type = "centerpopup",
-				text = format("%s: #5#",SN[74453]),
+				type = "simple",
+				text = format(L.alert["%s Duration"],SN[74453]),
 				time = 5,
 				flashtime = 5,
 				color1 = "ORANGE",
@@ -71,7 +75,7 @@ do
 				varname = format(L.alert["%s Cooldown"],SN[74453]),
 				type = "dropdown",
 				text = format(L.alert["%s Cooldown"],SN[74453]),
-				time = 50,
+				time = "<flamebeacontime>",
 				flashtime = 45,
 				color1 = "ORANGE",
 				icon = ST[74453],
@@ -123,10 +127,18 @@ do
 				spellid = 74453,
 				execute = {
 					{
-						"alert",{dstself = "flamebeaconself",dstother = "flamebeacondur"},
-						"announce",{dstself = "flamebeaconsay"},
+						"expect",{"#4#","==","&playerguid&"},
+						"alert", "flamebeaconself",
+						"announce", "flamebeaconsay",
+					},
+					{
+						"expect",{"#4#","~=","&playerguid&"},
+						"alert", "flamebeacondur",
+					},
+					{
 						"quash", "enragecd",
 						"alert", "enragecd",
+						"quash", "flamebeaconcd",
 						"alert", "flamebeaconcd",
 					},
 				},
@@ -138,6 +150,7 @@ do
 				spellid = 74452,
 				execute = {
 					{
+						"quash", "conflagrationdur",
 						"alert", "conflagrationdur",						
 					},
 				},

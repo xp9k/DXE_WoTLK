@@ -392,23 +392,6 @@ end
 	-- end
 -- end
 
-local function GetPortals()
-	local portals = {}
-	for i, j in pairs(port) do
-		n = "port"..GetSpellInfo(i)
-		n = {
-			type = "toggle",
-			name = i,
-			desc = GetSpellInfo(i),
-			order = 100 + i,
-			values = j,
-		},
-		tinsert(portals, n)
-		print(GetSpellInfo(i), j)
-	end
-	return portals
-end
-
 local function InitializeOptions()
 	local flump_group = {
 		type = "group",
@@ -719,11 +702,11 @@ function savetrinkets()
 end
 
 function savefeasts()
-	db.profile.Plugins.Flump.Trinkets = feasts
+	db.profile.Plugins.Flump.Feasts = feasts
 end
 
 function savemisc()
-	db.profile.Plugins.Flump.Trinkets = misc
+	db.profile.Plugins.Flump.Misc = misc
 end
 
 function savetables()

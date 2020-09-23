@@ -17,7 +17,7 @@ do
 		onactivate = {
 			tracing = {39746}, -- Zarithrian
 			tracerstart = true,
-			tracerstop = true,
+--			tracerstop = true,
 			combatstop = true,
 			defeat = 39746,
 		},
@@ -29,7 +29,7 @@ do
 			intimidatingroardur = {
 				varname = format(L.alert["%s Duration"],SN[74384]),
 				type = "centerpopup",
-				text = format("%s: &dstname_or_YOU&",SN[74384]),
+				text = format(L.alert["%s Duration"],SN[74384]),
 				time = 4,
 				flashtime = 4,
 				color1 = "INDIGO",
@@ -40,7 +40,7 @@ do
 				varname = format(L.alert["%s Cooldown"],SN[74384]),
 				type = "dropdown",
 				text = format(L.alert["%s Cooldown"],SN[74384]),
-				time = 33,
+				time = 38,
 				flashtime = 5,
 				color1 = "PURPLE",
 				icon = ST[74384],
@@ -64,8 +64,11 @@ do
 				spellid = 74384,
 				execute = {
 					{
+						"quash", "intimidatingroardur",
 						"alert", "intimidatingroardur",
+						"quash", "intimidatingroarcd",
 						"alert", "intimidatingroarcd",
+						"quash", "summonaddscd",
 						"alert", "summonaddscd",
 					},
 				},

@@ -408,7 +408,7 @@ local function InitializeOptions()
 					order = 5,
 					width = "normal",
 					get = function(info) return db.profile.Plugins.Fatality[info[#info]] end,
-					set = function(info,v) db.profile.Plugins.Fatality[info[#info]] = v; module:RefreshProfile(); fatality:CheckChannel() end,
+					set = function(info,v) db.profile.Plugins.Fatality[info[#info]] = v; module:RefreshProfile();  fatality:CheckChannel();  end,
 					disabled = function(info)
 						return ((db.profile.Plugins.Fatality.OUTPUT ~= 5))
 					end,
@@ -462,6 +462,9 @@ local function InitializeOptions()
 					width = "full",
 					get = function(info) return db.profile.Plugins.Fatality[info[#info]] end,
 					set = function(info,v) db.profile.Plugins.Fatality[info[#info]] = v; module:RefreshProfile() end,
+					disabled = function(info)
+						return ((db.profile.Plugins.Fatality.OUTPUT ~= 2))
+					end,
 				},
 		},
 	}
@@ -518,6 +521,13 @@ function fatality:PrintStatus()
 	end 
 end
 
-function module:RefreshProfile() pfl = db.profile.Plugins.Fatality; fatality:CheckEnable(); fatality:tdump(pfl) end
+function module:RefreshProfile()
+	if db.profile.Plugins.Fatality.OUTPUT ~= 2 then
+		db.profile.Plugins.Fatality.EVENT_HISTORY = 1
+	end
+	pfl = db.profile.Plugins.Fatality
+	fatality:CheckEnable()
+	fatality:tdump(pfl)
+end
 
 fatality:RegisterEvent("ADDON_LOADED")
