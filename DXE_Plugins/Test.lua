@@ -11,9 +11,7 @@ local Options = nil
 addon.plugins.Test = module
 local plugins_group = {}
 local defaults = {
-		profile = {
-			Test = false
-		}
+		Test = false
 	}
 
 local function InitializeOptions()

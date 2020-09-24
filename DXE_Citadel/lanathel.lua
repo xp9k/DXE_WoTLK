@@ -41,7 +41,7 @@ do
 				"alert","enragecd",
 				"alert","bloodboltcd",
 				"alert","inciteterrorcd",
-				"alert",{"pactcd", time = 15},
+				"alert","pactcd",
 				"alert","swarmingshadowcd",
 			},
 		},
@@ -137,7 +137,7 @@ do
 				varname = format(L.alert["%s Cooldown"],L.alert["Pact"]),
 				type = "dropdown",
 				text = format(L.alert["%s Cooldown"],L.alert["Pact"]),
-				time = 30,
+				time = "<pacttime>",
 				flashtime = 5,
 				color1 = "BLACK",
 				audiocd = 5,
@@ -229,23 +229,39 @@ do
 				},
 			},
 			-- Swarming Shadows early
+			-- {
+				-- type = "event",
+				-- event = "EMOTE",
+				-- execute = {
+					-- {
+						-- "expect",{"#1#","find",L.chat_citadel["^Shadows amass and swarm"]},
+						-- "quash","swarmingshadowcd",
+						-- "alert","swarmingshadowcd",
+						-- -- Swarming Shadows self
+						-- "expect",{"#5#","==","&playername&"},
+						-- "alert","swarmingshadowself",
+						-- "announce","swarmingshadowsay",
+					-- },
+					-- {
+						-- -- Swarming Shadows others
+						-- "expect",{"#1#","find",L.chat_citadel["^Shadows amass and swarm"]},
+						-- "expect",{"#5#","~=","&playername&"},
+						-- "alert","swarmingshadowothers",
+					-- },
+				-- },
+			-- },
 			{
-				type = "event",
-				event = "EMOTE",
+				type = "combatevent",
+				eventtype = "SPELL_CAST_SUCCESS",
+				spellname = 71264,
 				execute = {
 					{
-						"expect",{"#1#","find",L.chat_citadel["^Shadows amass and swarm"]},
-						"quash","swarmingshadowcd",
-						"alert","swarmingshadowcd",
-						-- Swarming Shadows self
-						"expect",{"#5#","==","&playername&"},
-						"alert","swarmingshadowself",
+						"expect",{"#4#","~=","&playerguid&"},
+						"quash","swarmingshadowothers",
 					},
 					{
-						-- Swarming Shadows others
-						"expect",{"#1#","find",L.chat_citadel["^Shadows amass and swarm"]},
-						"expect",{"#5#","~=","&playername&"},
-						"alert","swarmingshadowothers",
+						"expect",{"#4#","==","&playerguid&"},
+						"announce","swarmingshadowsay",
 					},
 				},
 			},
@@ -262,7 +278,6 @@ do
 					{
 						"expect",{"#4#","==","&playerguid&"},
 						"quash","swarmingshadowself",
-						"announce","swarmingshadowsay",
 					},
 				},
 			},
@@ -281,7 +296,7 @@ do
 			-- Pact of the Darkfallen applications
 			{
 				type = "combatevent",
-				eventtype = "SPELL_AURA_APPLIED",
+				eventtype = "SPELL_CAST_SUCCESS",
 				spellname = 71340,
 				execute = {
 					{

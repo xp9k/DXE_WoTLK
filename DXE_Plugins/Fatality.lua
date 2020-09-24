@@ -303,7 +303,8 @@ end
 function fatality:CheckEnable()
 	if not pfl.Enabled then return end
 	local _, instance = IsInInstance()
-	if not (pfl.RAID_ONLY and not instance == "raid") then
+--	if not (pfl.RAID_ONLY and not instance == "raid") then
+	if instance == "raid" then
 		unit_health = instances[GetRealZoneText()] -- Only use UNIT_HEALTH to determine deaths in predefined instances 
 		self:ClearData()
 		self:RegisterEvents()

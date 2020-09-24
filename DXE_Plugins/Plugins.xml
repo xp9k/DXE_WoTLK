@@ -7,6 +7,6 @@
 <Script file="Fatality.lua"/>
 <Script file="AutoResponder.lua"/>
 <Script file="LFGAlert.lua"/>
-<!-- <Script file="Helper.lua"/> -->
+<Script file="Helper.lua"/>
 </Ui>
 
