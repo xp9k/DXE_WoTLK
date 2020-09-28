@@ -817,3 +817,40 @@ do
 
 	DXE:RegisterEncounter(data)
 end
+
+
+local lichking = CreateFrame("Frame")
+lichking:SetScript("OnEvent",function(self,event,...) self[event](self,...) end)
+lichking:RegisterEvent("ADDON_LOADED")
+lichking:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+
+function lichking:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, srcFlags, destGUID, destName, destFlags, spellID, spellName, school, ...)
+	if event == "SPELL_DISPEL" then
+		PlagueScan()
+	end
+end
+
+do
+	local plague = GetSpellInfo(70337)
+	local function scanRaid()
+		DXE.Alerts.Dropdown(_, "necroplaguedur", format("%s: %s!",SN[70337],L.alert["YOU"]).."!", 5, 5, "ALERT3", "DCYAN", nil, nil, DXE.ST[70337], nil)
+		for i = 1, GetNumRaidMembers() do
+			local player = GetRaidRosterInfo(i)
+			if player then
+				local debuffed, _, _, _, _, _, expire = UnitDebuff(player, plague)
+				if debuffed and (expire - GetTime()) > 13 then
+					if UnitIsUnit(player, "player") then 
+						DXE.Alerts.Dropdown(_, "necroplaguedur", format("%s: %s!",SN[70337],L.alert["YOU"]).."!", 5, 5, "ALERT3", "GREEN", nil, nil, DXE.ST[70337], nil)
+					end
+				end
+			end
+		end
+	end
+	function PlagueScan()
+		DXE:ScheduleTimer(scanRaid, 0.8)
+	end
+end
+
+function lichking:ADDON_LOADED()
+	PlagueScan()
+end
