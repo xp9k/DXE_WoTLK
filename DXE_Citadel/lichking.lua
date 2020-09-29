@@ -819,28 +819,39 @@ do
 end
 
 
+local lichfight = false
 local lichking = CreateFrame("Frame")
 lichking:SetScript("OnEvent",function(self,event,...) self[event](self,...) end)
 lichking:RegisterEvent("ADDON_LOADED")
-lichking:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+
 
 function lichking:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, srcFlags, destGUID, destName, destFlags, spellID, spellName, school, ...)
-	if event == "SPELL_DISPEL" then
+	if lichfight and event == "SPELL_DISPEL" then
 		PlagueScan()
+	end
+end
+
+function lichking:CHAT_MSG_MONSTER_YELL(text, playerName, ...)
+	if find(text, L.chat_citadel["^So the Light's vaunted justice has finally arrived"]) then
+		lichfight = true
+		lichking:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+		print("lichfight == " .. lichfight)
 	end
 end
 
 do
 	local plague = GetSpellInfo(70337)
 	local function scanRaid()
-		DXE.Alerts.Dropdown(_, "necroplaguedur", format("%s: %s!",SN[70337],L.alert["YOU"]).."!", 5, 5, "ALERT3", "DCYAN", nil, nil, DXE.ST[70337], nil)
+--		DXE.Alerts.CenterPopup(_, "necroplaguedur", format("%s: %s!",SN[70337],L.alert["YOU"]).."!", 5, 5, "ALERT3", "GREEN", "GREEN", false, DXE.ST[70337])
 		for i = 1, GetNumRaidMembers() do
 			local player = GetRaidRosterInfo(i)
 			if player then
 				local debuffed, _, _, _, _, _, expire = UnitDebuff(player, plague)
 				if debuffed and (expire - GetTime()) > 13 then
 					if UnitIsUnit(player, "player") then 
-						DXE.Alerts.Dropdown(_, "necroplaguedur", format("%s: %s!",SN[70337],L.alert["YOU"]).."!", 5, 5, "ALERT3", "GREEN", nil, nil, DXE.ST[70337], nil)
+						DXE.Alerts.CenterPopup(_, "necroplaguedur", format("%s: %s!",SN[70337],L.alert["YOU"]).."!", 5, 5, "ALERT3", "GREEN", "GREEN", false, DXE.ST[70337])
+					else
+						print(format("Чума перекинулась на %s", player))
 					end
 				end
 			end
@@ -852,5 +863,6 @@ do
 end
 
 function lichking:ADDON_LOADED()
-	PlagueScan()
+--	PlagueScan()	 
+	lichking:RegisterEvent("CHAT_MSG_MONSTER_YELL")
 end

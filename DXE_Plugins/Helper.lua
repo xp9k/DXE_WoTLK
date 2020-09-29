@@ -13,7 +13,7 @@ local SPELL_BITE = {
 	[71729] = true,
 }
 
-local LADY_GUID
+local LADY_GUID, LICH_GUID
 
 local DOMINATE_COOLDOWN = {
 							Pull = 31, -- С пулла
@@ -25,7 +25,7 @@ local weapon_off = false
 local weapons = {}
 
 local Enabled = false
-local LadyFight = false
+local LadyFight, LichFight = false
 
 local f = CreateFrame("Frame")
 local addon,L = DXE,DXE.L
@@ -41,6 +41,7 @@ local pfl
 local defaults = {
 		LadyHelperEnabled = false,
 		LanathelBitesEnable = true,
+		LichPlagueJumpEnabled = true,
 }
 
 local plugins_group = {}
@@ -48,7 +49,7 @@ local plugins_group = {}
 f:RegisterEvent("ADDON_LOADED")
 f:RegisterEvent("PLAYER_REGEN_ENABLED")
 f:RegisterEvent("PLAYER_REGEN_DISABLED")
-f:RegisterEvent("CHAT_MSG_YELL")
+f:RegisterEvent("CHAT_MSG_MONSTER_YELL")
 f:SetScript("OnEvent",function(self,event,...) self[event](self,...) end)
 
 function f:PLAYER_REGEN_ENABLED()
@@ -60,12 +61,17 @@ function f:PLAYER_REGEN_DISABLED()
 	f:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 end
 
-function f:CHAT_MSG_YELL(text, playerName, ...)
-	if pfl.LadyHelperEnabled and strfind(text, "Как вы смеете ступать") ~= nil then
+function f:CHAT_MSG_MONSTER_YELL(text, playerName, ...)
+	if pfl.LadyHelperEnabled and find(text, "^Как вы смеете ступать") then
 		dominate_time = GetTime()
 		d_cd = DOMINATE_COOLDOWN.Pull
 		LadyFight = true
 		print("|cffff0000L|r|cff1784d1ady|r |cffff0000H|r|cff1784d1elper|r: Бой начат. |cff00ff00Аддон включен|r")
+	end
+	
+	if pfl.LichPlagueJumpEnabled and find(text, L.chat_citadel["^So the Light's vaunted justice has finally arrived"]) then
+		LichFight = true
+		print("LichFight == " .. LichFight)
 	end
 end
 
@@ -77,16 +83,7 @@ function f:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, srcFl
 	if pfl.LanathelBitesEnable then
 		if event == "SPELL_CAST_START" and SPELL_BITE[spellID] then
 			SendChatMessage(format("%s кусает %s", srcName, destName), "RAID")
-		end
-		
-		-- if SPELL_BITE[spellID] and (event == "SPELL_DAMAGE" or event == "SPELL_CAST_START") then
-			-- if destName ~= nil then
-				-- print(format("%s кусает %s [%d] [%s]", srcName, destName, spellID, event))
-			-- else
-				-- print(format("%s [%d] [%s]", srcName, spellID, event))
-			-- end
-		-- end		
-		
+		end		
 	end
 	
 	if pfl.LadyHelperEnabled and LadyFight then
@@ -108,8 +105,10 @@ function f:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, srcFl
 			d_cd = DOMINATE_COOLDOWN.Cast
 		end
 		
-		if event == "UNIT_DIED" and destGUID == LADY_GUID then
-			f:LadyDead()
+		if (event == "UNIT_DIED" or event == "PARTY_KILL") then
+			if destGUID == LADY_GUID then
+				f:LadyDead()
+			end		
 		end
 		
 		if SPELL_DOMINATE[spellID] and event == "SPELL_AURA_REMOVED" then
@@ -125,10 +124,28 @@ function f:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, srcFl
 			end			
 		end
 	end
+	
+	if pfl.LichPlagueJumpEnabled and LichFight then
+		if event == "SPELL_DISPEL" then
+			PlagueScan()
+		end
+		
+		if event == "SPELL_CAST_SUCCESS" and spellName == GetSpellInfo(73914) then
+			LICH_GUID = srcGUID
+		end
+		
+		if (event == "UNIT_DIED" or event == "PARTY_KILL") then 
+			if destGUID == LICH_GUID then
+				print("Lich is DEAD")
+				LichFight = false
+			end
+		end	
+	end
 end
 
 function f:ADDON_LOADED(addon)
 	LadyFight = false
+	LichFight = false
 end
 
 local function InitializeOptions()
@@ -159,6 +176,15 @@ local function InitializeOptions()
 				name = L.Plugins["Enable Lanathel bites announces to the Raid channel"],
 				desc = L.Plugins["Enable Lanathel bites announces to the Raid channe"],
 				order = 2,
+				width = "full",
+				get = function(info) return db.profile.Plugins.Helper[info[#info]] end,
+				set = function(info,v) db.profile.Plugins.Helper[info[#info]] = v; module:RefreshProfile(); end,
+			},
+			LichPlagueJumpEnabled = {
+				type = "toggle",
+				name = L.Plugins["Announce when dispelled Plague jumps to another Raid Member"],
+				desc = L.Plugins["Announce when dispelled Plague jumps to another Raid Member"],
+				order = 3,
 				width = "full",
 				get = function(info) return db.profile.Plugins.Helper[info[#info]] end,
 				set = function(info,v) db.profile.Plugins.Helper[info[#info]] = v; module:RefreshProfile(); end,
@@ -219,7 +245,27 @@ function f:LadyDead()
 	LadyFight = false
 	print("|cffff0000L|r|cff1784d1ady|r |cffff0000H|r|cff1784d1elper|r: |cff00ff00Босс убит.|r |cffff0000Аддон отключен|r")
 	weapon_off = true
-	f:UnregisterEvent("PLAYER_REGEN_ENABLED")
-	f:UnregisterEvent("PLAYER_REGEN_DISABLED")
-	f:UnregisterEvent("CHAT_MSG_YELL")
+end
+
+do
+	local plague = GetSpellInfo(70337)
+	local function scanRaid()
+--		DXE.Alerts.CenterPopup(_, "necroplaguedur", format("%s: %s!",SN[70337],L.alert["YOU"]).."!", 5, 5, "ALERT3", "GREEN", "GREEN", false, DXE.ST[70337])
+		for i = 1, GetNumRaidMembers() do
+			local player = GetRaidRosterInfo(i)
+			if player then
+				local debuffed, _, _, _, _, _, expire = UnitDebuff(player, plague)
+				if debuffed and (expire - GetTime()) > 13 then
+					if UnitIsUnit(player, "player") then 
+						DXE.Alerts.CenterPopup(_, "necroplaguedur", format("%s: %s!",SN[70337],L.alert["YOU"]).."!", 5, 5, "ALERT3", "GREEN", "GREEN", false, DXE.ST[70337])
+					else
+						print(format("Чума перекинулась на %s", player))
+					end
+				end
+			end
+		end
+	end
+	function PlagueScan()
+		DXE:ScheduleTimer(scanRaid, 0.8)
+	end
 end
