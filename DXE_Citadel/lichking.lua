@@ -862,7 +862,7 @@ do
 	end
 end
 
-function lichking:ADDON_LOADED()
---	PlagueScan()	 
+function lichking:ADDON_LOADED() 
 	lichking:RegisterEvent("CHAT_MSG_MONSTER_YELL")
+	lichfight = false
 end

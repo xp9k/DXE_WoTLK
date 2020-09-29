@@ -242,7 +242,7 @@ function f:PutOffWeapon()
 end
 
 function f:LadyDead()
-	LadyFight = false
+	LichFight = false
 	print("|cffff0000L|r|cff1784d1ady|r |cffff0000H|r|cff1784d1elper|r: |cff00ff00Босс убит.|r |cffff0000Аддон отключен|r")
 	weapon_off = true
 end
