@@ -62,16 +62,16 @@ function f:PLAYER_REGEN_DISABLED()
 end
 
 function f:CHAT_MSG_MONSTER_YELL(text, playerName, ...)
-	if pfl.LadyHelperEnabled and find(text, "^Как вы смеете ступать") then
+	if pfl.LadyHelperEnabled and strfind(text, L.chat_citadel["^What is this disturbance"]) then
 		dominate_time = GetTime()
 		d_cd = DOMINATE_COOLDOWN.Pull
 		LadyFight = true
 		print("|cffff0000L|r|cff1784d1ady|r |cffff0000H|r|cff1784d1elper|r: Бой начат. |cff00ff00Аддон включен|r")
 	end
 	
-	if pfl.LichPlagueJumpEnabled and find(text, L.chat_citadel["^So the Light's vaunted justice has finally arrived"]) then
+	if pfl.LichPlagueJumpEnabled and strfind(text, L.chat_citadel["^So the Light's vaunted justice has finally arrived"]) then
 		LichFight = true
-		print("LichFight == " .. LichFight)
+		print("LichFight == " .. tostring(LichFight))
 	end
 end
 
@@ -259,7 +259,8 @@ do
 					if UnitIsUnit(player, "player") then 
 						DXE.Alerts.CenterPopup(_, "necroplaguedur", format("%s: %s!",SN[70337],L.alert["YOU"]).."!", 5, 5, "ALERT3", "GREEN", "GREEN", false, DXE.ST[70337])
 					else
-						print(format("Чума перекинулась на %s", player))
+						SendChatMessage(format("Чума перекинулась на %s", player), "RAID")
+--						print(format("Чума перекинулась на %s", player))
 					end
 				end
 			end

@@ -832,10 +832,10 @@ function lichking:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName
 end
 
 function lichking:CHAT_MSG_MONSTER_YELL(text, playerName, ...)
-	if find(text, L.chat_citadel["^So the Light's vaunted justice has finally arrived"]) then
+	if strfind(text, L.chat_citadel["^So the Light's vaunted justice has finally arrived"]) then
 		lichfight = true
 		lichking:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-		print("lichfight == " .. lichfight)
+--		print("lichfight == " .. tostring(lichfight))
 	end
 end
 
@@ -851,7 +851,8 @@ do
 					if UnitIsUnit(player, "player") then 
 						DXE.Alerts.CenterPopup(_, "necroplaguedur", format("%s: %s!",SN[70337],L.alert["YOU"]).."!", 5, 5, "ALERT3", "GREEN", "GREEN", false, DXE.ST[70337])
 					else
-						print(format("Чума перекинулась на %s", player))
+--						SendChatMessage(format("Чума перекинулась на %s", player), "RAID")
+--						print(format("Чума перекинулась на %s", player))
 					end
 				end
 			end
