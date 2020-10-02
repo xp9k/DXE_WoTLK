@@ -336,8 +336,6 @@ function flump:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, s
 				sacrifice[srcGUID] = true
 			elseif special[spellID] then -- Workaround for spells which aren't tanking spells
 				send(L.Plugins["used"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] used Aura Mastery
-			elseif DIVINE_PLEA and spellID == 54428 and UnitManaMax(srcName) >= MIN_HEALER_MANA then
-				send(L.Plugins["used"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] used Divine Plea
 			end
 			
 		elseif event == "SPELL_AURA_APPLIED" then -- [X] cast [Y] on [Z]
