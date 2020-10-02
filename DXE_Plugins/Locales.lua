@@ -87,6 +87,16 @@ Plugins["Number of damage events to report per person (default: 1)"] = "Коли
 Plugins["Only in raid"] = "Только в рейде"
 Plugins["Show death only in raid"] = "Показывать смерти только в рейде"
 
+--	Helper
+Plugins["Helper"] = "Помощник"
+Plugins["Some helpful options"] = "Несколько полезных фишек"
+Plugins["Enable Lady Helper"] = "Включить помощника на Леди"
+Plugins["Puts off weapons before Mind Control"] = "Снимать оружие за 2 секунды до контроля"
+Plugins["Enable Lanathel bites announces to the Raid channel"] = "Сообщать в рейд кто кого кусает на Ланатели"
+Plugins["Announce when dispelled Plague jumps to another Raid Member"] = "Сообщать в рейд, если чума перекинулась на игрока при диспеле Чумы на Личе"
+Plugins["Plague jumped to %s"] = "Чума перекинулась на %s"
+Plugins["%s bites %s"] = "%s кусает %s"
+
 AL:GetLocale("DXE").Plugins = AL:GetLocale("DXE Plugins")
 
 return

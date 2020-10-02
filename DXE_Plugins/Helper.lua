@@ -81,8 +81,8 @@ function f:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, srcFl
 	local weapon, macro
 	
 	if pfl.LanathelBitesEnable then
-		if event == "SPELL_CAST_START" and SPELL_BITE[spellID] then
-			SendChatMessage(format("%s кусает %s", srcName, destName), "RAID")
+		if event == "SPELL_DAMAGE" and SPELL_BITE[spellID] then
+			SendChatMessage(format(L.Plugins["%s bites %s"], srcName, destName), "RAID")
 		end		
 	end
 	
@@ -152,10 +152,10 @@ local function InitializeOptions()
 	local helper_group = {
 		type = "group",
 		childGroups = "tab",
-		name = "Helper",
+		name = L.Plugins["Helper"],
 		get = function(info) return db.profile.Plugins.Helper[info[#info]] end,
 		set = function(info,v) db.profile.Plugins.Helper[info[#info]] = v; module:RefreshProfile() end,
-		order = 1,
+		order = 2,
 		args = {
 			description = {
 				type = "header",
@@ -174,7 +174,7 @@ local function InitializeOptions()
 			LanathelBitesEnable = {
 				type = "toggle",
 				name = L.Plugins["Enable Lanathel bites announces to the Raid channel"],
-				desc = L.Plugins["Enable Lanathel bites announces to the Raid channe"],
+				desc = L.Plugins["Enable Lanathel bites announces to the Raid channel"],
 				order = 2,
 				width = "full",
 				get = function(info) return db.profile.Plugins.Helper[info[#info]] end,
@@ -259,7 +259,7 @@ do
 					if UnitIsUnit(player, "player") then 
 						DXE.Alerts.CenterPopup(_, "necroplaguedur", format("%s: %s!",SN[70337],L.alert["YOU"]).."!", 5, 5, "ALERT3", "GREEN", "GREEN", false, DXE.ST[70337])
 					else
-						SendChatMessage(format("Чума перекинулась на %s", player), "RAID")
+						SendChatMessage(format(L.Plugins["Plague jumped to %s"], player), "RAID")
 --						print(format("Чума перекинулась на %s", player))
 					end
 				end
