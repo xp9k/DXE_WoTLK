@@ -251,7 +251,7 @@ end
 
 function fatality:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, srcFlags, destGUID, destName, destFlags, ...)
 	
-	if (pfl.RAID_ONLY and not UnitInRaid(destName)) or (not UnitInParty(destName)) then return end
+	if not (UnitInRaid(destName) or UnitInParty(destName)) then return end
 	
 	local spellID, spellName, amount, overkill, environment, crit, crush
 	
@@ -511,6 +511,7 @@ function fatality:CheckChannel()
 	if channel_id == 0 then
 		print(format("|cffff0000Channel not found.|r Channel |cff39d7e5%s|r was joined automatically", pfl.CHANNEL_NAME))
 		JoinChannelByName(pfl.CHANNEL_NAME)
+		channel_id = GetChannelName(pfl.CHANNEL_NAME)
 	end
 end
 
@@ -531,7 +532,7 @@ function module:RefreshProfile()
 	end
 	pfl = db.profile.Plugins.Fatality
 	fatality:CheckEnable()
-	fatality:tdump(pfl)
+--	fatality:tdump(pfl)
 end
 
 fatality:RegisterEvent("ADDON_LOADED")

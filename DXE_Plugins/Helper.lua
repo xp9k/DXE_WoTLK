@@ -62,6 +62,8 @@ function f:PLAYER_REGEN_DISABLED()
 end
 
 function f:CHAT_MSG_MONSTER_YELL(text, playerName, ...)
+	local _, instance = IsInInstance()
+	if instance ~= "raid" then return end
 	if pfl.LadyHelperEnabled and strfind(text, L.chat_citadel["^What is this disturbance"]) then
 		dominate_time = GetTime()
 		d_cd = DOMINATE_COOLDOWN.Pull
@@ -71,7 +73,7 @@ function f:CHAT_MSG_MONSTER_YELL(text, playerName, ...)
 	
 	if pfl.LichPlagueJumpEnabled and strfind(text, L.chat_citadel["^So the Light's vaunted justice has finally arrived"]) then
 		LichFight = true
-		print("LichFight == " .. tostring(LichFight))
+--		print("LichFight == " .. tostring(LichFight))
 	end
 end
 
@@ -242,7 +244,7 @@ function f:PutOffWeapon()
 end
 
 function f:LadyDead()
-	LichFight = false
+	LadyFight = false
 	print("|cffff0000L|r|cff1784d1ady|r |cffff0000H|r|cff1784d1elper|r: |cff00ff00Босс убит.|r |cffff0000Аддон отключен|r")
 	weapon_off = true
 end

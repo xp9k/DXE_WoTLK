@@ -17,8 +17,8 @@ do
 		},
 		onactivate = {
 			tracerstart = true,
-			tracerstop = true,
-			combatstop = true,
+--			tracerstop = true,
+--			combatstop = true,
 			tracing = {
 				36597, -- Lich King
 			},
@@ -842,7 +842,6 @@ end
 do
 	local plague = GetSpellInfo(70337)
 	local function scanRaid()
---		DXE.Alerts.CenterPopup(_, "necroplaguedur", format("%s: %s!",SN[70337],L.alert["YOU"]).."!", 5, 5, "ALERT3", "GREEN", "GREEN", false, DXE.ST[70337])
 		for i = 1, GetNumRaidMembers() do
 			local player = GetRaidRosterInfo(i)
 			if player then
@@ -850,9 +849,6 @@ do
 				if debuffed and (expire - GetTime()) > 13 then
 					if UnitIsUnit(player, "player") then 
 						DXE.Alerts.CenterPopup(_, "necroplaguedur", format("%s: %s!",SN[70337],L.alert["YOU"]).."!", 5, 5, "ALERT3", "GREEN", "GREEN", false, DXE.ST[70337])
-					else
---						SendChatMessage(format("Чума перекинулась на %s", player), "RAID")
---						print(format("Чума перекинулась на %s", player))
 					end
 				end
 			end
