@@ -64,14 +64,17 @@ end
 function f:CHAT_MSG_MONSTER_YELL(text, playerName, ...)
 	local _, instance = IsInInstance()
 	if instance ~= "raid" then return end
-	if pfl.LadyHelperEnabled and strfind(text, L.chat_citadel["^What is this disturbance"]) then
+	
+--	if L.chat_citadel == nil then return end
+	
+	if pfl.LadyHelperEnabled and L.chat_citadel ~= nil and strfind(text, L.chat_citadel["^What is this disturbance"]) then
 		dominate_time = GetTime()
 		d_cd = DOMINATE_COOLDOWN.Pull
 		LadyFight = true
 		print("|cffff0000L|r|cff1784d1ady|r |cffff0000H|r|cff1784d1elper|r: Бой начат. |cff00ff00Аддон включен|r")
 	end
 	
-	if pfl.LichPlagueJumpEnabled and strfind(text, L.chat_citadel["^So the Light's vaunted justice has finally arrived"]) then
+	if pfl.LichPlagueJumpEnabled and L.chat_citadel ~= nil and strfind(text, L.chat_citadel["^So the Light's vaunted justice has finally arrived"]) then
 		LichFight = true
 --		print("LichFight == " .. tostring(LichFight))
 	end
@@ -260,10 +263,8 @@ do
 				if debuffed and (expire - GetTime()) > 13 then
 					if UnitIsUnit(player, "player") then 
 						DXE.Alerts.CenterPopup(_, "necroplaguedur", format("%s: %s!",SN[70337],L.alert["YOU"]).."!", 5, 5, "ALERT3", "GREEN", "GREEN", false, DXE.ST[70337])
-					else
-						SendChatMessage(format(L.Plugins["Plague jumped to %s"], player), "RAID")
---						print(format("Чума перекинулась на %s", player))
 					end
+					SendChatMessage(format(L.Plugins["Plague jumped to %s"], player), "RAID")
 				end
 			end
 		end
