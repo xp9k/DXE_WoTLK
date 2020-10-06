@@ -242,6 +242,12 @@ local function send(msg)
 	end
 end
 
+local function isFemale(unit)
+	if UnitSex(unit) and UnitSex(unit)==3 then return true
+	else return false
+	end
+end
+
 local function icon(name)
 	local n = GetRaidTargetIndex(name)
 	return n and format("{rt%d}", n) or ""
@@ -269,7 +275,11 @@ function flump:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, s
 			soulstones[destName].SoR = true -- Workaround for Spirit of Redemption issue
 		elseif event == "UNIT_DIED" and soulstones[destName] and not UnitIsFeignDeath(destName) then
 			if not soulstones[destName].SoR and (GetTime() - soulstones[destName].time) < 2 then
-				send(L.Plugins["ss"]:format(destName, GetSpellLink(6203)))
+				if isFemale(destName) then
+					send(L.Plugins["ss_fem"]:format(destName, GetSpellLink(6203)))
+				else
+					send(L.Plugins["ss"]:format(destName, GetSpellLink(6203)))
+				end
 				SendChatMessage(L.Plugins["ss"]:format(destName, GetSpellLink(6203)), "RAID_WARNING")
 			end
 			soulstones[destName] = nil
@@ -278,47 +288,91 @@ function flump:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, s
 	
 	if event == "SPELL_CAST_SUCCESS" then
 		if spellID == HEROISM then
-			send(L.Plugins["used"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] used [Y] -- Heroism/Bloodlust
+			if isFemale(srcName) then
+				send(L.Plugins["used_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] used [Y] -- Heroism/Bloodlust
+			else
+				send(L.Plugins["used"]:format(icon(srcName), srcName, GetSpellLink(spellID)))
+			end
 		elseif bots[spellID] then 
-			send(L.Plugins["bot"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] used a [Y] -- Bots
+			if isFemale(srcName) then
+				send(L.Plugins["bot_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] used a [Y] -- Bots
+			else
+				send(L.Plugins["bot"]:format(icon(srcName), srcName, GetSpellLink(spellID)))
+			end
 		elseif rituals[spellID] then
-			send(L.Plugins["create"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] is casting a [Z] -- Rituals
+			if isFemale(srcName) then
+				send(L.Plugins["create_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] is casting a [Z] -- Rituals
+			else
+				send(L.Plugins["create"]:format(icon(srcName), srcName, GetSpellLink(spellID)))
+			end
 		elseif misc[spellID] then
-			send(L.Plugins["miscellaneous"]:format(srcName, GetSpellLink(spellID))) --Misc
+			if isFemale(srcName) then
+				send(L.Plugins["miscellaneous_fem"]:format(srcName, GetSpellLink(spellID))) --Misc
+			else
+				send(L.Plugins["miscellaneous"]:format(srcName, GetSpellLink(spellID)))
+			end
 		end
 		
 	elseif event == "SPELL_AURA_APPLIED" then -- Check name instead of ID to save checking all ranks
 		if spellName == SOULSTONE then
 			local _, class = UnitClass(srcName)
 			if class == "WARLOCK" then -- Workaround for Spirit of Redemption issue
-				send(L.Plugins["cast"]:format(icon(srcName), srcName, GetSpellLink(6203), icon(destName), destName)) -- [X] cast [Y] on [Z] -- Soulstone
+				if isFemale(srcName) then
+					send(L.Plugins["cast_fem"]:format(icon(srcName), srcName, GetSpellLink(6203), icon(destName), destName)) -- [X] cast [Y] on [Z] -- Soulstone
+				else
+					send(L.Plugins["cast"]:format(icon(srcName), srcName, GetSpellLink(6203), icon(destName), destName))
+				end
 			end
 		end
 		
 	elseif event == "SPELL_CREATE" then
 		if port[spellID] then
-			send(L.Plugins["portal"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] opened a [Z] -- Portals
+			if isFemale(srcName) then
+				send(L.Plugins["portal_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] opened a [Z] -- Portals
+			else
+				send(L.Plugins["portal"]:format(icon(srcName), srcName, GetSpellLink(spellID)))
+			end
 		elseif toys[spellID] then
-			send(L.L.Plugins["bot"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] used a [Z]
+			if isFemale(srcName) then
+				send(L.L.Plugins["bot_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] used a [Z]
+			else
+				send(L.L.Plugins["bot"]:format(icon(srcName), srcName, GetSpellLink(spellID)))
+			end
 		end
 		
 	elseif event == "SPELL_CAST_START" then
 		if feasts[spellID] then
-			send(L.Plugins["feast"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] prepares a [Z] -- Feasts
+			if isFemale(srcName) then
+				send(L.Plugins["feast_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] prepares a [Z] -- Feasts
+			else
+				send(L.Plugins["feast"]:format(icon(srcName), srcName, GetSpellLink(spellID)))
+			end
 		end
 		
 	elseif event == "SPELL_RESURRECT" then
 		if spellName == REBIRTH then -- Check name instead of ID to save checking all ranks
-			send(L.Plugins["cast"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName)) -- [X] cast [Y] on [Z] -- Rebirth
+			if isFemale(srcName) then
+				send(L.Plugins["cast_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName)) -- [X] cast [Y] on [Z] -- Rebirth
+			else
+				send(L.Plugins["cast"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName))
+			end
 		elseif spellName == CABLES then
-			send(L.Plugins["res"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName))
+			if isFemale(srcName) then
+				send(L.Plugins["res_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName))
+			else
+				send(L.Plugins["res"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName))
+			end
 		end	
 		
 	elseif event == "SPELL_DISPEL_FAILED" then
 		local extraID, extraName = ...
 		local target = fails[extraName]
 		if target or destName == target then
-			send(L.Plugins["dispel"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName, GetSpellLink(extraID))) -- [W]'s [X] failed to dispel [Y]'s [Z]
+			if isFemale(srcName) then
+				send(L.Plugins["dispel_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName, GetSpellLink(extraID))) -- [W]'s [X] failed to dispel [Y]'s [Z]
+			else
+				send(L.Plugins["dispel"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName, GetSpellLink(extraID)))
+			end
 		end
 	end
 
@@ -326,39 +380,79 @@ function flump:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, s
 	if not (pfl.InCombat and not UnitAffectingCombat(srcName)) then -- If the caster is in combat	
 		if event == "SPELL_CAST_SUCCESS" then
 			if spells[spellID] then
-				send(L.Plugins["cast"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName)) -- [X] cast [Y] on [Z]
+				if isFemale(srcName) then
+					send(L.Plugins["cast_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName)) -- [X] cast [Y] on [Z]
+				else
+					send(L.Plugins["cast"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName))
+				end
 			elseif spellID == 19752 then -- Don't want to announce when it fades, so
-				send(L.Plugins["cast"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName)) -- Divine Intervention
+				if isFemale(srcName) then
+					send(L.Plugins["cast_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName)) -- Divine Intervention
+				else
+					send(L.Plugins["cast"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName))
+				end
 			elseif use[spellID] and IsTank(srcName) then
-				send(L.Plugins["used"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] used [Y]
+				if isFemale(srcName) then
+					send(L.Plugins["used_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] used [Y]
+				else
+					send(L.Plugins["used"]:format(icon(srcName), srcName, GetSpellLink(spellID)))
+				end
 			elseif spellID == 64205 and IsTank(srcName) then  -- Workaround for Divine Sacrifice issue
-				send(L.Plugins["used"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] used Divine Sacrifice
+				if isFemale(srcName) then
+					send(L.Plugins["used_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] used Divine Sacrifice
+				else
+					send(L.Plugins["used"]:format(icon(srcName), srcName, GetSpellLink(spellID)))
+				end
 				sacrifice[srcGUID] = true
 			elseif special[spellID] then -- Workaround for spells which aren't tanking spells
-				send(L.Plugins["used"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] used Aura Mastery
+				if isFemale(srcName) then
+					send(L.Plugins["used_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] used Aura Mastery
+				else
+					send(L.Plugins["used"]:format(icon(srcName), srcName, GetSpellLink(spellID)))
+				end
 			end
 			
 		elseif event == "SPELL_AURA_APPLIED" then -- [X] cast [Y] on [Z]
 			if spellID == 20233 or spellID == 20236 then -- Improved Lay on Hands (Rank 1/Rank 2)
-				send(L.Plugins["cast"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName))
+				if isFemale(srcName) then
+					send(L.Plugins["cast_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName))
+				else
+					send(L.Plugins["cast"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName))
+				end
 			elseif bonus[spellID] then
-				send(L.Plugins["used"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] used [Z] (bonus)
+				if isFemale(srcName) then
+					send(L.Plugins["used_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] used [Z] (bonus)
+				else
+					send(L.Plugins["used"]:format(icon(srcName), srcName, GetSpellLink(spellID)))
+				end
 			elseif spellID == 66233 then
 				if not ad_heal then -- If the Ardent Defender heal message hasn't been sent already
 					send(ad:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X]'s [Y] consumed
 				end
 				ad_heal = false
 			elseif spellName == HOP and IsTank(srcName) then
-				send(L.Plugins["cast"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName)) -- [X] cast Hand of Protection on [Z]
+				if isFemale(srcName) then
+					send(L.Plugins["cast_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName)) -- [X] cast Hand of Protection on [Z]
+				else
+					send(L.Plugins["cast"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName))
+				end
 			elseif trinkets[spellID] then
-				send(L.Plugins["used"]:format(icon(srcName), srcName, select(2, GetItemInfo(trinkets[spellID])))) -- [X] used [Y]
+				if isFemale(srcName) then
+					send(L.Plugins["used_fem"]:format(icon(srcName), srcName, select(2, GetItemInfo(trinkets[spellID])))) -- [X] used [Y]
+				else
+					send(L.Plugins["used"]:format(icon(srcName), srcName, select(2, GetItemInfo(trinkets[spellID]))))
+				end
 			end
 		
 		elseif event == "SPELL_HEAL" then
 			if spellID == 48153 or spellID == 66235 then -- Guardian Spirit / Ardent Defender
 				local amount = ...
 				ad_heal = true
-				send(L.Plugins["gs"]:format(icon(srcName), srcName, GetSpellLink(spellID), amount)) -- [X]'s [Y] consumed: [Z] heal
+				if isFemale(srcName) then
+					send(L.Plugins["gs_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID), amount)) -- [X]'s [Y] consumed: [Z] heal
+				else
+					send(L.Plugins["gs"]:format(icon(srcName), srcName, GetSpellLink(spellID), amount))
+				end
 			end
 			
 		if 1 > 0 then	

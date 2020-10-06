@@ -95,7 +95,7 @@ function f:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, srcFl
 			SendChatMessage(format(L.Plugins["%s bites %s"], srcName, destName), "RAID")		
 		end	
 		if (event == "SPELL_CAST_SUCCESS" and spellID == 71510) then
-			LANA_GUID == srcGUID
+			LANA_GUID = srcGUID
 		end
 		if (event == "UNIT_DIED" or event == "PARTY_KILL") then
 			if destGUID == LANA_GUID then
