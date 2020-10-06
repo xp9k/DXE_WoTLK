@@ -332,6 +332,7 @@ chat_citadel["^The Alliance falter"] = "^Альянс повержен"
 chat_citadel["^The Scourge will wash over this world"] = "^Плеть накроет этот мир"
 chat_citadel["^What is this disturbance"] = "^Как вы смеете ступать"
 chat_citadel["^Your incursion ends here"] = "^Здесь ваше вторжение и окончится"
+chat_citadel["^It was"] = "^Это было... неразумное... решение..."
 
 AL:GetLocale("DXE").chat_citadel = AL:GetLocale("DXE Chat Citadel")
 -- NPC names

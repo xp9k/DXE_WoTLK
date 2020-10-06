@@ -13,7 +13,7 @@ local SPELL_BITE = {
 	[71729] = true,
 }
 
-local LADY_GUID, LICH_GUID
+local LADY_GUID, LICH_GUID, LANA_GUID
 
 local DOMINATE_COOLDOWN = {
 							Pull = 31, -- С пулла
@@ -25,7 +25,7 @@ local weapon_off = false
 local weapons = {}
 
 local Enabled = false
-local LadyFight, LichFight = false
+local LadyFight, LichFight, LanaFight = false
 
 local f = CreateFrame("Frame")
 local addon,L = DXE,DXE.L
@@ -78,6 +78,11 @@ function f:CHAT_MSG_MONSTER_YELL(text, playerName, ...)
 		LichFight = true
 --		print("LichFight == " .. tostring(LichFight))
 	end
+	
+	if pfl.LanathelBitesEnable and L.chat_citadel ~= nil and strfind(text, L.chat_citadel["^It was"]) then
+		LanaFight = true
+		print("LanaFight == " .. tostring(LanaFight))
+	end
 end
 
 function f:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, srcFlags, destGUID, destName, destFlags, spellID, spellName, school, ...)
@@ -85,10 +90,18 @@ function f:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, srcFl
 	local spellSchool, extraSpellID, extraSpellName, extraSchool = ... 
 	local weapon, macro
 	
-	if pfl.LanathelBitesEnable then
-		if event == "SPELL_DAMAGE" and SPELL_BITE[spellID] then
-			SendChatMessage(format(L.Plugins["%s bites %s"], srcName, destName), "RAID")
-		end		
+	if pfl.LanathelBitesEnable and LanaFight then
+		if (event == "SPELL_DAMAGE" or event == "SPELL_MISSED") and SPELL_BITE[spellID] then
+			SendChatMessage(format(L.Plugins["%s bites %s"], srcName, destName), "RAID")		
+		end	
+		if (event == "SPELL_CAST_SUCCESS" and spellID == 71510) then
+			LANA_GUID == srcGUID
+		end
+		if (event == "UNIT_DIED" or event == "PARTY_KILL") then
+			if destGUID == LANA_GUID then
+				LadyFight = false
+			end		
+		end
 	end
 	
 	if pfl.LadyHelperEnabled and LadyFight then
@@ -151,6 +164,7 @@ end
 function f:ADDON_LOADED(addon)
 	LadyFight = false
 	LichFight = false
+	LanaFight = false
 end
 
 local function InitializeOptions()
