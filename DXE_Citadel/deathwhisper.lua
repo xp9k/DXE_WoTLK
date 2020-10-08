@@ -231,7 +231,7 @@ do
 					},
 					{
 						
-						"expect",{"&difficulty&",">","2"},
+						"expect",{"&difficulty&",">=","3"},
 						"quash","cultcd",
 						"set",{culttime = 45},
 						"alert","cultcd",
