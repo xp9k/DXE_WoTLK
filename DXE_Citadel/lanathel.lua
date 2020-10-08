@@ -265,6 +265,17 @@ do
 					},
 				},
 			},
+			{
+				type = "combatevent",
+				eventtype = "SPELL_CAST_SUCCESS",
+				spellname = 73070,
+				execute = {
+					{
+						"quash", "pactcd",
+						"alert", {"pactcd", time = 25},
+					},
+				},
+			},
 			-- Swarming Shadows others removal
 			{
 				type = "combatevent",
