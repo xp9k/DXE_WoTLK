@@ -223,9 +223,18 @@ do
 				execute = {
 					{
 						"alert","manabarrierwarn",
+					},
+					{
 						"expect",{"&difficulty&","<=","2"},
 						"quash","cultcd",
 						"canceltimer","firecult",
+					},
+					{
+						
+						"expect",{"&difficulty&",">","2"},
+						"quash","cultcd",
+						"set",{culttime = 45},
+						"alert","cultcd",
 					},
 				},
 			},
