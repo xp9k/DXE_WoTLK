@@ -689,10 +689,11 @@ local function InitializeOptions()
 	end
 	
 	for i, j in pairs(trinkets_opt) do
+		local item = select(2, GetItemInfo(trinkets[i]))
 		flump_group.args.Trinkets.args[tostring(i)] = {
 			type = "toggle",
-			name = select(2, GetItemInfo(trinkets[i])),
-			desc = GetItemInfo(trinkets[i]) .. " (" .. select(4, GetItemInfo(trinkets[i])) .. ")",
+			name = select(2, GetItemInfo(trinkets[i])) or "Unknown",
+--				desc = GetItemInfo(trinkets[i]) .. " (" .. select(4, GetItemInfo(trinkets[i])) .. ")",
 			order = 100 + i,
 			get = function(info) return trinkets_opt[i] end,
 			set = function(info,v)  trinkets_opt[i] = v; module:RefreshProfile(); savetables() end,
@@ -789,7 +790,11 @@ function module:OnInitialize()
 	addon.Options:RegisterPlugin(module)
 end
 
+function flump:GET_ITEM_INFO_RECEIVED(arg1)
+end
+
 flump:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+flump:RegisterEvent("GET_ITEM_INFO_RECEIVED")
 
 ---------------------------------------
 -- SETTINGS
