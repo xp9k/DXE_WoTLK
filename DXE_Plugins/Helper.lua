@@ -67,7 +67,7 @@ function f:CHAT_MSG_MONSTER_YELL(text, playerName, ...)
 	
 --	if L.chat_citadel == nil then return end
 	
-	if pfl.LadyHelperEnabled 
+	if pfl.LadyHelperEnabled then
 		if L.chat_citadel ~= nil then
 			if strfind(text, L.chat_citadel["^What is this disturbance"]) then
 				dominate_time = GetTime()
@@ -78,7 +78,7 @@ function f:CHAT_MSG_MONSTER_YELL(text, playerName, ...)
 		end
 	end
 	
-	if pfl.LichPlagueJumpEnabled 
+	if pfl.LichPlagueJumpEnabled then
 		if L.chat_citadel ~= nil then
 			if strfind(text, L.chat_citadel["^So the Light's vaunted justice has finally arrived"]) then
 				LichFight = true
@@ -87,7 +87,7 @@ function f:CHAT_MSG_MONSTER_YELL(text, playerName, ...)
 		end
 	end
 	
-	if pfl.LanathelBitesEnable 
+	if pfl.LanathelBitesEnable then
 		if L.chat_citadel ~= nil then
 			if strfind(text, L.chat_citadel["^It was"]) then
 				LanaFight = true
