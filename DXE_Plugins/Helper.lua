@@ -67,21 +67,33 @@ function f:CHAT_MSG_MONSTER_YELL(text, playerName, ...)
 	
 --	if L.chat_citadel == nil then return end
 	
-	if pfl.LadyHelperEnabled and L.chat_citadel ~= nil and strfind(text, L.chat_citadel["^What is this disturbance"]) then
-		dominate_time = GetTime()
-		d_cd = DOMINATE_COOLDOWN.Pull
-		LadyFight = true
-		print("|cffff0000L|r|cff1784d1ady|r |cffff0000H|r|cff1784d1elper|r: Бой начат. |cff00ff00Аддон включен|r")
+	if pfl.LadyHelperEnabled 
+		if L.chat_citadel ~= nil 
+			if strfind(text, L.chat_citadel["^What is this disturbance"]) then
+				dominate_time = GetTime()
+				d_cd = DOMINATE_COOLDOWN.Pull
+				LadyFight = true
+				print("|cffff0000L|r|cff1784d1ady|r |cffff0000H|r|cff1784d1elper|r: Бой начат. |cff00ff00Аддон включен|r")
+			end
+		end
 	end
 	
-	if pfl.LichPlagueJumpEnabled and L.chat_citadel ~= nil and strfind(text, L.chat_citadel["^So the Light's vaunted justice has finally arrived"]) then
-		LichFight = true
---		print("LichFight == " .. tostring(LichFight))
+	if pfl.LichPlagueJumpEnabled 
+		if L.chat_citadel ~= nil 
+			if strfind(text, L.chat_citadel["^So the Light's vaunted justice has finally arrived"]) then
+				LichFight = true
+		--		print("LichFight == " .. tostring(LichFight))
+			end
+		end
 	end
 	
-	if pfl.LanathelBitesEnable and L.chat_citadel ~= nil and strfind(text, L.chat_citadel["^It was"]) then
-		LanaFight = true
-		print("LanaFight == " .. tostring(LanaFight))
+	if pfl.LanathelBitesEnable 
+		if L.chat_citadel ~= nil 
+			if strfind(text, L.chat_citadel["^It was"]) then
+				LanaFight = true
+				print("LanaFight == " .. tostring(LanaFight))
+			end
+		end
 	end
 end
 

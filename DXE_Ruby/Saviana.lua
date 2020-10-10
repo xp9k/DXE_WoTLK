@@ -62,10 +62,10 @@ do
 				icon = ST[74453],
 				flashscreen = true,
 			},
-			flamebeacondur = {
+			flamebeaconwarn = {
 				varname = format(L.alert["%s Duration"],SN[74453]),
 				type = "simple",
-				text = format(L.alert["%s Duration"],SN[74453]),
+				text = format("%s: &dstname_or_YOU&",SN[74453]),
 				time = 5,
 				flashtime = 5,
 				color1 = "ORANGE",
@@ -132,8 +132,7 @@ do
 						"announce", "flamebeaconsay",
 					},
 					{
-						"expect",{"#4#","~=","&playerguid&"},
-						"alert", "flamebeacondur",
+						"schedulealert", {"flamebeaconwarn", 0.5},
 					},
 					{
 						"quash", "enragecd",
