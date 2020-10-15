@@ -186,6 +186,8 @@ local special = {
 
 local toys = {
 	[61031] = true, -- Toy Train Set
+	[49844] = true, -- Пульт Худовара
+	[48933] = true, -- Червоточина
 }
 
 local fails = {
@@ -334,9 +336,9 @@ function flump:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, s
 			end
 		elseif toys[spellID] then
 			if isFemale(srcName) then
-				send(L.L.Plugins["bot_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] used a [Z]
+				send(L.Plugins["bot_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] used a [Z]
 			else
-				send(L.L.Plugins["bot"]:format(icon(srcName), srcName, GetSpellLink(spellID)))
+				send(L.Plugins["bot"]:format(icon(srcName), srcName, GetSpellLink(spellID)))
 			end
 		end
 		
