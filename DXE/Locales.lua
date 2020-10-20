@@ -1417,6 +1417,7 @@ alert["Weakened"] = "Ослабление"
 alert["West"] = "западной"
 alert["YOU"] = "ВЫ"
 alert["YOU ARE CLOSE"] = "ВЫ БЛИЗКО"
+alert["Pull"] = "Атака"
 
 AL:GetLocale("DXE").alert = AL:GetLocale("DXE Alert")
 
