@@ -82,16 +82,6 @@ do
 				flashscreen = true,
 				icon = ST[71340],
 			},
-			pactremovalself = {
-				varname = format(L.alert["%s on self"],format(L.alert["%s Removal"],L.alert["Pact"])),
-				type = "simple",
-				text = format(L.alert["%s Removed"],L.alert["Pact"]).."! "..L.alert["YOU"].."!",
-				time = 3,
---				color1 = "GOLD",
---				sound = "ALERT4",
-				flashscreen = true,
-				icon = ST[71340],
-			},
 			bloodboltcd = {
 				varname = format(L.alert["%s Cooldown"],SN[71772]),
 				type = "dropdown",
@@ -308,7 +298,10 @@ do
 			{
 				type = "combatevent",
 				eventtype = "SPELL_CAST_SUCCESS",
-				spellname = 71340,
+				spellid = {
+					71336, -- ??
+					71340, -- 25h
+				},
 				execute = {
 					{
 						"quash", "pactcd",
@@ -317,18 +310,6 @@ do
 					{
 						"expect",{"#4#","==","&playerguid&"},
 						"alert","pactself",
-					},
-				},
-			},
-			-- Pact of the Darkfallen removal
-			{
-				type = "combatevent",
-				eventtype = "SPELL_AURA_REMOVED",
-				spellname = 71340,
-				execute = {
-					{
-						"expect",{"#4#","==","&playerguid&"},
-						"alert","pactremovalself",
 					},
 				},
 			},
