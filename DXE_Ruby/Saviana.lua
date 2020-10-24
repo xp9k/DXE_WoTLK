@@ -132,7 +132,7 @@ do
 						"announce", "flamebeaconsay",
 					},
 					{
-						"schedulealert", {"flamebeaconwarn", 0.5},
+						"schedulealert", {"flamebeaconwarn", 1.5},
 					},
 					{
 						"quash", "enragecd",

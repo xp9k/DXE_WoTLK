@@ -835,7 +835,6 @@ function lichking:CHAT_MSG_MONSTER_YELL(text, playerName, ...)
 	if strfind(text, L.chat_citadel["^So the Light's vaunted justice has finally arrived"]) then
 		lichfight = true
 		lichking:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
---		print("lichfight == " .. tostring(lichfight))
 	end
 end
 
@@ -845,17 +844,17 @@ do
 		for i = 1, GetNumRaidMembers() do
 			local player = GetRaidRosterInfo(i)
 			if player then
-				local debuffed, _, _, _, _, _, expire = UnitDebuff(player, plague)
+				local debuffed, _, _, _, _, expire = UnitDebuff(player, plague)
 				if debuffed and (expire - GetTime()) > 13 then
-					if UnitIsUnit(player, "player") then 
-						DXE.Alerts.CenterPopup(_, "necroplaguedur", format("%s: %s!",SN[70337],L.alert["YOU"]).."!", 5, 5, "ALERT3", "GREEN", "GREEN", false, DXE.ST[70337])
-					end
+--					if UnitIsUnit(player, "player") then 
+						DXE.Alerts.CenterPopup(_, "necroplaguedur", format("%s: %s!", SN[70337], player).."!", 5, 5, "ALERT3", "GREEN", "GREEN", false, DXE.ST[70337])
+--					end
 				end
 			end
 		end
 	end
 	function PlagueScan()
-		DXE:ScheduleTimer(scanRaid, 0.8)
+		DXE:ScheduleTimer(scanRaid, 0.5)
 	end
 end
 
