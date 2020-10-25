@@ -768,12 +768,12 @@ function addon:VehicleNames()
 	return names
 end
 
-function addon:SpellNames(spell)
+function addon:DebuffedNames(spell)
 	local names = {}
 	for name in pairs(Roster.name_to_unit) do
-		local debuffed, _, _, _, _, expire  = UnitDebuff(name, spell)
+		local debuffed = UnitDebuff(name, spell)
 		if debuffed then
-			names[#names+1] = name
+			names[#names + 1] = name
 		end
 	end
 	return names

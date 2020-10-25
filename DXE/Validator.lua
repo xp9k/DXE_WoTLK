@@ -939,6 +939,7 @@ do
 		difficulty = true,
 		srcname_or_YOU = true,
 		dstname_or_YOU = true,
+		debuffednames = true,
 		upvalue = true,
 		-- with params
 		-- replace vars and nums don't need to be checked
