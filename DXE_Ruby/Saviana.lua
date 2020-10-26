@@ -63,7 +63,7 @@ do
 				flashscreen = true,
 			},
 			flamebeaconwarn = {
-				varname = format(L.alert["%s Duration"],SN[74453]),
+				varname = format(L.alert["%s Warning"],SN[74453]),
 				type = "simple",
 				text = format("%s: &debuffednames|"..SN[74453].."&",SN[74453]),
 				time = 5,
@@ -132,7 +132,7 @@ do
 						"announce", "flamebeaconsay",
 					},
 					{
-						"schedulealert", {"flamebeaconwarn", 1},
+						"schedulealert", {"flamebeaconwarn", 0.3},
 					},
 					{
 						"quash", "enragecd",

@@ -139,7 +139,7 @@ do
 			},
 			dominatewarn = {
 				varname = format(L.alert["%s Warning"],SN[71289]),
-				text = "<dominatetext>",
+				text = format("%s: &debuffednames|"..SN[71289].."&", SN[71289]),
 				type = "simple",
 				time = 3,
 				color1 = "GREY",
@@ -301,19 +301,22 @@ do
 						"alert","dominatecd",
 					},
 					{
-						"expect",{"#4#","~=","&playerguid&"},
-						"invoke",{
-							{
-								"expect",{"&difficulty&","==","4"}, -- == 25h
-								"set",{dominatetext = format(L.alert["%s Cast"],SN[71289])}
-							},
-							{
-								"expect",{"&difficulty&","<=","3"}, -- < 25h
-								"set",{dominatetext = format("%s: #5#!",SN[71289])},
-							},
-						},
-						"alert","dominatewarn",
+						"schedulealert", {"dominatewarn", 0.3},
 					},
+					-- {
+						-- "expect",{"#4#","~=","&playerguid&"},
+						-- "invoke",{
+							-- {
+								-- "expect",{"&difficulty&","==","4"}, -- == 25h
+								-- "set",{dominatetext = format(L.alert["%s Cast"],SN[71289])}
+							-- },
+							-- {
+								-- "expect",{"&difficulty&","<=","3"}, -- < 25h
+								-- "set",{dominatetext = format("%s: #5#!",SN[71289])},
+							-- },
+						-- },
+						-- "alert","dominatewarn",
+					-- },
 				},
 			},
 			-- Frostbolt

@@ -105,6 +105,15 @@ do
 				color1 = "PURPLE",
 				icon = ST[70826],
 			},
+			impalewarn = {
+				varname = format(L.alert["%s Warning"],SN[69062]),
+				type = "simple",
+				text = format("%s: &debuffednames|"..SN[69062].."&",SN[69062]),
+				time = 5,
+				flashtime = 5,
+				color1 = "ORANGE",
+				icon = ST[69062],
+			},
 		},
 		arrows = {
 			impalearrow = {
@@ -200,6 +209,9 @@ do
 						"raidicon","impalemark",
 						"expect",{"#1#","~=","&playerguid&"},
 						"arrow","impalearrow",
+					},
+					{
+						"schedulealert", {"impalewarn", 0.3},
 					},
 				},
 			},
