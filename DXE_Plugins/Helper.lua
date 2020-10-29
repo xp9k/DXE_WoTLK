@@ -286,11 +286,14 @@ do
 			local player = GetRaidRosterInfo(i)
 			if player then
 				local debuffed, _, _, _, _, _, expire = UnitDebuff(player, plague)
-				if debuffed and (expire - GetTime()) > 13 then
+--				if debuffed and (expire - GetTime()) > 13 then
+				if debuffed then
+					print("plague: %s; debuffed: %s; expire: %s; now: %s; expire-now: %s", plague, debuffed, tostring(expire), tostring(GetTime()), tostring(expire - GetTime()))
 					if UnitIsUnit(player, "player") then 
 						DXE.Alerts.CenterPopup(_, "necroplaguedur", format("%s: %s!",SN[70337],L.alert["YOU"]).."!", 5, 5, "ALERT3", "GREEN", "GREEN", false, DXE.ST[70337])
 					end
-					SendChatMessage(format(L.Plugins["Plague jumped to %s"], player), "RAID")
+--					SendChatMessage(format(L.Plugins["Plague jumped to %s"], player), "RAID")
+					print(format(L.Plugins["Plague jumped to %s"], player))
 				end
 			end
 		end
