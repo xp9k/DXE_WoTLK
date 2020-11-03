@@ -1652,6 +1652,7 @@ if L then
 
 local options = AL:NewLocale("DXE Options", "ruRU")
 options["About"] = "Об аддоне"
+options["Abilities looks"] = "Вид способностей (настройки)"
 options["Add"] = "Добавить"
 options["Add Sound Label"] = "Добавить звуковой сигнал"
 options["Adjust how long the flash lasts"] = "Изменить длительность отдельных вспышек"
@@ -1769,6 +1770,7 @@ options["Enable Warning Bars"] = "Включить полосы предупре
 options["Enable Warning Messages"] = "Включить предупреждающие сообщения"
 options["Enabling |cffffd200X popups|r will make it fire a message on appearance. Enabling |cffffd200X before ending|r will make it fire a message before ending based on before end threshold"] = "Включение опции |cffffd200\"Всплывающие ...\"|r позволит показывать сообщения в момент события. Включение опции |cffffd200\"... перед окончанием\"|r позволит показывать сообщения заранее за указанное вами время до окончания события."
 options["Encounters"] = "Настройки схваток"
+options["Encounters looks"] = "Вид схваток (настройки)"
 options["Examples"] = "Примеры"
 options["Fires a dropdown, center popup, and simple alert bars"] = "Включает тестовые полосы для проверки настроек"
 options["Fires a flash using a random color"] = "Включает мигание экрана со случайно выбранным цветом"

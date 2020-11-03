@@ -18,6 +18,12 @@ local SM = LibStub("LibSharedMedia-3.0")
 local Plugins = {}
 addon.plugins = Plugins
 
+local enc_looks_vals = {
+	L.options["Tabs"],
+	L.options["Tree"],
+	L.options["Select"],	
+}
+
 local function genblank(order) return {type = "description", name = "", order = order} end
 
 local function InitializeOptions()
@@ -192,6 +198,30 @@ local function InitializeOptions()
 					name = L.options["Border Color"],
 					desc = L.options["Border color used throughout the addon"],
 					hasAlpha = true,
+				},
+				separator3 = {
+					type = "description",
+					name = " ",
+					order = 599,
+					width = "full",
+				},
+				EncountersType = {
+					order = 600,
+					type = "select",
+					name = L.options["Encounters looks"],
+					desc = L.options["The way encounters options look like"],
+					values = enc_looks_vals,
+					get = function(info) return db.profile.Globals[info[#info]] end,
+					set = function(info, index) db.profile.Globals[info[#info]] = index > 3 and nil or index;  end,
+				},
+				AbilitiesType = {
+					order = 700,
+					type = "select",
+					name = L.options["Abilities looks"],
+					desc = L.options["The way Abilities options look like"],
+					values = enc_looks_vals,
+					get = function(info) return db.profile.Globals[info[#info]] end,
+					set = function(info, index) db.profile.Globals[info[#info]] = index > 3 and nil or index; end,
 				},
 			},
 		}
@@ -558,6 +588,12 @@ local function InitializeOptions()
 					local option_args = enc_args[optionType].args
 
 					for var,info in pairs(override and optionInfo.list or encData) do
+						local desc_name
+						if info.spellid ~= nil then
+							desc_name = GetSpellLink(info.spellid)
+						else
+							desc_name = nil
+						end
 						option_args[var] = option_args[var] or {
 							name = info.varname,
 							width = "full",
@@ -586,7 +622,7 @@ local function InitializeOptions()
 			EnabledToggle = {
 				type = "toggle",
 				name = L.options["Enabled"],
-				width = "half",
+				width = "full",
 				order = 1,										-- data.key     -- info.var
 				set = function(info,v) db.profile.Encounters[info[#info-3]][info[#info-1]].enabled = v end,
 				get = function(info) return db.profile.Encounters[info[#info-3]][info[#info-1]].enabled end,
@@ -792,7 +828,13 @@ local function InitializeOptions()
 						args = {},
 					}
 					enc_args[optionType].inline = nil
-					enc_args[optionType].childGroups = "select"
+					if db.profile.Globals.AbilitiesType == 1 then
+						enc_args[optionType].childGroups = "tab"
+					elseif db.profile.Globals.AbilitiesType == 2 then
+						enc_args[optionType].childGroups = "tree"
+					else
+						enc_args[optionType].childGroups = "select"
+					end
 
 					local option_args = enc_args[optionType].args
 					for var,info in pairs(override and optionInfo.list or encData) do
@@ -802,6 +844,7 @@ local function InitializeOptions()
 						}
 
 						option_args[var].type = "group"
+						option_args[var].width = "full"
 						option_args[var].args = {}
 						option_args[var].get = nil
 						option_args[var].set = nil
@@ -872,7 +915,17 @@ local function InitializeOptions()
 		local function AddEncounterOptions(data)
 			-- Add a zone group if it doesn't exist. category supersedes zone
 			local catkey = data.category and formatkey(data.category) or formatkey(data.zone)
-			encs_args[catkey] = encs_args[catkey] or {type = "group", name = data.category or data.zone, args = {}}
+			local chldrp = "tree"
+			
+			if db.profile.Globals.EncountersType == 1 then
+				chldrp = "tab"
+			elseif db.profile.Globals.EncountersType == 2 then
+				chldrp = "tree"
+			else
+				chldrp = "select"
+			end
+			
+			encs_args[catkey] = encs_args[catkey] or {type = "group", childGroups = chldrp, width = "full", name = data.category or data.zone, args = {}}
 			-- Update args pointer
 			local cat_args = encs_args[catkey].args
 			-- Exists, delete args
