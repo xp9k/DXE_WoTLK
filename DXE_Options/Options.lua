@@ -680,10 +680,21 @@ local function InitializeOptions()
 							--return ((EDB[key].alerts[var].type == "dropdown") or (EDB[key].alerts[var].type == "centerpopup"))
 						end,
 					},
+					separator1 = {
+						type = "description",
+						name = " ",
+						order = 499,
+						width = "full",
+					},
 					counter = {
 						type = "toggle",
 						name = L.options["Counter"],
 						order = 500,
+					},
+					raidannounce = {
+						type = "toggle",
+						name = L.options["Raid announce"],
+						order = 550,
 					},
 					test = {
 						type = "execute",
