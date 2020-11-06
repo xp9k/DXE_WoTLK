@@ -295,19 +295,19 @@ function flump:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, s
 			else
 				send(L.Plugins["used"]:format(icon(srcName), srcName, GetSpellLink(spellID)))
 			end
-		elseif bots[spellID] then 
+		elseif pfl.BotsEnable and bots[spellID] then 
 			if isFemale(srcName) then
 				send(L.Plugins["bot_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] used a [Y] -- Bots
 			else
 				send(L.Plugins["bot"]:format(icon(srcName), srcName, GetSpellLink(spellID)))
 			end
-		elseif rituals[spellID] then
+		elseif pfl.RitualsEnable and rituals[spellID] then
 			if isFemale(srcName) then
 				send(L.Plugins["create_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] is casting a [Z] -- Rituals
 			else
 				send(L.Plugins["create"]:format(icon(srcName), srcName, GetSpellLink(spellID)))
 			end
-		elseif misc[spellID] then
+		elseif pfl.MiscEnable and misc[spellID] then
 			if isFemale(srcName) then
 				send(L.Plugins["miscellaneous_fem"]:format(srcName, GetSpellLink(spellID))) --Misc
 			else
@@ -328,7 +328,7 @@ function flump:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, s
 		end
 		
 	elseif event == "SPELL_CREATE" then
-		if port[spellID] then
+		if pfl.PortEnable and port[spellID] then
 			if isFemale(srcName) then
 				send(L.Plugins["portal_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] opened a [Z] -- Portals
 			else
@@ -343,7 +343,7 @@ function flump:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, s
 		end
 		
 	elseif event == "SPELL_CAST_START" then
-		if feasts[spellID] then
+		if pfl.FeastsEnable and feasts[spellID] then
 			if isFemale(srcName) then
 				send(L.Plugins["feast_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] prepares a [Z] -- Feasts
 			else
@@ -381,7 +381,7 @@ function flump:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, s
 	
 	if not (pfl.InCombat and not UnitAffectingCombat(srcName)) then -- If the caster is in combat	
 		if event == "SPELL_CAST_SUCCESS" then
-			if spells[spellID] then
+			if pfl.SpellsEnable and spells[spellID] then
 				if isFemale(srcName) then
 					send(L.Plugins["cast_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName)) -- [X] cast [Y] on [Z]
 				else
@@ -393,7 +393,7 @@ function flump:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, s
 				else
 					send(L.Plugins["cast"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName))
 				end
-			elseif use[spellID] and IsTank(srcName) then
+			elseif pfl.UseEnable and use[spellID] and IsTank(srcName) then
 				if isFemale(srcName) then
 					send(L.Plugins["used_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] used [Y]
 				else
@@ -438,7 +438,7 @@ function flump:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, s
 				else
 					send(L.Plugins["cast"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName))
 				end
-			elseif trinkets[spellID] then
+			elseif pfl.TrinketsEnable and trinkets[spellID] then
 				if isFemale(srcName) then
 					send(L.Plugins["used_fem"]:format(icon(srcName), srcName, select(2, GetItemInfo(trinkets[spellID])))) -- [X] used [Y]
 				else
@@ -547,7 +547,13 @@ local function InitializeOptions()
 				name = "Portals",
 				order = 20,
 				width = "full",
-					args = {},
+					args = {
+						PortalsEnable = {
+							name = L.options["Enable"],
+							type = "toggle",
+							width = "full",
+						},
+					},
 			},	
 			Spells = {
 				type = "group",
@@ -555,7 +561,13 @@ local function InitializeOptions()
 				name = "Spells",
 				order = 20,
 				width = "full",
-					args = {},
+					args = {
+						SpellsEnable = {
+							name = L.options["Enable"],
+							type = "toggle",
+							width = "full",
+						},
+					},
 			},	
 			Bots = {
 				type = "group",
@@ -563,7 +575,13 @@ local function InitializeOptions()
 				name = "Bots",
 				order = 20,
 				width = "full",
-					args = {},
+					args = {
+						BotsEnable = {
+							name = L.options["Enable"],
+							type = "toggle",
+							width = "full",
+						},
+					},
 			},	
 			Use = {
 				type = "group",
@@ -572,22 +590,11 @@ local function InitializeOptions()
 				order = 20,
 				width = "full",
 					args = {
-							-- add_use_input = {
-								-- type = "input",
-								-- name = L.options["Spell ID"],
-								-- order = -2,
-								-- get = function(info) return add_use_label end,
-								-- set = function(info,v) add_use_label = v end,
-							-- },
-							-- use_add = {
-								-- type = "execute",
-								-- name = L.options["Add"],
-								-- order = -1,
-								-- func = function()
-								-- print(add_use_label)
-									-- use[tonumber(add_use_label)] = true
-								-- end,
-							-- },					
+						UseEnable = {
+							name = L.options["Enable"],
+							type = "toggle",
+							width = "full",
+						},					
 				},
 			},	
 			Rituals = {
@@ -596,7 +603,13 @@ local function InitializeOptions()
 				name = "Rituals",
 				order = 20,
 				width = "full",
-					args = {},
+					args = {
+						RitualsEnable = {
+							name = L.options["Enable"],
+							type = "toggle",
+							width = "full",
+						},
+					},
 			},	
 			Trinkets = {
 				type = "group",
@@ -604,7 +617,13 @@ local function InitializeOptions()
 				name = "Trinkets",
 				order = 20,
 				width = "full",
-					args = {},
+					args = {
+						TrinketsEnable = {
+							name = L.options["Enable"],
+							type = "toggle",
+							width = "full",
+						},
+					},
 			},
 			Feasts = {
 				type = "group",
@@ -612,7 +631,13 @@ local function InitializeOptions()
 				name = "Feasts",
 				order = 20,
 				width = "full",
-					args = {},
+					args = {
+						FeastsEnable = {
+							name = L.options["Enable"],
+							type = "toggle",
+							width = "full",
+						},
+					},
 			},
 			Misc = {
 				type = "group",
@@ -621,6 +646,11 @@ local function InitializeOptions()
 				order = 20,
 				width = "full",
 					args = {
+						MiscEnable = {
+							name = L.options["Enable"],
+							type = "toggle",
+							width = "full",
+						},
 				},
 			},			
 		},
@@ -641,6 +671,7 @@ local function InitializeOptions()
 			name = GetSpellInfo(i),
 			desc = GetSpellInfo(i),
 			order = 100 + i,
+			disabled = function() return not pfl.PortalsEnable end,
 			get = function(info) return port[i] end,
 			set = function(info,v) port[i] = v; module:RefreshProfile(); savetables() end,
 		}
@@ -652,6 +683,7 @@ local function InitializeOptions()
 			name = GetSpellInfo(i),
 			desc = GetSpellInfo(i),
 			order = 100 + i,
+			disabled = function() return not pfl.SpellsEnable end,
 			get = function(info) return spells[i] end,
 			set = function(info,v) spells[i] = v; module:RefreshProfile(); savetables() end,
 		}
@@ -663,6 +695,7 @@ local function InitializeOptions()
 			name = GetSpellInfo(i),
 			desc = GetSpellInfo(i),
 			order = 100 + i,
+			disabled = function() return not pfl.BotsEnable end,
 			get = function(info) return bots[i] end,
 			set = function(info,v)  bots[i] = v; module:RefreshProfile(); savetables() end,
 		}
@@ -674,6 +707,7 @@ local function InitializeOptions()
 			name = GetSpellInfo(i),
 			desc = GetSpellInfo(i),
 			order = 100 + i,
+			disabled = function() return not pfl.UseEnable end,
 			get = function(info) return use[i] end,
 			set = function(info,v)  use[i] = v; module:RefreshProfile(); savetables() end,
 		}
@@ -685,6 +719,7 @@ local function InitializeOptions()
 			name = GetSpellInfo(i),
 			desc = GetSpellInfo(i),
 			order = 100 + i,
+			disabled = function() return not pfl.RitualsEnable end,
 			get = function(info) return rituals[i] end,
 			set = function(info,v)  rituals[i] = v; module:RefreshProfile(); savetables() end,
 		}
@@ -697,6 +732,7 @@ local function InitializeOptions()
 			name = select(2, GetItemInfo(trinkets[i])) or "Unknown",
 --				desc = GetItemInfo(trinkets[i]) .. " (" .. select(4, GetItemInfo(trinkets[i])) .. ")",
 			order = 100 + i,
+			disabled = function() return not pfl.TrinketsEnable end,
 			get = function(info) return trinkets_opt[i] end,
 			set = function(info,v)  trinkets_opt[i] = v; module:RefreshProfile(); savetables() end,
 		}
@@ -708,6 +744,7 @@ local function InitializeOptions()
 			name = GetSpellInfo(i),
 			desc = GetSpellInfo(i),
 			order = 100 + i,
+			disabled = function() return not pfl.FeastsEnable end,
 			get = function(info) return feasts[i] end,
 			set = function(info,v)  feasts[i] = v; module:RefreshProfile(); savetables() end,
 		}
@@ -719,6 +756,7 @@ local function InitializeOptions()
 			name = GetSpellInfo(i),
 			desc = GetSpellInfo(i),
 			order = 100 + i,
+			disabled = function() return not pfl.MiscEnable end,
 			get = function(info) return misc[i] end,
 			set = function(info,v)  misc[i] = v; module:RefreshProfile(); savetables() end,
 		}
