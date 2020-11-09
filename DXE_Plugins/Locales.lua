@@ -1,8 +1,8 @@
 --[[
 	The contents of this file are auto-generated using the WoWAce localization application
 	Please go to http://www.wowace.com/projects/deus-vox-encounters/localization/ to update translations.
-	Anyone with a wowace/curseforge account can edit them. 
-]] 
+	Anyone with a wowace/curseforge account can edit them.
+]]
 
 local AL = LibStub("AceLocale-3.0")
 
@@ -63,6 +63,15 @@ Plugins["create_fem"] = "%s%s создала %s!"
 Plugins["dispel_fem"] = "%s%s's %s failed to dispel %s%s's %s!"
 Plugins["ss_fem"]	 = "%s умерла с %s!"
 Plugins["miscellaneous_fem"] = "%s применила %s"
+
+Plugins["Use"] = "Защитные КД"
+Plugins["Spells"] = "Поддержка"
+Plugins["Rituals"] = "Ритуалы"
+Plugins["Trinkets"] = "Тринкеты"
+Plugins["Feasts"] = "Пиры"
+Plugins["Misc"] = "Разное"
+Plugins["Bots"] = "Боты"
+Plugins["Portals"] = "Порталы"
 
 --	Plugins Options
 Plugins["NONE"] = "НЕТ"

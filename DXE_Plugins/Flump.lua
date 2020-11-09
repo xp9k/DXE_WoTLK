@@ -158,7 +158,7 @@ local trinkets = {
 	[67699] = UnitFactionGroup("player") == "Horde" and 47290 or 47080, -- Жизненная сила владыки мира
 	[67753] = UnitFactionGroup("player") == "Horde" and 47451 or 47088, -- Жизненная сила владыки мира Her.
 	}
-	
+
 local trinkets_opt = {
 	-- Trinkets
 	[71638] = true, -- Sindragosa's claw Heroic
@@ -238,7 +238,7 @@ local defaults = {
 local function send(msg)
 	if OUTPUT == "NONE" then return end
 	if OUTPUT == "SELF" then
-		print(msg)		
+		print(msg)
 	else
 		SendChatMessage(msg, OUTPUT)
 	end
@@ -287,7 +287,7 @@ function flump:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, s
 			soulstones[destName] = nil
 		end
 	end
-	
+
 	if event == "SPELL_CAST_SUCCESS" then
 		if spellID == HEROISM then
 			if isFemale(srcName) then
@@ -295,7 +295,7 @@ function flump:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, s
 			else
 				send(L.Plugins["used"]:format(icon(srcName), srcName, GetSpellLink(spellID)))
 			end
-		elseif pfl.BotsEnable and bots[spellID] then 
+		elseif pfl.BotsEnable and bots[spellID] then
 			if isFemale(srcName) then
 				send(L.Plugins["bot_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] used a [Y] -- Bots
 			else
@@ -314,7 +314,7 @@ function flump:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, s
 				send(L.Plugins["miscellaneous"]:format(srcName, GetSpellLink(spellID)))
 			end
 		end
-		
+
 	elseif event == "SPELL_AURA_APPLIED" then -- Check name instead of ID to save checking all ranks
 		if spellName == SOULSTONE then
 			local _, class = UnitClass(srcName)
@@ -326,7 +326,7 @@ function flump:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, s
 				end
 			end
 		end
-		
+
 	elseif event == "SPELL_CREATE" then
 		if pfl.PortEnable and port[spellID] then
 			if isFemale(srcName) then
@@ -341,7 +341,7 @@ function flump:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, s
 				send(L.Plugins["bot"]:format(icon(srcName), srcName, GetSpellLink(spellID)))
 			end
 		end
-		
+
 	elseif event == "SPELL_CAST_START" then
 		if pfl.FeastsEnable and feasts[spellID] then
 			if isFemale(srcName) then
@@ -350,7 +350,7 @@ function flump:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, s
 				send(L.Plugins["feast"]:format(icon(srcName), srcName, GetSpellLink(spellID)))
 			end
 		end
-		
+
 	elseif event == "SPELL_RESURRECT" then
 		if spellName == REBIRTH then -- Check name instead of ID to save checking all ranks
 			if isFemale(srcName) then
@@ -364,8 +364,8 @@ function flump:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, s
 			else
 				send(L.Plugins["res"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName))
 			end
-		end	
-		
+		end
+
 	elseif event == "SPELL_DISPEL_FAILED" then
 		local extraID, extraName = ...
 		local target = fails[extraName]
@@ -378,8 +378,8 @@ function flump:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, s
 		end
 	end
 
-	
-	if not (pfl.InCombat and not UnitAffectingCombat(srcName)) then -- If the caster is in combat	
+
+	if not (pfl.InCombat and not UnitAffectingCombat(srcName)) then -- If the caster is in combat
 		if event == "SPELL_CAST_SUCCESS" then
 			if pfl.SpellsEnable and spells[spellID] then
 				if isFemale(srcName) then
@@ -413,7 +413,7 @@ function flump:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, s
 					send(L.Plugins["used"]:format(icon(srcName), srcName, GetSpellLink(spellID)))
 				end
 			end
-			
+
 		elseif event == "SPELL_AURA_APPLIED" then -- [X] cast [Y] on [Z]
 			if spellID == 20233 or spellID == 20236 then -- Improved Lay on Hands (Rank 1/Rank 2)
 				if isFemale(srcName) then
@@ -445,7 +445,7 @@ function flump:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, s
 					send(L.Plugins["used"]:format(icon(srcName), srcName, select(2, GetItemInfo(trinkets[spellID]))))
 				end
 			end
-		
+
 		elseif event == "SPELL_HEAL" then
 			if spellID == 48153 or spellID == 66235 then -- Guardian Spirit / Ardent Defender
 				local amount = ...
@@ -456,8 +456,8 @@ function flump:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, s
 					send(L.Plugins["gs"]:format(icon(srcName), srcName, GetSpellLink(spellID), amount))
 				end
 			end
-			
-		if 1 > 0 then	
+
+		if 1 > 0 then
 			elseif event == "SPELL_AURA_REMOVED" then
 				if spells[spellID] or (spellName == HOP and IsTank(destName)) then
 					send(L.Plugins["fade"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName)) -- [X]'s [Y] faded from [Z]
@@ -474,9 +474,9 @@ function flump:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, s
 					send(L.Plugins["sw"]:format(GetSpellLink(spellID), icon(srcName), srcName)) -- Divine Plea faded from [X]
 				end
 			end
-		end		
+		end
 	end
-		
+
 end
 
 -- local function EnableDisable()
@@ -527,135 +527,224 @@ local function InitializeOptions()
 				order = 4,
 				width = "full",
 			},
-			InCombat = {
-				type = "toggle",
-				name = L.Plugins["combat"],
-				desc = L.Plugins["Only in combat"],
-				order = 5,
-				values = InCombat,
-			},
-			OnlyTanks = {
-				type = "toggle",
-				name = L.Plugins["only_tanks"],
-				desc = L.Plugins["Only tanks"],
-				order = 6,
-				values = OnlyTanks,
-			},	
 			Portals = {
 				type = "group",
 				childGroups = "tab",
-				name = "Portals",
+				name = L.Plugins["Portals"],
 				order = 20,
 				width = "full",
 					args = {
 						PortalsEnable = {
+							order = 1,
 							name = L.options["Enable"],
 							type = "toggle",
 							width = "full",
 						},
+						PortalsGroup = {
+							order = 2,
+							name = L.Plugins["Portals"],
+							type = "group",
+							guiInline = true,
+							disabled = function() return not pfl.PortalsEnable end,
+								args = {
+								},
+						},
 					},
-			},	
+			},
 			Spells = {
 				type = "group",
 				childGroups = "tab",
-				name = "Spells",
+				name = L.Plugins["Spells"],
 				order = 20,
 				width = "full",
 					args = {
 						SpellsEnable = {
+							order = 1,
 							name = L.options["Enable"],
 							type = "toggle",
 							width = "full",
 						},
+						SpellsGroup = {
+							order = 2,
+							name = L.Plugins["Spells"],
+							type = "group",
+							guiInline = true,
+							disabled = function() return not pfl.SpellsEnable end,
+							args = {
+								},
+						},
 					},
-			},	
+			},
 			Bots = {
 				type = "group",
 				childGroups = "tab",
-				name = "Bots",
+				name = L.Plugins["Bots"],
 				order = 20,
 				width = "full",
 					args = {
 						BotsEnable = {
+							order = 1,
 							name = L.options["Enable"],
 							type = "toggle",
 							width = "full",
 						},
+						BotsGroup = {
+							order = 2,
+							name = L.Plugins["Bots"],
+							type = "group",
+							guiInline = true,
+							disabled = function() return not pfl.BotsEnable end,
+								args = {
+								},
+						},
 					},
-			},	
+			},
 			Use = {
 				type = "group",
 				childGroups = "tab",
-				name = "Use",
+				name = L.Plugins["Use"],
 				order = 20,
 				width = "full",
 					args = {
 						UseEnable = {
-							name = L.options["Enable"],
-							type = "toggle",
-							width = "full",
-						},					
-				},
-			},	
-			Rituals = {
-				type = "group",
-				childGroups = "tab",
-				name = "Rituals",
-				order = 20,
-				width = "full",
-					args = {
-						RitualsEnable = {
+							order = 1 ,
 							name = L.options["Enable"],
 							type = "toggle",
 							width = "full",
 						},
+						InCombat = {
+							type = "toggle",
+							name = L.Plugins["combat"],
+							desc = L.Plugins["Only in combat"],
+							order = 2,
+							values = InCombat,
+							disabled = function() return not pfl.UseEnable end,
+						},
+						OnlyTanks = {
+							type = "toggle",
+							name = L.Plugins["only_tanks"],
+							desc = L.Plugins["Only tanks"],
+							order = 3,
+							values = OnlyTanks,
+							disabled = function() return not pfl.UseEnable end,
+						},
+						UseGroup = {
+							order = 4,
+							name = L.Plugins["Use"],
+							type = "group",
+							guiInline = true,
+							disabled = function() return not pfl.UseEnable end,
+								args = {
+								},
+						},
+				},
+			},
+			Rituals = {
+				type = "group",
+				childGroups = "tab",
+				name = L.Plugins["Rituals"],
+				order = 20,
+				width = "full",
+					args = {
+						RitualsEnable = {
+							order = 1,
+							name = L.options["Enable"],
+							type = "toggle",
+							width = "full",
+						},
+						RitualsGroup = {
+							order = 2,
+							name = L.Plugins["Rituals"],
+							type = "group",
+							guiInline = true,
+							disabled = function() return not pfl.RitualsEnable end,
+								args = {
+								},
+						},
 					},
-			},	
+			},
 			Trinkets = {
 				type = "group",
 				childGroups = "tab",
-				name = "Trinkets",
+				name = L.Plugins["Trinkets"],
 				order = 20,
 				width = "full",
 					args = {
 						TrinketsEnable = {
+							order = 1,
 							name = L.options["Enable"],
 							type = "toggle",
 							width = "full",
+						},
+						-- TrinketsCache = {
+						-- 	order = 4,
+						-- 	name = L.options["Cache"],
+						-- 	type = "execute",
+						-- 	width = "normal",
+						-- 	func = function() flump:CacheItems(50364)  end,
+						-- },
+						TrinketsGroup = {
+							order = 2,
+							name = L.Plugins["Trinkets"],
+							type = "group",
+							guiInline = true,
+							disabled = function() return not pfl.TrinketsEnable end,
+								args = {
+								},
 						},
 					},
 			},
 			Feasts = {
 				type = "group",
 				childGroups = "tab",
-				name = "Feasts",
+				name = L.Plugins["Feasts"],
 				order = 20,
 				width = "full",
 					args = {
 						FeastsEnable = {
+							order = 1,
 							name = L.options["Enable"],
 							type = "toggle",
 							width = "full",
+						},
+						FeastsGroup = {
+							order = 2,
+							name = L.Plugins["Feasts"],
+							type = "group",
+							guiInline = true,
+							disabled = function() return not pfl.RitualsEnable end,
+								args = {
+								},
 						},
 					},
 			},
 			Misc = {
 				type = "group",
 				childGroups = "tab",
-				name = "Misc",
+				name = L.Plugins["Misc"],
 				order = 20,
 				width = "full",
 					args = {
 						MiscEnable = {
+							order = 1,
 							name = L.options["Enable"],
 							type = "toggle",
 							width = "full",
 						},
+						MiscGroup = {
+							order = 2,
+							name = L.Plugins["Misc"],
+							type = "group",
+							guiInline = true,
+							disabled = function() return not pfl.MiscEnable end,
+								args = {
+								},
+						},
 				},
-			},			
+			},
 		},
 	}
-	
+
 	db.profile.Plugins.Flump.Portals = {}
 	db.profile.Plugins.Flump.Spells = {}
 	db.profile.Plugins.Flump.Bots = {}
@@ -664,109 +753,101 @@ local function InitializeOptions()
 	db.profile.Plugins.Flump.Trinkets = {}
 	db.profile.Plugins.Flump.Feasts = {}
 	db.profile.Plugins.Flump.Misc = {}
-	
+
 	for i, j in pairs(port) do
-		flump_group.args.Portals.args[tostring(i)] = {
+		flump_group.args.Portals.args.PortalsGroup.args[tostring(i)] = {
 			type = "toggle",
 			name = GetSpellInfo(i),
 			desc = GetSpellInfo(i),
 			order = 100 + i,
-			disabled = function() return not pfl.PortalsEnable end,
 			get = function(info) return port[i] end,
 			set = function(info,v) port[i] = v; module:RefreshProfile(); savetables() end,
 		}
 	end
-	
+
 	for i, j in pairs(spells) do
-		flump_group.args.Spells.args[tostring(i)] = {
+		flump_group.args.Spells.args.SpellsGroup.args[tostring(i)] = {
 			type = "toggle",
 			name = GetSpellInfo(i),
 			desc = GetSpellInfo(i),
 			order = 100 + i,
-			disabled = function() return not pfl.SpellsEnable end,
 			get = function(info) return spells[i] end,
 			set = function(info,v) spells[i] = v; module:RefreshProfile(); savetables() end,
 		}
-	end	
-	
+	end
+
 	for i, j in pairs(bots) do
-		flump_group.args.Bots.args[tostring(i)] = {
+		flump_group.args.Bots.args.BotsGroup.args[tostring(i)] = {
 			type = "toggle",
 			name = GetSpellInfo(i),
 			desc = GetSpellInfo(i),
 			order = 100 + i,
-			disabled = function() return not pfl.BotsEnable end,
 			get = function(info) return bots[i] end,
 			set = function(info,v)  bots[i] = v; module:RefreshProfile(); savetables() end,
 		}
 	end
-	
+
 	for i, j in pairs(use) do
-		flump_group.args.Use.args[tostring(i)] = {
+		flump_group.args.Use.args.UseGroup.args[tostring(i)] = {
 			type = "toggle",
 			name = GetSpellInfo(i),
 			desc = GetSpellInfo(i),
 			order = 100 + i,
-			disabled = function() return not pfl.UseEnable end,
 			get = function(info) return use[i] end,
 			set = function(info,v)  use[i] = v; module:RefreshProfile(); savetables() end,
 		}
 	end
-	
+
 	for i, j in pairs(rituals) do
-		flump_group.args.Rituals.args[tostring(i)] = {
+		flump_group.args.Rituals.args.RitualsGroup.args[tostring(i)] = {
 			type = "toggle",
 			name = GetSpellInfo(i),
 			desc = GetSpellInfo(i),
 			order = 100 + i,
-			disabled = function() return not pfl.RitualsEnable end,
 			get = function(info) return rituals[i] end,
 			set = function(info,v)  rituals[i] = v; module:RefreshProfile(); savetables() end,
 		}
 	end
-	
+
 	for i, j in pairs(trinkets_opt) do
 		local item = select(2, GetItemInfo(trinkets[i]))
-		flump_group.args.Trinkets.args[tostring(i)] = {
+		flump_group.args.Trinkets.args.TrinketsGroup.args[tostring(i)] = {
 			type = "toggle",
-			name = select(2, GetItemInfo(trinkets[i])) or "Unknown",
---				desc = GetItemInfo(trinkets[i]) .. " (" .. select(4, GetItemInfo(trinkets[i])) .. ")",
+			name = select(2, GetItemInfo(trinkets[i])) or "Not cached",
+			desc = (GetItemInfo(trinkets[i]) or "Not cached") .. " (" .. (select(4, GetItemInfo(trinkets[i])) or "") .. ")",
 			order = 100 + i,
-			disabled = function() return not pfl.TrinketsEnable end,
 			get = function(info) return trinkets_opt[i] end,
 			set = function(info,v)  trinkets_opt[i] = v; module:RefreshProfile(); savetables() end,
 		}
 	end
-	
+
 	for i, j in pairs(feasts) do
-		flump_group.args.Feasts.args[tostring(i)] = {
+		flump_group.args.Feasts.args.FeastsGroup.args[tostring(i)] = {
 			type = "toggle",
 			name = GetSpellInfo(i),
 			desc = GetSpellInfo(i),
 			order = 100 + i,
-			disabled = function() return not pfl.FeastsEnable end,
 			get = function(info) return feasts[i] end,
 			set = function(info,v)  feasts[i] = v; module:RefreshProfile(); savetables() end,
 		}
 	end
-	
+
 	for i, j in pairs(misc) do
-		flump_group.args.Misc.args[tostring(i)] = {
+		flump_group.args.Misc.args.MiscGroup.args[tostring(i)] = {
 			type = "toggle",
 			name = GetSpellInfo(i),
 			desc = GetSpellInfo(i),
 			order = 100 + i,
-			disabled = function() return not pfl.MiscEnable end,
 			get = function(info) return misc[i] end,
 			set = function(info,v)  misc[i] = v; module:RefreshProfile(); savetables() end,
 		}
 	end
 
-	module.plugins_group = flump_group	
+	module.plugins_group = flump_group
 end
 
 function module:OnInitialize()
-	
+
 	db = addon.db
 	if db.profile.Plugins.Flump == nil then
 		db.profile.Plugins.Flump = defaults
@@ -811,22 +892,22 @@ function module:OnInitialize()
 			if next(db.profile.Plugins.Flump.Misc) ~= nil then
 				misc = db.profile.Plugins.Flump.Misc
 			end
-		end		
+		end
 	end
-	
+
 	module:RefreshProfile()
 	OUTPUT = chats[pfl.Chat]
 
 	db.RegisterCallback(self, "OnProfileChanged", "RefreshProfile")
 	db.RegisterCallback(self, "OnProfileCopied", "RefreshProfile")
 	db.RegisterCallback(self, "OnProfileReset", "RefreshProfile")
-	
+
 	if not addon.Options then
 		if select(6,GetAddOnInfo("DXE_Options")) == "MISSING" then addon:Print((L["Missing %s"]):format("DXE_Options")) return end
 		if not IsAddOnLoaded("DXE_Options") then addon.Loader:Load("DXE_Options") end
 	end
-	
-	InitializeOptions()	
+
+	InitializeOptions()
 	addon.Options:RegisterPlugin(module)
 end
 
@@ -908,6 +989,21 @@ end
 
 addon:AddToRefreshProfile(RefreshProfile)
 
+function flump:GET_ITEM_INFO_RECEIVED(itemID)
+	if trinkets[itemID] then
+		print(itemID)
+	end
+end
+
+function flump:CacheItems(itemID)
+		for i = 1, 100 do
+			item = GetItemInfo(itemID)
+			if not item then
+				print(format("Item %s not cached", itemID))
+			else
+				print(format("Item %s Cached!", itemID))
+			end
+		end
+end
+
 flump:SetScript("OnEvent",function(self,event,...) self[event](self,...) end)
-
-

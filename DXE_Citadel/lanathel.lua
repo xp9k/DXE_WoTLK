@@ -133,6 +133,15 @@ do
 				audiocd = 5,
 				icon = ST[71340],
 			},
+			pactwarn = {
+				varname = format(L.alert["%s Warning"],SN[71340]),
+				type = "simple",
+				text = format("%s: &debuffednames|"..SN[71340].."&",SN[71340]),
+				time = 5,
+				flashtime = 5,
+				color1 = "ORANGE",
+				icon = ST[71340],
+			},
 			swarmingshadowcd = {
 				varname = format(L.alert["%s Cooldown"],SN[71265]),
 				type = "dropdown",
@@ -262,7 +271,7 @@ do
 				execute = {
 					{
 						"quash", "pactcd",
-						"alert", {"pactcd", time = 25},
+						"alert", {"pactcd", time = 20},
 					},
 				},
 			},
@@ -310,6 +319,9 @@ do
 					{
 						"expect",{"#4#","==","&playerguid&"},
 						"alert","pactself",
+					},
+					{				
+						"schedulealert", {"pactwarn", 0.3},
 					},
 				},
 			},

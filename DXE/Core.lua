@@ -2141,6 +2141,7 @@ do
 				audiocd = false,
 				audiotime = 5,
 				counter = false,
+				raidannounce = false,
 			},
 		},
 		raidicons = { 

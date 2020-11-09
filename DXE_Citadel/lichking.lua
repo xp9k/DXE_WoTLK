@@ -217,7 +217,7 @@ do
 				type = "simple",
 				text = format("%s: &vehiclenames&",L.npc_citadel["Val'kyr"]),
 				time = 5,
-				icon = ST[74445]
+				icon = ST[74445],
 			},
 			valkyrcd = {
 				varname = format(L.alert["%s Cooldown"],SN[69037]),

@@ -696,6 +696,12 @@ local function InitializeOptions()
 						name = L.options["Raid announce"],
 						order = 550,
 					},
+					separator2 = {
+						type = "description",
+						name = " ",
+						order = 599,
+						width = "full",
+					},
 					test = {
 						type = "execute",
 						name = L.options["Test"],
@@ -817,11 +823,11 @@ local function InitializeOptions()
 				local audiotime = stgs.audiotime
 
 				if info.type == "dropdown" then
-					addon.Alerts:Dropdown(var, info.varname, 10, 5, stgs.sound, stgs.color1, stgs.color2, stgs.flashscreen, info.icon, stgs.audiocd,stgs.audiotime)
+					addon.Alerts:Dropdown(var, info.varname, 10, 5, stgs.sound, stgs.color1, stgs.color2, stgs.flashscreen, info.icon, stgs.audiocd,stgs.audiotime,stgs.raidannounce)
 				elseif info.type == "centerpopup" then
-					addon.Alerts:CenterPopup(var, info.varname, 10, 5, stgs.sound, stgs.color1, stgs.color2, stgs.flashscreen, info.icon, stgs.audiocd,stgs.audiotime)
+					addon.Alerts:CenterPopup(var, info.varname, 10, 5, stgs.sound, stgs.color1, stgs.color2, stgs.flashscreen, info.icon, stgs.audiocd,stgs.audiotime,stgs.raidannounce)
 				elseif info.type == "simple" then
-					addon.Alerts:Simple(info.varname,5,stgs.sound,stgs.color1,stgs.flashscreen,info.icon)
+					addon.Alerts:Simple(info.varname,5,stgs.sound,stgs.color1,stgs.flashscreen,info.icon,stgs.raidannounce)
 				end
 			end
 		end

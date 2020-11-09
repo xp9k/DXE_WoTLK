@@ -18,8 +18,8 @@ do
 		onactivate = {
 			tracing = {36658}, -- Tyrannus
 			tracerstart = true,
-			tracerstop = true,
-			combatstop = true,
+			-- tracerstop = true,
+			-- combatstop = true,
 			defeat = 36658,
 		},
 		userdata = {
@@ -53,13 +53,22 @@ do
 				icon = ST[69275],
 				flashscreen = true,
 			},
-			markofrimefangother = {
-				varname = format(L.alert["%s on others"],SN[69275]),
+			markofrimefangdur = {
+				varname = format(L.alert["%s Duration"],SN[69275]),
 				text = format("%s: #5#!",SN[69275]),
 				type = "centerpopup",
 				time = 7,
 				flashtime = 4,
 				sound = "ALERT4",
+				color1 = "BLUE",
+				icon = ST[69275],
+			},
+			markofrimefangwarn = {
+				varname = format(L.alert["%s Warning"],SN[69275]),
+				text = format("%s: #5#!",SN[69275]),
+				type = "simple",
+				time = 5,
+				flashtime = 5,
 				color1 = "BLUE",
 				icon = ST[69275],
 			},
@@ -75,8 +84,8 @@ do
 				icon = ST[69172],
 				flashscreen = true,
 			},
-			overlordsbrandother = {
-				varname = format(L.alert["%s on others"],SN[69172]),
+			overlordsbranddur = {
+				varname = format(L.alert["%s Duration"],SN[69172]),
 				text = format("%s: #5#!",SN[69172]),
 				type = "centerpopup",
 				time = 8,
@@ -84,9 +93,9 @@ do
 				color1 = "MAGENTA",
 				icon = ST[69172],
 			},
-			unholypowerwarn = {
+			unholypowerdur = {
 				varname = format(L.alert["%s Duration"],SN[69629]),
-				text = format("%s: &dstname_or_YOU&",SN[69629]),
+				text = format("%s: #2#!",SN[69629]),
 				type = "centerpopup",
 				time = 10,
 				flashtime = 10,
@@ -123,12 +132,11 @@ do
 					},
 					{
 						"expect",{"#4#","==","&playerguid&"},
-						"alert", "markofrimefangself",
 						"announce", "markofrimefangsay",
 					},
 					{
-						"expect",{"#4#","~=","&playerguid&"},
-						"alert", "markofrimefangother",						
+						"alert", "markofrimefangdur",						
+						"alert", "markofrimefangwarn",						
 					},
 				},
 			},
@@ -154,7 +162,7 @@ do
 					},
 					{
 						"expect",{"#4#","~=","&playerguid&"},
-						"alert", "overlordsbrandother",						
+						"alert", "overlordsbranddur",						
 					},
 				},
 			},
@@ -165,7 +173,7 @@ do
 				spellid = 69629,
 				execute = {
 					{
-						"alert", "unholypowerwarn",						
+						"alert", "unholypowerdur",						
 					},
 				},
 			},

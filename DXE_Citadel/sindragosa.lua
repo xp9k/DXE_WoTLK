@@ -71,6 +71,17 @@ do
 				throttle = 2,
 				icon = ST[70126],
 			},
+			frostbeaconwarn = {
+				varname = format(L.alert["%s Warning"],SN[70126]),
+				type = "simple",
+				text = format("%s: &debuffednames|"..SN[70126].."&", SN[70126]),
+				time = 7,
+				flashtime = 7,
+				color1 = "GOLD",
+				flashscreen = true,
+				sound = "ALERT2",
+				icon = ST[70126],
+			},
 			frostbeaconself = {
 				varname = format(L.alert["%s on self"],SN[70126]),
 				type = "simple",
@@ -105,6 +116,17 @@ do
 				text = format("%s: %s! %s!",SN[69762],L.alert["YOU"],L.alert["CAREFUL"]),
 				time = 30,
 				flashtime = 30,
+				color1 = "TURQUOISE",
+				flashscreen = true,
+				sound = "ALERT2",
+				icon = ST[69762],
+			},
+			unchainedwarn = {
+				varname = format(L.alert["%s Warning"],SN[69762]),
+				type = "simple",
+				text = format("%s: &debuffednames|"..SN[69762].."&", SN[69762]),
+				time = 5,
+				flashtime = 5,
 				color1 = "TURQUOISE",
 				flashscreen = true,
 				sound = "ALERT2",
@@ -506,6 +528,9 @@ do
 								"expect",{"&difficulty&","==","2"}, -- 25
 								"scheduletimer",{"checkbeacon",0.2}, -- allow time for raid icon to set
 							},
+							{
+								"schedulealert", {"frostbeaconwarn", 0.2},
+							},
 						},
 					},
 				},
@@ -564,6 +589,10 @@ do
 					{
 						"expect",{"#4#","==","&playerguid&"},
 						"alert","unchainedself",
+					},
+					{
+						"quash", "unchainedwarn",
+						"schedulealert", {"unchainedwarn", 0.2},
 					},
 				},
 			},

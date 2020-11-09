@@ -705,11 +705,11 @@ do
 			
 			-- Pass in appropriate arguments
 			if defn.type == "dropdown" then
-				Alerts:Dropdown(id,text,time,defn.flashtime,stgs.sound,stgs.color1,stgs.color2,stgs.flashscreen,defn.icon,stgs.audiocd,stgs.audiotime)
+				Alerts:Dropdown(id,text,time,defn.flashtime,stgs.sound,stgs.color1,stgs.color2,stgs.flashscreen,defn.icon,stgs.audiocd,stgs.audiotime,stgs.raidannounce)
 			elseif defn.type == "centerpopup" then
-				Alerts:CenterPopup(id,text,time,defn.flashtime,stgs.sound,stgs.color1,stgs.color2,stgs.flashscreen,defn.icon,stgs.audiocd,stgs.audiotime)
+				Alerts:CenterPopup(id,text,time,defn.flashtime,stgs.sound,stgs.color1,stgs.color2,stgs.flashscreen,defn.icon,stgs.audiocd,stgs.audiotime,stgs.raidannounce)
 			elseif defn.type == "simple" then
-				Alerts:Simple(text,time,stgs.sound,stgs.color1,stgs.flashscreen,defn.icon)
+				Alerts:Simple(text,time,stgs.sound,stgs.color1,stgs.flashscreen,defn.icon,stgs.raidannounce)
 			elseif defn.type == "absorb" then
 				Alerts:Absorb(id,text,defn.textformat,time,defn.flashtime,stgs.sound,stgs.color1,stgs.color2,stgs.flashscreen,defn.icon,
 				              defn.values[tuple['7']],ReplaceTokens(defn.npcid))

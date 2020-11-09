@@ -17,8 +17,8 @@ do
 		onactivate = {
 			tracing = {39747}, -- Saviana
 			tracerstart = true,
-			tracerstop = true,
-			combatstop = true,
+--			tracerstop = true,
+--			combatstop = true,
 			defeat = 39747,
 		},
 		onstart = {

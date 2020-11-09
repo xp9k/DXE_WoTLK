@@ -18,8 +18,8 @@ do
 		onactivate = {
 			tracing = {36497}, -- Bronjahm
 			tracerstart = true,
-			tracerstop = true,
-			combatstop = true,
+			-- tracerstop = true,
+			-- combatstop = true,
 			defeat = 36497,
 		},
 		userdata = {
@@ -95,7 +95,7 @@ do
 					},
 					{
 						"expect",{"#4#","~=","&playerguid&"},
-						"set",{corruptsoultext = format(L.alert["%s Duration"],SN[68839])},
+--						"set",{corruptsoultext = format(L.alert["%s Duration"],SN[68839])},
 						"alert", "corruptsoulother",						
 					},
 				},

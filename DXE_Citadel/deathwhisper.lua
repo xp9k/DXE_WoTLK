@@ -301,7 +301,8 @@ do
 						"alert","dominatecd",
 					},
 					{
-						"schedulealert", {"dominatewarn", 0.3},
+						"quash", "dominatewarn",
+						"schedulealert", {"dominatewarn", 0.2},
 					},
 					-- {
 						-- "expect",{"#4#","~=","&playerguid&"},
@@ -319,6 +320,17 @@ do
 					-- },
 				},
 			},
+			-- {
+				-- type = "combatevent",
+				-- eventtype = "SPELL_CAST_SUCCESS",
+				-- spellname = 71289,
+				-- execute = {
+					-- {
+						-- "quash", "dominatewarn",
+						-- "schedulealert", {"dominatewarn", 0.3},
+					-- },
+				-- },
+			-- },
 			-- Frostbolt
 			{
 				type = "combatevent",

@@ -530,7 +530,7 @@ do
 
 		if pfl.WarningMessages and self.bmsg and timeleft <= pfl.BeforeThreshold then
 			self.bmsg = nil
-			Pour(self.orig_text.." - "..MMSS(timeleft),data.icon,data.c1)
+			Pour(self.orig_text..L.alert[" in "]..MMSS(timeleft),data.icon,data.c1)
 		end
 	end
 
@@ -553,7 +553,7 @@ do
 
 		if pfl.WarningMessages and self.bmsg and timeleft <= pfl.BeforeThreshold then
 			self.bmsg = nil
-			Pour(self.orig_text.." - "..MMSS(timeleft),data.icon,data.c1)
+			Pour(self.orig_text..L.alert[" in "]..MMSS(timeleft),data.icon,data.c1)
 		end
 	end
 
@@ -882,7 +882,7 @@ function module:IsActive(id)
 	end
 end
 
-function module:Dropdown(id, text, totalTime, flashTime, sound, c1, c2, flashscreen, icon, audiocd, audiotime)
+function module:Dropdown(id, text, totalTime, flashTime, sound, c1, c2, flashscreen, icon, audiocd, audiotime, raidannounce)
 	if pfl.DisableDropdowns then self:CenterPopup(id, text, totalTime, flashTime, sound, c1, c2, flashscreen, icon) return end
 	local soundFile,c1Data,c2Data = GetMedia(sound,c1,c2)
 	local bar = GetBar()
@@ -901,9 +901,9 @@ function module:Dropdown(id, text, totalTime, flashTime, sound, c1, c2, flashscr
 		else bar:ScheduleTimer("TranslateToCenter",waitTime) end
 	end
 	bar:ScheduleTimer("Fade",totalTime)
-	if pfl.WarningMessages then
+	if pfl.WarningMessages and raidannounce then
 		local popup,before = GetMessageEra(id)
-		if popup then Pour(text.." - "..MMSS(totalTime),icon,c1Data) end
+		if popup then Pour(text..L.alert[" in "]..MMSS(totalTime),icon,c1Data) end
 		if before then bar:FireBeforeMsg() end
 	end
 	
@@ -914,7 +914,7 @@ function module:Dropdown(id, text, totalTime, flashTime, sound, c1, c2, flashscr
 	end
 end
 
-function module:CenterPopup(id, text, totalTime, flashTime, sound, c1, c2, flashscreen, icon, audiocd, audiotime)
+function module:CenterPopup(id, text, totalTime, flashTime, sound, c1, c2, flashscreen, icon, audiocd, audiotime, raidannounce)
 	local soundFile,c1Data,c2Data = GetMedia(sound,c1,c2)
 	local bar = GetBar()
 	bar:SetID(id)
@@ -931,9 +931,9 @@ function module:CenterPopup(id, text, totalTime, flashTime, sound, c1, c2, flash
 	end
 	bar:ScheduleTimer("Fade",totalTime)
 	if flashscreen then self:FlashScreen(c1Data) end
-	if pfl.WarningMessages then
+	if pfl.WarningMessages and raidannounce then
 		local popup,before = GetMessageEra(id)
-		if popup then Pour(text.." - "..MMSS(totalTime),icon,c1Data) end
+		if popup then Pour(text..L.alert[" in "]..MMSS(totalTime),icon,c1Data) end
 		if before then bar:FireBeforeMsg() end
 	end
 	if audiocd then
@@ -943,7 +943,7 @@ function module:CenterPopup(id, text, totalTime, flashTime, sound, c1, c2, flash
 	end
 end
 
-function module:Simple(text, totalTime, sound, c1, flashscreen, icon)
+function module:Simple(text, totalTime, sound, c1, flashscreen, icon, raidannounce)
 	local soundFile,c1Data = GetMedia(sound,c1)
 	if soundFile and not pfl.DisableSounds then PlaySoundFile(soundFile) end
 	if flashscreen then self:FlashScreen(c1Data) end
@@ -959,8 +959,8 @@ function module:Simple(text, totalTime, sound, c1, flashscreen, icon)
 		bar[pfl.WarningAnchor and "AnchorToWarning" or "AnchorToCenter"](bar)
 		bar:ScheduleTimer("Fade",totalTime)
 	end
-
-	if pfl.WarningMessages and pfl.WarnPopupMessage then Pour(text,icon,c1Data) end
+	
+	if pfl.WarningMessages and pfl.WarnPopupMessage and raidannounce then Pour(text,icon,c1Data) end
 end
 
 ---------------------------------------------
@@ -1021,6 +1021,7 @@ function module:Absorb(id, text, textFormat, totalTime, flashTime, sound, c1, c2
 	bar:ScheduleTimer("UnregisterCLEU",totalTime)
 
 	if c1Data then bar:SetColor(c1Data,c2Data) end
+	print(text)
 	if pfl.WarningMessages and pfl.WarnPopupMessage then Pour(text,icon,c1Data) end
 end
 
@@ -1109,7 +1110,7 @@ end
 function module:BarTest()
 	self:CenterPopup("alerttestdur", "Centerpopup Centerpopup Centerpopup Centerpopup Centerpopup Centerpopup Centerpopup Centerpopup ", 10, 5, "DXE ALERT1", "DCYAN", nil, nil, addon.ST[28374], 10, 3)
 	self:Dropdown("alerttestcd", "Dropdown Dropdown Dropdown Dropdown Dropdown Dropdown Dropdown Dropdown Dropdown Dropdown Dropdown Dropdown ", 20, 5, "DXE ALERT2", "BLUE", "ORANGE", nil, addon.ST[64813], 20, 5)
-	self:Simple("Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning ",3,"DXE ALERT3","RED", nil, addon.ST[53351])
+	self:Simple("Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning ",3,"DXE ALERT3","RED", nil, addon.ST[53351], true)
 end
 
 local lookup

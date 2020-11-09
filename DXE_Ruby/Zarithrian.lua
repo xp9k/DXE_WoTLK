@@ -18,7 +18,7 @@ do
 			tracing = {39746}, -- Zarithrian
 			tracerstart = true,
 --			tracerstop = true,
-			combatstop = true,
+--			combatstop = true,
 			defeat = 39746,
 		},
 		onstart = {

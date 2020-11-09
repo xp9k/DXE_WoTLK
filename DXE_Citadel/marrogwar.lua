@@ -211,7 +211,7 @@ do
 						"arrow","impalearrow",
 					},
 					{
-						"schedulealert", {"impalewarn", 0.3},
+						"schedulealert", {"impalewarn", 0.2},
 					},
 				},
 			},
