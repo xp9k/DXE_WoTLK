@@ -827,7 +827,7 @@ lichking:RegisterEvent("ADDON_LOADED")
 
 function lichking:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, srcFlags, destGUID, destName, destFlags, spellID, spellName, school, ...)
 	if lichfight and event == "SPELL_DISPEL" then
-		PlagueScan()
+--		PlagueScan()
 	end
 end
 
@@ -846,7 +846,7 @@ do
 			if player then
 				local debuffed, _, _, _, _, _, expire = UnitDebuff(player, plague)
 				if debuffed and (expire - GetTime()) > 13 then
---					if UnitIsUnit(player, "player") then 
+--					if UnitIsUnit(player, "player") then
 						DXE.Alerts.CenterPopup(_, "necroplaguedur", format("%s: %s!", SN[70337], player).."!", 5, 5, "ALERT3", "GREEN", "GREEN", false, DXE.ST[70337])
 --					end
 				end
@@ -858,7 +858,7 @@ do
 	end
 end
 
-function lichking:ADDON_LOADED() 
+function lichking:ADDON_LOADED()
 	lichking:RegisterEvent("CHAT_MSG_MONSTER_YELL")
 	lichfight = false
 end

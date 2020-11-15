@@ -101,7 +101,6 @@ local spells = {
 	[49016] = true, -- Истерия
 	--Hunter
 	[20736] = true, -- Отвлекающий выстрел
-	[19801] = true, -- Усмиряющий выстрел
 	[34477] = true, -- Перенаправление
 	--Rogue
 	[57934] = true, -- Маленькие хитрости
@@ -145,7 +144,6 @@ local bonus = {
 	[70654] = true, -- Blood Armor [4P T10]
 	-- Druid
 	[70725] = true, -- Enraged Defense [4P T10]
-
 }
 
 local trinkets = {
@@ -188,6 +186,20 @@ local toys = {
 	[61031] = true, -- Toy Train Set
 	[49844] = true, -- Пульт Худовара
 	[48933] = true, -- Червоточина
+}
+
+local dispels = {
+	[475] = true, -- Снятие проклятия (Маг)
+	[526] = true, -- Оздоровление
+	[528] = true, -- Излечение болезни (Прист)
+	[552] = true, -- Устранение болезни (Прист)
+	[988] = true, -- Рассеивание заклинаний
+	[2782] = true, -- Снятие проклятия (Друид)
+	[4987] = true, -- Очищение (Паладин)
+	[5938] = true, -- Отравляющий укол (Рога)
+	[19801] = true, -- Усмиряющий выстрел (Хант)
+	[32375] = true, -- Массовое рассеивание (Прист)
+	[51886] = true, -- Очищение духа (Шам)
 }
 
 local fails = {
@@ -364,20 +376,28 @@ function flump:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, s
 			else
 				send(L.Plugins["res"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName))
 			end
-		end
 
 	elseif event == "SPELL_DISPEL_FAILED" then
 		local extraID, extraName = ...
 		local target = fails[extraName]
 		if target or destName == target then
 			if isFemale(srcName) then
-				send(L.Plugins["dispel_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName, GetSpellLink(extraID))) -- [W]'s [X] failed to dispel [Y]'s [Z]
+				send(L.Plugins["dispel_failed_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName, GetSpellLink(extraID))) -- [W]'s [X] failed to dispel [Y]'s [Z]
 			else
-				send(L.Plugins["dispel"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName, GetSpellLink(extraID)))
+				send(L.Plugins["dispel_failed"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName, GetSpellLink(extraID)))
 			end
 		end
 	end
 
+	elseif event == "SPELL_DISPEL" then
+		if pfl.DispelsEnable and dispels[spellID] then
+			if isFemale(srcName) then
+				send(L.Plugins["dispels_fem"]:format(icon(srcName), srcName, GetSpellLink(extraID), icon(destName), destName)) -- [W]'s [X] failed to dispel [Y]'s [Z]
+			else
+				send(L.Plugins["dispels"]:format(icon(srcName), srcName, GetSpellLink(extraID), icon(destName), destName))
+			end
+		end
+	end
 
 	if not (pfl.InCombat and not UnitAffectingCombat(srcName)) then -- If the caster is in combat
 		if event == "SPELL_CAST_SUCCESS" then
@@ -406,7 +426,7 @@ function flump:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, s
 					send(L.Plugins["used"]:format(icon(srcName), srcName, GetSpellLink(spellID)))
 				end
 				sacrifice[srcGUID] = true
-			elseif special[spellID] then -- Workaround for spells which aren't tanking spells
+			elseif pfl.SpecialEnable and special[spellID] then -- Workaround for spells which aren't tanking spells
 				if isFemale(srcName) then
 					send(L.Plugins["used_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] used Aura Mastery
 				else
@@ -415,29 +435,23 @@ function flump:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, s
 			end
 
 		elseif event == "SPELL_AURA_APPLIED" then -- [X] cast [Y] on [Z]
-			if spellID == 20233 or spellID == 20236 then -- Improved Lay on Hands (Rank 1/Rank 2)
-				if isFemale(srcName) then
-					send(L.Plugins["cast_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName))
-				else
-					send(L.Plugins["cast"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName))
-				end
-			elseif bonus[spellID] then
+			if pfl.BonusEnable and bonus[spellID] then
 				if isFemale(srcName) then
 					send(L.Plugins["used_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X] used [Z] (bonus)
 				else
 					send(L.Plugins["used"]:format(icon(srcName), srcName, GetSpellLink(spellID)))
 				end
-			elseif spellID == 66233 then
-				if not ad_heal then -- If the Ardent Defender heal message hasn't been sent already
-					send(ad:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X]'s [Y] consumed
-				end
-				ad_heal = false
-			elseif spellName == HOP and IsTank(srcName) then
-				if isFemale(srcName) then
-					send(L.Plugins["cast_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName)) -- [X] cast Hand of Protection on [Z]
-				else
-					send(L.Plugins["cast"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName))
-				end
+			-- elseif spellID == 66233 then
+			-- 	if not ad_heal then -- If the Ardent Defender heal message hasn't been sent already
+			-- 		send(ad:format(icon(srcName), srcName, GetSpellLink(spellID))) -- [X]'s [Y] consumed
+			-- 	end
+			-- 	ad_heal = false
+			-- elseif spellName == HOP and IsTank(srcName) then
+			-- 	if isFemale(srcName) then
+			-- 		send(L.Plugins["cast_fem"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName)) -- [X] cast Hand of Protection on [Z]
+			-- 	else
+			-- 		send(L.Plugins["cast"]:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName))
+			-- 	end
 			elseif pfl.TrinketsEnable and trinkets[spellID] then
 				if isFemale(srcName) then
 					send(L.Plugins["used_fem"]:format(icon(srcName), srcName, select(2, GetItemInfo(trinkets[spellID])))) -- [X] used [Y]
@@ -491,7 +505,7 @@ local function InitializeOptions()
 	local add_use_label = ""
 	local flump_group = {
 		type = "group",
-		childGroups = "tab",
+		childGroups = "tree",
 		name = "Flump",
 		get = function(info) return db.profile.Plugins.Flump[info[#info]] end,
 		set = function(info,v) db.profile.Plugins.Flump[info[#info]] = v; module:RefreshProfile(); savetables() end,
@@ -742,6 +756,78 @@ local function InitializeOptions()
 						},
 				},
 			},
+			Bonus = {
+				type = "group",
+				childGroups = "tab",
+				name = L.Plugins["Bonus"],
+				order = 50,
+				width = "full",
+					args = {
+						BonusEnable = {
+							order = 1,
+							name = L.options["Enable"],
+							type = "toggle",
+							width = "full",
+						},
+						BonusGroup = {
+							order = 2,
+							name = L.Plugins["Bonus"],
+							type = "group",
+							guiInline = true,
+							disabled = function() return not pfl.BonusEnable end,
+								args = {
+								},
+						},
+				},
+			},
+			Special = {
+				type = "group",
+				childGroups = "tab",
+				name = L.Plugins["Special"],
+				order = 50,
+				width = "full",
+					args = {
+						SpecialEnable = {
+							order = 1,
+							name = L.options["Enable"],
+							type = "toggle",
+							width = "full",
+						},
+						SpecialGroup = {
+							order = 2,
+							name = L.Plugins["Special"],
+							type = "group",
+							guiInline = true,
+							disabled = function() return not pfl.SpecialEnable end,
+								args = {
+								},
+						},
+				},
+			},
+			Dispels = {
+				type = "group",
+				childGroups = "tab",
+				name = L.Plugins["Dispels"],
+				order = 100,
+				width = "full",
+					args = {
+						DispelsEnable = {
+							order = 1,
+							name = L.options["Enable"],
+							type = "toggle",
+							width = "full",
+						},
+						DispelsGroup = {
+							order = 2,
+							name = L.Plugins["Dispels"],
+							type = "group",
+							guiInline = true,
+							disabled = function() return not pfl.DispelsEnable end,
+								args = {
+								},
+						},
+				},
+			},
 		},
 	}
 
@@ -753,6 +839,9 @@ local function InitializeOptions()
 	db.profile.Plugins.Flump.Trinkets = {}
 	db.profile.Plugins.Flump.Feasts = {}
 	db.profile.Plugins.Flump.Misc = {}
+	db.profile.Plugins.Flump.Bonus = {}
+	db.profile.Plugins.Flump.Special = {}
+	db.profile.Plugins.Flump.Dispels = {}
 
 	for i, j in pairs(port) do
 		flump_group.args.Portals.args.PortalsGroup.args[tostring(i)] = {
@@ -843,6 +932,54 @@ local function InitializeOptions()
 		}
 	end
 
+	for i, j in pairs(bonus) do
+		flump_group.args.Bonus.args.BonusGroup.args[tostring(i)] = {
+			type = "toggle",
+			name = GetSpellInfo(i),
+			desc = GetSpellInfo(i),
+			order = i,
+			get = function(info) return bonus[i] end,
+			set = function(info,v)  bonus[i] = v; module:RefreshProfile(); savetables() end,
+		}
+	end
+
+	for i, j in pairs(special) do
+		flump_group.args.Special.args.SpecialGroup.args[tostring(i)] = {
+			type = "toggle",
+			name = GetSpellInfo(i),
+			desc = GetSpellInfo(i),
+			order = i,
+			get = function(info) return special[i] end,
+			set = function(info,v)  special[i] = v; module:RefreshProfile(); savetables() end,
+		}
+	end
+
+	for i, j in pairs(dispels) do
+		flump_group.args.Dispels.args.DispelsGroup.args[tostring(i)] = {
+			type = "toggle",
+			name = GetSpellLink(i),
+			icon = select(3, GetSpellInfo(i)),
+			width = "normal",
+			order = 4 * i,
+			get = function(info) return dispels[i] end,
+			set = function(info,v)  dispels[i] = v; module:RefreshProfile(); savetables() end,
+		}
+		flump_group.args.Dispels.args.DispelsGroup.args[tostring(i).."_desc"] = {
+			type = "execute",
+			name = "Link",
+			icon = select(3, GetSpellInfo(i)),
+			width = "half",
+			func = function() local l = select(1, GetSpellLink(i)); print(l); end,
+			order = 4 * i + 1,
+		}
+		flump_group.args.Dispels.args.DispelsGroup.args[tostring(i).."_gap"] = {
+			type = "description",
+			name = "",
+			width = "full",
+			order = 4 * i + 2,
+		}
+	end
+
 	module.plugins_group = flump_group
 end
 
@@ -860,7 +997,7 @@ function module:OnInitialize()
 		if db.profile.Plugins.Flump.Spells ~= nil then
 			if next(db.profile.Plugins.Flump.Spells) ~= nil then
 				spells = db.profile.Plugins.Flump.Spells
-				print(spells)
+--				print(spells)
 			end
 		end
 		if db.profile.Plugins.Flump.Bots ~= nil then
@@ -891,6 +1028,21 @@ function module:OnInitialize()
 		if db.profile.Plugins.Flump.Misc ~= nil then
 			if next(db.profile.Plugins.Flump.Misc) ~= nil then
 				misc = db.profile.Plugins.Flump.Misc
+			end
+		end
+		if db.profile.Plugins.Flump.Bonus ~= nil then
+			if next(db.profile.Plugins.Flump.Bonus) ~= nil then
+				bonus = db.profile.Plugins.Flump.Bonus
+			end
+		end
+		if db.profile.Plugins.Flump.Special ~= nil then
+			if next(db.profile.Plugins.Flump.Special) ~= nil then
+				special = db.profile.Plugins.Flump.Special
+			end
+		end
+		if db.profile.Plugins.Flump.Dispels ~= nil then
+			if next(db.profile.Plugins.Flump.Dispels) ~= nil then
+				dispels = db.profile.Plugins.Flump.Dispels
 			end
 		end
 	end
@@ -957,6 +1109,18 @@ function savemisc()
 	db.profile.Plugins.Flump.Misc = misc
 end
 
+function savebonus()
+	db.profile.Plugins.Flump.Bonus = bonus
+end
+
+function savespecial()
+	db.profile.Plugins.Flump.Special = special
+end
+
+function savedispels()
+	db.profile.Plugins.Flump.Dispels = dispels
+end
+
 function savetables()
 	saveportals()
 	savespells()
@@ -966,6 +1130,9 @@ function savetables()
 	savetrinkets()
 	savefeasts()
 	savemisc()
+	savebonus()
+	savespecial()
+	savedispels()
 end
 
 function flump:set()
@@ -991,7 +1158,7 @@ addon:AddToRefreshProfile(RefreshProfile)
 
 function flump:GET_ITEM_INFO_RECEIVED(itemID)
 	if trinkets[itemID] then
-		print(itemID)
+--		print(itemID)
 	end
 end
 
