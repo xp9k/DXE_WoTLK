@@ -517,9 +517,9 @@ end
 
 function fatality:PrintStatus()
 	if pfl.Enabled then
-		print(format("|cff39d7e5Fatality: %s|r", "|cff00ff00on|r"))
+		print(format("|cff39d7e5Fatality: %s|r", "|cff00ff00" .. L.options["on"] .. "|r"))
 	else
-		print(format("|cff39d7e5Fatality: %s|r", "|cffff0000off|r"))
+		print(format("|cff39d7e5Fatality: %s|r", "|cffff0000" .. L.options["off"] .. "|r"))
 	end
 end
 

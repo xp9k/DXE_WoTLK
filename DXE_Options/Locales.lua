@@ -1,8 +1,8 @@
 --[[
 	The contents of this file are auto-generated using the WoWAce localization application
 	Please go to http://www.wowace.com/projects/deus-vox-encounters/localization/ to update translations.
-	Anyone with a wowace/curseforge account can edit them. 
-]] 
+	Anyone with a wowace/curseforge account can edit them.
+]]
 
 local AL = LibStub("AceLocale-3.0")
 
@@ -1825,6 +1825,8 @@ options["Name Horizontal Offset"] = "Горизонтальное положен
 options["Neutral Color"] = "Нейтральный цвет"
 options["None"] = "Ничего"
 options["Now change the sound to what you want. Sounds can be tested by clicking on the speaker icons within the dropdown"] = "Изменяйте звуки по вашему желанию. Прослушать тот или иной звук можно нажав значок колонки в меню."
+options["on"] = "Включен"
+options["off"] = "Выключен"
 options["Only if engaged"] = "Только в схватке"
 options["Only in party"] = "Только в группе"
 options["Only in party instances"] = "Только в групповых подземельях"

@@ -26,6 +26,7 @@ local MIN_HEALER_MANA = 20000	-- How much mana must a player have to be consider
 local DIVINE_PLEA = true		-- Announce when (holy) Paladins cast Divine Plea? (-50% healing)
 
 local status = "|cff39d7e5Flump: %s|r"
+local spellstatus = "%s %s!"
 
 -- local bot	 = "%s%s ставит %s!"
 -- local used	 = "%s%s использовал(а) %s!"
@@ -508,7 +509,7 @@ local function InitializeOptions()
 		childGroups = "tree",
 		name = "Flump",
 		get = function(info) return db.profile.Plugins.Flump[info[#info]] end,
-		set = function(info,v) db.profile.Plugins.Flump[info[#info]] = v; module:RefreshProfile(); savetables() end,
+		set = function(info, v, v2) db.profile.Plugins.Flump[info[#info]] = v; module:RefreshProfile(); savetables(); end,
 		order = 1,
 		args = {
 			description = {
@@ -906,7 +907,7 @@ local function InitializeOptions()
 			desc = (GetItemInfo(trinkets[i]) or "Not cached") .. " (" .. (select(4, GetItemInfo(trinkets[i])) or "") .. ")",
 			order = 100 + i,
 			get = function(info) return trinkets_opt[i] end,
-			set = function(info,v)  trinkets_opt[i] = v; module:RefreshProfile(); savetables() end,
+			set = function(info,v)  trinkets_opt[i] = v; module:RefreshProfile(); savetables(); end,
 		}
 	end
 
@@ -957,26 +958,12 @@ local function InitializeOptions()
 	for i, j in pairs(dispels) do
 		flump_group.args.Dispels.args.DispelsGroup.args[tostring(i)] = {
 			type = "toggle",
-			name = GetSpellLink(i),
+			name = GetSpellInfo(i),
 			icon = select(3, GetSpellInfo(i)),
 			width = "normal",
-			order = 4 * i,
+			order = i,
 			get = function(info) return dispels[i] end,
-			set = function(info,v)  dispels[i] = v; module:RefreshProfile(); savetables() end,
-		}
-		flump_group.args.Dispels.args.DispelsGroup.args[tostring(i).."_desc"] = {
-			type = "execute",
-			name = "Link",
-			icon = select(3, GetSpellInfo(i)),
-			width = "half",
-			func = function() local l = select(1, GetSpellLink(i)); print(l); end,
-			order = 4 * i + 1,
-		}
-		flump_group.args.Dispels.args.DispelsGroup.args[tostring(i).."_gap"] = {
-			type = "description",
-			name = "",
-			width = "full",
-			order = 4 * i + 2,
+			set = function(info,v)  dispels[i] = v; module:RefreshProfile(); savetables(); if dispels[i] then print(format(spellstatus, select(1, GetSpellLink(i)), "|cff00ff00" .. L.options["on"] .. "|r")) else print(format(spellstatus, select(1, GetSpellLink(i)), "|cffff0000" .. L.options["off"] .. "|r")) end; end,
 		}
 	end
 
@@ -1137,10 +1124,10 @@ end
 
 function flump:set()
 	if pfl.Enabled then
-		print(format(status, "|cff00ff00on|r"))
+		print(format(status, "|cff00ff00" .. L.options["on"] .. "|r"))
 		flump:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	else
-		print(format(status, "|cffff0000off|r"))
+		print(format(status, "|cffff0000" .. L.options["off"] .. "|r"))
 		flump:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	end
 --	EnableDisable()
