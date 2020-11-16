@@ -113,52 +113,52 @@ end
 local function shuffle(t)
     for i=1,#t-1 do
 	    t[i].time = t[i+1].time
-		t[i].srcGUID = t[i+1].srcGUID
-		t[i].srcName = t[i+1].srcName
-		t[i].srcFlags = t[i+1].srcFlags
-		t[i].destGUID = t[i+1].destGUID 	
-		t[i].destName = t[i+1].destName 	
-		t[i].destFlags = t[i+1].destFlags 	
-		t[i].spellID = t[i+1].spellID 	
-		t[i].spellName = t[i+1].spellName 	
-		t[i].environment = t[i+1].environment
-		t[i].amount = t[i+1].amount 	
-		t[i].overkill = t[i+1].overkill 	
-		t[i].crit = t[i+1].crit 		
-		t[i].crush = t[i+1].crush 		
+			t[i].srcGUID = t[i+1].srcGUID
+			t[i].srcName = t[i+1].srcName
+			t[i].srcFlags = t[i+1].srcFlags
+			t[i].destGUID = t[i+1].destGUID
+			t[i].destName = t[i+1].destName
+			t[i].destFlags = t[i+1].destFlags
+			t[i].spellID = t[i+1].spellID
+			t[i].spellName = t[i+1].spellName
+			t[i].environment = t[i+1].environment
+			t[i].amount = t[i+1].amount
+			t[i].overkill = t[i+1].overkill
+			t[i].crit = t[i+1].crit
+			t[i].crush = t[i+1].crush
     end
 end
 
 function fatality:FormatOutput(guid, known)
-	
+
 	local c = candidates[guid]
 	local destName, destFlags = c[#c].destName, c[#c].destFlags
-		
+
 	local destIcon = icon(destFlags)
-	
+
 	if not known then
 		return unknown:format(destIcon, destName)
 	end
-	
+
 	local dest = format("%s%s", destIcon, color(c[1].destName))
-	
+
 	local source, info, full
-	
+
 	for i=1,pfl.EVENT_HISTORY do
-	
+
 		local e = c[i]
 		if not e then break end
-		
+
 		if e.srcName then
 			local srcIcon = icon(e.srcFlags)
 			source = format("%s%s", srcIcon, color(e.srcName))
 		else
 			source = color("Unknown")
 		end
-		
+
 		local ability = (e.spellID and GetSpellLink(e.spellID)) or e.environment or "Melee"
-		
-		if e.amount > 0 then 
+
+		if e.amount > 0 then
 			local amount = (pfl.OVERKILL and (e.amount - e.overkill)) or e.amount
 			local overkill = (pfl.OVERKILL and e.overkill > 0) and format(" (O: %s)", shorten(e.overkill)) or ""
 			amount = shorten(amount)
@@ -174,11 +174,11 @@ function fatality:FormatOutput(guid, known)
 			-- SPELL_INSTAKILL
 			info = format("%s [%s]", ability, color("Unknown"))
 		end
-		
+
 		full = format("%s%s%s", full or "", info, c[i + 1] and " + " or "")
-		
+
 	end
-	
+
 	local msg = format(death, dest, full)
 
 	if msg:len() > 255 and chats[pfl.OUTPUT] ~= "SELF" then
@@ -186,18 +186,18 @@ function fatality:FormatOutput(guid, known)
 		print(format(status, err))
 		return
 	end
-	
+
 	return msg
-	
+
 end
 
 function fatality:RecordDamage(now, srcGUID, srcName, srcFlags, destGUID, destName, destFlags, spellID, spellName, environment, amount, overkill, crit, crush)
-	
+
 	-- If the table doesn't already exist, create it
 	if not candidates[destGUID] then
 		candidates[destGUID] = {}
 	end
-	
+
 	-- Store the table in a temporary variable
 	local t = candidates[destGUID]
 
@@ -209,11 +209,11 @@ function fatality:RecordDamage(now, srcGUID, srcName, srcFlags, destGUID, destNa
         shuffle(t)
         history = pfl.EVENT_HISTORY
     end
-	
+
 	if not t[history] then
 		t[history] = {}
 	end
-	
+
 	t[history].time = now
     t[history].srcGUID = srcGUID
 	t[history].srcName = srcName
@@ -228,7 +228,7 @@ function fatality:RecordDamage(now, srcGUID, srcName, srcFlags, destGUID, destNa
 	t[history].overkill = overkill
 	t[history].crit = crit
 	t[history].crush = crush
-	
+
 end
 
 function fatality:ReportDeath(guid)
@@ -250,11 +250,11 @@ function fatality:ReportDeath(guid)
 end
 
 function fatality:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName, srcFlags, destGUID, destName, destFlags, ...)
-	
+
 	if not (UnitInRaid(destName) or UnitInParty(destName)) then return end
-	
+
 	local spellID, spellName, amount, overkill, environment, crit, crush
-	
+
 	if special[event] then
 		spellID, spellName, spellSchool, amount, overkill, _, _, _, _, crit, _, crush = ...
 	elseif event == "SWING_DAMAGE" then
@@ -265,15 +265,15 @@ function fatality:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, srcGUID, srcName
 	elseif event == "ENVIRONMENTAL_DAMAGE" then
 		environment, amount, overkill = ...
 	end
-	
+
 	if amount then
 		self:RecordDamage(GetTime(), srcGUID, srcName, srcFlags, destGUID, destName, destFlags, spellID, spellName, environment, amount, overkill, crit, crush)
 	end
-	
+
 	if event == "UNIT_DIED" and not UnitIsFeignDeath(destName) then
 		self:ReportDeath(destGUID)
 	end
-	
+
 end
 
 function fatality:ClearData()
@@ -305,7 +305,7 @@ function fatality:CheckEnable()
 	local _, instance = IsInInstance()
 --	if not (pfl.RAID_ONLY and not instance == "raid") then
 	if instance == "raid" then
-		unit_health = instances[GetRealZoneText()] -- Only use UNIT_HEALTH to determine deaths in predefined instances 
+		unit_health = instances[GetRealZoneText()] -- Only use UNIT_HEALTH to determine deaths in predefined instances
 		self:ClearData()
 		self:RegisterEvents()
 	else
@@ -362,7 +362,7 @@ local function InitializeOptions()
 	if not addon.Options then
 		if select(6,GetAddOnInfo("DXE_Options")) == "MISSING" then addon:Print((L["Missing %s"]):format("DXE_Options")) return end
 		if not IsAddOnLoaded("DXE_Options") then addon.Loader:Load("DXE_Options") end
-	end	
+	end
 	local FatalityGroup = {
 		type = "group",
 		name = L.Plugins["Fatality"],
@@ -491,14 +491,14 @@ function module:OnInitialize()
 	if db.profile.Plugins.Fatality == nil then
 		db.profile.Plugins.Fatality = defaults
 	end
-	
+
 	module:RefreshProfile()
-	
+
 	db.RegisterCallback(self, "OnProfileChanged", "RefreshProfile")
 	db.RegisterCallback(self, "OnProfileCopied", "RefreshProfile")
 	db.RegisterCallback(self, "OnProfileReset", "RefreshProfile")
-	
-	InitializeOptions()	
+
+	InitializeOptions()
 	fatality:CheckEnable()
 end
 
@@ -520,7 +520,7 @@ function fatality:PrintStatus()
 		print(format("|cff39d7e5Fatality: %s|r", "|cff00ff00on|r"))
 	else
 		print(format("|cff39d7e5Fatality: %s|r", "|cffff0000off|r"))
-	end 
+	end
 end
 
 function module:RefreshProfile()
