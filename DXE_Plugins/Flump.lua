@@ -570,7 +570,7 @@ local function InitializeOptions()
 				type = "group",
 				childGroups = "tab",
 				name = L.Plugins["Spells"],
-				order = 20,
+				order = 30,
 				width = "full",
 					args = {
 						SpellsEnable = {
@@ -594,7 +594,7 @@ local function InitializeOptions()
 				type = "group",
 				childGroups = "tab",
 				name = L.Plugins["Bots"],
-				order = 20,
+				order = 40,
 				width = "full",
 					args = {
 						BotsEnable = {
@@ -618,7 +618,7 @@ local function InitializeOptions()
 				type = "group",
 				childGroups = "tab",
 				name = L.Plugins["Use"],
-				order = 20,
+				order = 50,
 				width = "full",
 					args = {
 						UseEnable = {
@@ -658,7 +658,7 @@ local function InitializeOptions()
 				type = "group",
 				childGroups = "tab",
 				name = L.Plugins["Rituals"],
-				order = 20,
+				order = 60,
 				width = "full",
 					args = {
 						RitualsEnable = {
@@ -682,7 +682,7 @@ local function InitializeOptions()
 				type = "group",
 				childGroups = "tab",
 				name = L.Plugins["Trinkets"],
-				order = 20,
+				order = 150,
 				width = "full",
 					args = {
 						TrinketsEnable = {
@@ -713,7 +713,7 @@ local function InitializeOptions()
 				type = "group",
 				childGroups = "tab",
 				name = L.Plugins["Feasts"],
-				order = 20,
+				order = 70,
 				width = "full",
 					args = {
 						FeastsEnable = {
@@ -737,7 +737,7 @@ local function InitializeOptions()
 				type = "group",
 				childGroups = "tab",
 				name = L.Plugins["Misc"],
-				order = 20,
+				order = 80,
 				width = "full",
 					args = {
 						MiscEnable = {
@@ -761,7 +761,7 @@ local function InitializeOptions()
 				type = "group",
 				childGroups = "tab",
 				name = L.Plugins["Bonus"],
-				order = 50,
+				order = 90,
 				width = "full",
 					args = {
 						BonusEnable = {
@@ -785,7 +785,7 @@ local function InitializeOptions()
 				type = "group",
 				childGroups = "tab",
 				name = L.Plugins["Special"],
-				order = 50,
+				order = 100,
 				width = "full",
 					args = {
 						SpecialEnable = {
@@ -809,7 +809,7 @@ local function InitializeOptions()
 				type = "group",
 				childGroups = "tab",
 				name = L.Plugins["Dispels"],
-				order = 100,
+				order = 200,
 				width = "full",
 					args = {
 						DispelsEnable = {
@@ -851,7 +851,7 @@ local function InitializeOptions()
 			desc = GetSpellInfo(i),
 			order = 100 + i,
 			get = function(info) return port[i] end,
-			set = function(info,v) port[i] = v; module:RefreshProfile(); savetables() end,
+			set = function(info,v) port[i] = v; module:RefreshProfile(); savetables(); if port[i] then print(format(spellstatus, select(1, GetSpellLink(i)), "|cff00ff00" .. L.options["on"] .. "|r")) else print(format(spellstatus, select(1, GetSpellLink(i)), "|cffff0000" .. L.options["off"] .. "|r")) end; end,
 		}
 	end
 
@@ -862,7 +862,7 @@ local function InitializeOptions()
 			desc = GetSpellInfo(i),
 			order = 100 + i,
 			get = function(info) return spells[i] end,
-			set = function(info,v) spells[i] = v; module:RefreshProfile(); savetables() end,
+			set = function(info,v) spells[i] = v; module:RefreshProfile(); savetables(); if spells[i] then print(format(spellstatus, select(1, GetSpellLink(i)), "|cff00ff00" .. L.options["on"] .. "|r")) else print(format(spellstatus, select(1, GetSpellLink(i)), "|cffff0000" .. L.options["off"] .. "|r")) end; end,
 		}
 	end
 
@@ -873,7 +873,7 @@ local function InitializeOptions()
 			desc = GetSpellInfo(i),
 			order = 100 + i,
 			get = function(info) return bots[i] end,
-			set = function(info,v)  bots[i] = v; module:RefreshProfile(); savetables() end,
+			set = function(info,v)  bots[i] = v; module:RefreshProfile(); savetables(); if bots[i] then print(format(spellstatus, select(1, GetSpellLink(i)), "|cff00ff00" .. L.options["on"] .. "|r")) else print(format(spellstatus, select(1, GetSpellLink(i)), "|cffff0000" .. L.options["off"] .. "|r")) end; end,
 		}
 	end
 
@@ -884,7 +884,7 @@ local function InitializeOptions()
 			desc = GetSpellInfo(i),
 			order = 100 + i,
 			get = function(info) return use[i] end,
-			set = function(info,v)  use[i] = v; module:RefreshProfile(); savetables() end,
+			set = function(info,v)  use[i] = v; module:RefreshProfile(); savetables(); if use[i] then print(format(spellstatus, select(1, GetSpellLink(i)), "|cff00ff00" .. L.options["on"] .. "|r")) else print(format(spellstatus, select(1, GetSpellLink(i)), "|cffff0000" .. L.options["off"] .. "|r")) end; end,
 		}
 	end
 
@@ -895,7 +895,7 @@ local function InitializeOptions()
 			desc = GetSpellInfo(i),
 			order = 100 + i,
 			get = function(info) return rituals[i] end,
-			set = function(info,v)  rituals[i] = v; module:RefreshProfile(); savetables() end,
+			set = function(info,v)  rituals[i] = v; module:RefreshProfile(); savetables(); if rituals[i] then print(format(spellstatus, select(1, GetSpellLink(i)), "|cff00ff00" .. L.options["on"] .. "|r")) else print(format(spellstatus, select(1, GetSpellLink(i)), "|cffff0000" .. L.options["off"] .. "|r")) end;  end,
 		}
 	end
 
@@ -907,7 +907,7 @@ local function InitializeOptions()
 			desc = (GetItemInfo(trinkets[i]) or "Not cached") .. " (" .. (select(4, GetItemInfo(trinkets[i])) or "") .. ")",
 			order = 100 + i,
 			get = function(info) return trinkets_opt[i] end,
-			set = function(info,v)  trinkets_opt[i] = v; module:RefreshProfile(); savetables(); end,
+			set = function(info,v)  trinkets_opt[i] = v; module:RefreshProfile(); savetables(); if trinkets_opt[i] then print(format(spellstatus, select(2, GetItemInfo(trinkets[i])), "|cff00ff00" .. L.options["on"] .. "|r")) else print(format(spellstatus, select(2, GetItemInfo(trinkets[i])), "|cffff0000" .. L.options["off"] .. "|r")) end; end,
 		}
 	end
 
@@ -918,7 +918,7 @@ local function InitializeOptions()
 			desc = GetSpellInfo(i),
 			order = 100 + i,
 			get = function(info) return feasts[i] end,
-			set = function(info,v)  feasts[i] = v; module:RefreshProfile(); savetables() end,
+			set = function(info,v)  feasts[i] = v; module:RefreshProfile(); savetables(); if feasts[i] then print(format(spellstatus, select(1, GetSpellLink(i)), "|cff00ff00" .. L.options["on"] .. "|r")) else print(format(spellstatus, select(1, GetSpellLink(i)), "|cffff0000" .. L.options["off"] .. "|r")) end; end,
 		}
 	end
 
@@ -929,7 +929,7 @@ local function InitializeOptions()
 			desc = GetSpellInfo(i),
 			order = 100 + i,
 			get = function(info) return misc[i] end,
-			set = function(info,v)  misc[i] = v; module:RefreshProfile(); savetables() end,
+			set = function(info,v)  misc[i] = v; module:RefreshProfile(); savetables(); if misc[i] then print(format(spellstatus, select(1, GetSpellLink(i)), "|cff00ff00" .. L.options["on"] .. "|r")) else print(format(spellstatus, select(1, GetSpellLink(i)), "|cffff0000" .. L.options["off"] .. "|r")) end; end,
 		}
 	end
 
@@ -940,7 +940,7 @@ local function InitializeOptions()
 			desc = GetSpellInfo(i),
 			order = i,
 			get = function(info) return bonus[i] end,
-			set = function(info,v)  bonus[i] = v; module:RefreshProfile(); savetables() end,
+			set = function(info,v)  bonus[i] = v; module:RefreshProfile(); savetables(); if bonus[i] then print(format(spellstatus, select(1, GetSpellLink(i)), "|cff00ff00" .. L.options["on"] .. "|r")) else print(format(spellstatus, select(1, GetSpellLink(i)), "|cffff0000" .. L.options["off"] .. "|r")) end; end,
 		}
 	end
 
@@ -951,7 +951,7 @@ local function InitializeOptions()
 			desc = GetSpellInfo(i),
 			order = i,
 			get = function(info) return special[i] end,
-			set = function(info,v)  special[i] = v; module:RefreshProfile(); savetables() end,
+			set = function(info,v)  special[i] = v; module:RefreshProfile(); savetables(); if special[i] then print(format(spellstatus, select(1, GetSpellLink(i)), "|cff00ff00" .. L.options["on"] .. "|r")) else print(format(spellstatus, select(1, GetSpellLink(i)), "|cffff0000" .. L.options["off"] .. "|r")) end; end,
 		}
 	end
 
