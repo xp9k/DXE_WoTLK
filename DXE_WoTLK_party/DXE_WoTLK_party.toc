@@ -5,7 +5,7 @@
 ## LoadOnDemand: 1
 ## Dependencies: DXE
 ## X-DXE-Category: WoTLK Party
-## X-DXE-Zone: The Forge of Souls, Pit of Saron
+## X-DXE-Zone: The Forge of Souls, Pit of Saron, Halls of Lightning, Gundrak, Old Stratholm
 ## X-Curse-Packaged-Version: v505
 ## X-Curse-Project-Name: Deus Vox Encounters
 ## X-Curse-Project-ID: deus-vox-encounters
@@ -15,3 +15,9 @@ Locales.lua
 Bronjahm.lua
 DevourerOfSouls.lua
 Tyrannus.lua
+Ick.lua
+Ionar.lua
+Volkhan.lua
+ForgemasterGarfrost.lua
+Moorabi.lua
+SalrammTheFleshcrafter.lua

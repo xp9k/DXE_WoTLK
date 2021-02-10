@@ -9,7 +9,7 @@ do
 		version = 1,
 		key = "Bronjahm",
 		zone = L.zone["The Forge of Souls"],
-		category = L.zone["WoTLK Party"],
+		category = L.zone["The Forge of Souls"],
 		name = L.npc_wotlk_party["Bronjahm"],
 		triggers = {
 			scan = {36497}, -- Bronjahm

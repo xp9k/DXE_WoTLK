@@ -9,7 +9,7 @@ do
 		version = 1,
 		key = "Devourer",
 		zone = L.zone["The Forge of Souls"],
-		category = L.zone["WoTLK Party"],
+		category = L.zone["The Forge of Souls"],
 		name = L.npc_wotlk_party["Devourer of Souls"],
 		triggers = {
 			scan = {36502}, -- Devourer of Souls

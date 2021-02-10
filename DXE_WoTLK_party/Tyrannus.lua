@@ -9,7 +9,7 @@ do
 		version = 1,
 		key = "Tyrannus",
 		zone = L.zone["Pit of Saron"],
-		category = L.zone["WoTLK Party"],
+		category = L.zone["Pit of Saron"],
 		name = L.npc_wotlk_party["Tyrannus"],
 		triggers = {
 			scan = 36658, -- Tyrannus
