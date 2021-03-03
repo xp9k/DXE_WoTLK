@@ -20,8 +20,8 @@ local data = {
 			36494,
 			},
 		tracerstart = true,
-		tracerstop = false,
-		combatstop = false,
+		-- tracerstop = false,
+		-- combatstop = false,
 		defeat = 36494,
 		},
 	alerts = {

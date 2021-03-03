@@ -38,7 +38,8 @@ do
 				"alert","aircd",
 				"alert","frostbreathcd",
 				"alert","icygripcd",
-				"set",{breathtime = 21.5, icygriptime = 77.4},
+				"set",{breathtime = 21.5, icygriptime = 77.4, unchainedtime = 12},
+				"alert", "unchainedcd",
 			},
 		},
 		alerts = {

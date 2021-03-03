@@ -161,6 +161,7 @@ do
 				text = format(L.alert["%s Cooldown"],SN[72762]),
 				time = 32,
 				time2 = 37,
+				time3 = 50,
 				flashtime = 10,
 				color1 = "PURPLE",
 				throttle = 2,
@@ -188,7 +189,7 @@ do
 			remorsedur = {
 				varname = format(L.alert["%s Duration"],SN[68981]),
 				type = "centerpopup",
-				text = format(L.alert["%s Duration"],SN[68981]),
+				text = format(L.alert["%s"],SN[68981]),
 				time = 60,
 				flashtime = 10,
 				color1 = "BLUE",
@@ -328,6 +329,15 @@ do
 				sound = "ALERT4",
 				icon = ST[68980],
 			},
+			harvestsoulsdur = {
+				varname = format(L.alert["%s Duration"],SN[74297]),
+				type = "centerpopup",
+				text = format(L.alert["%s"],SN[74297]),
+				color1 = "BLACK",
+				time = 48,
+				sound = "ALERT4",
+				icon = ST[74297],
+			},
 			harvestsoulcd = {
 				varname = format(L.alert["%s Cooldown"],SN[68980]),
 				type = "dropdown",
@@ -335,6 +345,7 @@ do
 				text2 = format(L.alert["%s Cooldown"],SN[74297]),
 				time = {12.5,75,loop = false, type = "series"},
 				time2 = {12.5,55,loop = false, type = "series"},
+				time3 = 105,
 				flashtime = 10,
 				color1 = "BROWN",
 				icon = ST[68980],
@@ -780,12 +791,15 @@ do
 			-- Harvest Souls
 			{
 				type = "combatevent",
-				eventtype = "SPELL_CAST_SUCCESS",
-				spellname = 74297,
+				eventtype = "SPELL_AURA_APPLIED",
+				spellid = 74297,
 				execute = {
 					{
+						"batchquash",{"defilecd","soulreapercd","vilespiritcd", "harvestsoulsdur", "harvestsoulwarn", "harvestsoulcd"},
+						"alert", "harvestsoulsdur",
 						"alert",{"harvestsoulwarn", text = 2},
-						"batchquash",{"defilecd","soulreapercd","vilespiritcd"},
+						"alert",{"defilecd", time = 3},
+						"alert",{"harvestsoulcd", time = 3, text = 2},
 					},
 				},
 			},
@@ -859,6 +873,6 @@ do
 end
 
 function lichking:ADDON_LOADED()
-	lichking:RegisterEvent("CHAT_MSG_MONSTER_YELL")
-	lichfight = false
+--	lichking:RegisterEvent("CHAT_MSG_MONSTER_YELL")
+--	lichfight = false
 end

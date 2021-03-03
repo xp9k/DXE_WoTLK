@@ -18,8 +18,8 @@ do
 		onactivate = {
 			tracing = {36502}, -- Devourer of Souls
 			tracerstart = true,
-			tracerstop = true,
-			combatstop = true,
+			-- tracerstop = true,
+			-- combatstop = true,
 			defeat = 36502,
 		},
 		userdata = {

@@ -128,10 +128,12 @@ do
 				type = "dropdown",
 				text = format(L.alert["%s Cooldown"],L.alert["Pact"]),
 				time = "<pacttime>",
-				flashtime = 5,
+				time2 = 25,
+				flashtime = 2,
 				color1 = "BLACK",
 				audiocd = 5,
 				icon = ST[71340],
+				behavior = "overwrite",
 			},
 			pactwarn = {
 				varname = format(L.alert["%s Warning"],SN[71340]),
@@ -160,6 +162,7 @@ do
 				flashtime = 10,
 				color1 = "GREY",
 				icon = ST[73070],
+				behavior = "overwrite",
 			},
 			bloodthirstself = {
 				varname = format(L.alert["%s on self"],SN[70877]),
@@ -170,6 +173,13 @@ do
 				color1 = "WHITE",
 				sound = "ALERT4",
 				icon = ST[70877],
+			},
+			biteswarn = {
+				varname = format(L.alert["%s Warning"],SN[70946]),
+				type = "simple",
+				text = format("#2# " .. L.alert["bites"] .. " #5#"),
+				time = 5,
+				icon = ST[70946],
 			},
 			frenzywarn = {
 				varname = format(L.alert["%s Warning"],SN[70923]),
@@ -270,8 +280,8 @@ do
 				spellname = 73070,
 				execute = {
 					{
-						"quash", "pactcd",
-						"alert", {"pactcd", time = 20},
+--						"quash", "pactcd",
+						"alert", {"pactcd", time = 2},
 					},
 				},
 			},
@@ -313,14 +323,14 @@ do
 				},
 				execute = {
 					{
-						"quash", "pactcd",
+					--	"quash", "pactcd",
 						"alert", "pactcd",
 					},
 					{
 						"expect",{"#4#","==","&playerguid&"},
 						"alert","pactself",
 					},
-					{				
+					{
 						"schedulealert", {"pactwarn", 0.3},
 					},
 				},
@@ -334,6 +344,17 @@ do
 					{
 						"expect",{"#4#","==","&playerguid&"},
 						"alert","essenceself",
+					},
+				},
+			},
+			-- Announce bites
+			{
+				type = "combatevent",
+				eventtype = "SPELL_DAMAGE",
+				spellname = 70946,
+				execute = {
+					{
+						"alert","biteswarn",
 					},
 				},
 			},

@@ -15,9 +15,12 @@ do
 			scan = 36476, -- Ick
 		},
 		onactivate = {
+			tracing = 36476,
 			tracerstart = true,
-			tracerstop = false,
-			combatstop = false,
+			-- tracerstop = false,
+			-- combatstop = false,
+			defeat = 36476,
+			},
 		},
 		alerts = {
 			pursuitdur = {
