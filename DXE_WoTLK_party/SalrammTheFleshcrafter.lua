@@ -16,10 +16,10 @@ local data = {
 		yell = L.chat_wotlk_party[""],
 		},
 	onactivate = {
-		tracing = 26530,
-		tracerstart = true,
-		-- tracerstop = false,
-		-- combatstop = false,
+		tracing = {26530},
+--		tracerstart = true,
+		tracerstop = true,
+		combatstop = true,
 		defeat = 26530,
 		},
 	alerts = {

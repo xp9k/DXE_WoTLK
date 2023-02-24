@@ -6,22 +6,19 @@ local L,SN,ST = DXE.L,DXE.SN,DXE.ST
 
 do
 local data = {
-	version = 1,
+	version = 300,
 	key = "ForgemasterGarfrost",
 	zone = L.zone["Pit of Saron"],
 	category = L.zone["Pit of Saron"],
 	name = L.npc_wotlk_party["Forgemaster Garfrost"],
 	triggers = {
 		scan = 36494, -- Forgemaster Garfrost
-		yell = L.chat_wotlk_party[""],
-		},
+	},
 	onactivate = {
-		tracing = {
-			36494,
-			},
+		tracing = {36494},
 		tracerstart = true,
-		-- tracerstop = false,
-		-- combatstop = false,
+		tracerstop = true,
+		combatstop = true,
 		defeat = 36494,
 		},
 	alerts = {

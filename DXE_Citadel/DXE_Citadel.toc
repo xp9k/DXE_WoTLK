@@ -11,17 +11,4 @@
 ## X-Curse-Project-ID: deus-vox-encounters
 ## X-Curse-Repository-ID: wow/deus-vox-encounters/mainline
 
-Locales.lua
-trash.lua
-lichking.lua
-council.lua
-deathwhisper.lua
-festergut.lua
-sindragosa.lua
-marrogwar.lua
-putricide.lua
-rotface.lua
-saurfang.lua
-valithria.lua
-gunship.lua
-lanathel.lua
+Encounters.xml

@@ -1836,6 +1836,7 @@ options["Only on mouseover"] = "Только при наведении курс�
 options["Oscillations"] = "Вспышки"
 options["Output to an additional interface"] = "Дополнительный вывод предупреждений"
 options["Pane"] = "Панель"
+options["Plugins"] = "Расширения"
 options["Proximity"] = "Окно дистанции"
 options["Raid announce"] = "Анонсировать в рейд"
 options["Raid Bar Color"] = "Цвет рейдовых полос"

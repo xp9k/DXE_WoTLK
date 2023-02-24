@@ -15,8 +15,6 @@ local ACD = LibStub("AceConfigDialog-3.0")
 local ACR = LibStub("AceConfigRegistry-3.0")
 local SM = LibStub("LibSharedMedia-3.0")
 
-local Plugins = {}
-addon.plugins = Plugins
 
 local enc_looks_vals = {
 	L.options["Tabs"],
@@ -2387,21 +2385,6 @@ local function InitializeOptions()
 		opts_args.sounds_group = sounds_group
 	end
 
-	do
-		local plugins_group = {	
-		type = "group",
-		childGroups = "tab",
-		name = L.Plugins["Plugins"],
-		order = -10,
-			args = {
-			},
-		}
-		
-		plugins_group.args = GetPlugisOptions()
-		opts_args.plugins_group = plugins_group
---		print(tdump(plugins_group))
-	end
-
 	---------------------------------------------
 	-- DEBUG
 	---------------------------------------------
@@ -2426,14 +2409,6 @@ local function InitializeOptions()
 	AC:RegisterOptionsTable("DXE", opts)
 end
 
-function module:RegisterPlugin(plg_module)	
---	print(plg_module)
-	tinsert(Plugins, plg_module)
---	Plugins[#Plugins + 1] = plg_module
-	InitializeOptions()
---	self:UpdateOptions()
-end
-
 
 function module:UpdateOptions()
 --	if opts ~= nil  then	
@@ -2442,17 +2417,6 @@ function module:UpdateOptions()
 --		opts_args.profile.order = -20		
 		AC:RegisterOptionsTable("DXE", opts)
 --	end
-end
-
-function GetPlugisOptions()
-	local args = {}	
-	
-	for key, value in ipairs(Plugins) do
-		name = value.name
-		args[name] = value:GetOptions()
---		print(tostring(key) .. " " .. name)
-	end
-	return args
 end
 
 function tdump(o)
@@ -2492,5 +2456,5 @@ function module:ToggleConfig() ACD[ACD.OpenFrames.DXE and "Close" or "Open"](ACD
 		-- print(value.name)
 	-- end	
 	
---	self:UpdateOptions()	
+	self:UpdateOptions()	
 end

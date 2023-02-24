@@ -1,0 +1,18 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+<Script file="Locales.lua"/>
+<Script file="council.lua"/>
+<Script file="deathwhisper.lua"/>
+<Script file="festergut.lua"/>
+<Script file="gunship.lua"/>
+<Script file="lanathel.lua"/>
+<Script file="lichking.lua"/>
+<Script file="marrogwar.lua"/>
+<Script file="putricide.lua"/>
+<Script file="rotface.lua"/>
+<Script file="saurfang.lua"/>
+<Script file="sindragosa.lua"/>
+<Script file="trash.lua"/>
+<Script file="valithria.lua"/>
+</Ui>
+

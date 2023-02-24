@@ -68,12 +68,6 @@ local defaults = {
 			BlockBossEmoteFrame = false,
 			BlockRaidWarningFrame = false,
 		},
-		Flump = {
-			Enabled = true,
-			Chat = 2,
-			InCombat = false,
-			OnlyTanks = false,
-		},
 		Windows = {
 			TitleBarColor = {0,0,0.82,1},
 		},
@@ -110,7 +104,7 @@ local defaults = {
 			VICTORY = "FF1 Victory",
 		},
 		CustomSounds = {},
-		Plugins = {},
+		-- Plugins = {},
 	},
 }
 
@@ -124,7 +118,7 @@ addon.version = 505
 addon:SetDefaultModuleState(false)
 addon.callbacks = LibStub("CallbackHandler-1.0"):New(addon)
 addon.defaults = defaults
-addon.plugins = {}
+-- addon.plugins = {}
 
 ---------------------------------------------
 -- UPVALUES

@@ -791,7 +791,7 @@ do
 			-- Harvest Souls
 			{
 				type = "combatevent",
-				eventtype = "SPELL_AURA_APPLIED",
+				eventtype = "SPELL_CAST_SUCCESS",
 				spellid = 74297,
 				execute = {
 					{

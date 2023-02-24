@@ -1,8 +1,8 @@
 --[[
 	The contents of this file are auto-generated using the WoWAce localization application
 	Please go to http://www.wowace.com/projects/deus-vox-encounters/localization/ to update translations.
-	Anyone with a wowace/curseforge account can edit them. 
-]] 
+	Anyone with a wowace/curseforge account can edit them.
+]]
 
 local AL = LibStub("AceLocale-3.0")
 
@@ -1294,6 +1294,7 @@ L["You need to be a raid officer"] = "Вы должны быть рейдовы�
 
 -- Alert phrases
 local alert = AL:NewLocale("DXE Alert", "ruRU")
+alert["bites"] = "кусает"
 alert["Air Phase"] = "Воздушная фаза"
 alert["Arrival"] = "Появление"
 alert["Bile"] = "Горящая желчь"

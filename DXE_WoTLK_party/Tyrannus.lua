@@ -16,10 +16,10 @@ do
 			yell = L.chat_wotlk_party["^Alas, brave, brave adventurers"],
 		},
 		onactivate = {
-			tracing = 36658, -- Tyrannus
+			tracing = {36658,}, -- Tyrannus
 			tracerstart = true,
-			-- tracerstop = true,
-			-- combatstop = true,
+--			tracerstop = true,
+--			combatstop = true,
 			defeat = 36658,
 		},
 		userdata = {

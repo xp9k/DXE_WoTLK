@@ -6,7 +6,7 @@ local L,SN,ST = DXE.L,DXE.SN,DXE.ST
 
 do
 	local data = {
-		version = 1,
+		version = 100,
 		key = "Ick",
 		zone = L.zone["Pit of Saron"],
 		category = L.zone["Pit of Saron"],
@@ -15,13 +15,12 @@ do
 			scan = 36476, -- Ick
 		},
 		onactivate = {
-			tracing = 36476,
+			tracing = {36476},
 			tracerstart = true,
-			-- tracerstop = false,
-			-- combatstop = false,
+			tracerstop = true,
+			combatstop = true,
 			defeat = 36476,
 			},
-		},
 		alerts = {
 			pursuitdur = {
 				varname = format(L.alert["%s Duration"], SN[68987]),

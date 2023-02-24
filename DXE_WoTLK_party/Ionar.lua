@@ -15,10 +15,10 @@ do
 			scan = 28546, -- Ionar
 		},
 		onactivate = {
-			tracing = 28546,
+			tracing = {28546},
 			tracerstart = true,
-			-- tracerstop = false,
-			-- combatstop = false,
+			tracerstop = true,
+			combatstop = true,
 			defeat = 28546,
 		},
 		alerts = {

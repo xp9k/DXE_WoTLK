@@ -221,13 +221,13 @@ end
 
 local function GetMessageEra(id)
 	local popup,before
-	
+
 	if id == nil then return popup,before end
 
 	if find(id,"cd$") then
 		popup = pfl.CdPopupMessage
 		before = pfl.CdBeforeMessage
-	elseif find(id,"dur$") then 
+	elseif find(id,"dur$") then
 		popup = pfl.DurPopupMessage
 		before = pfl.DurBeforeMessage
 	elseif find(id,"self$") then
@@ -276,6 +276,7 @@ local function Pour(text,icon,color)
 		-- color coded text disconnects the user!!!
 		text = gsub(text,"|c%x%x%x%x%x%x%x%x(.-)|r","%1")
 		SendChatMessage(format(ANNOUNCE_FORMAT,text),"RAID_WARNING")
+--		print(text)
 	end
 end
 
@@ -292,7 +293,7 @@ do
 	t:SetAllPoints(true)
 	flash:SetAllPoints(true)
 	flash:Hide()
-	
+
 	local counter
 	local function OnUpdate(self,elapsed)
 		counter = counter + elapsed
@@ -315,7 +316,7 @@ do
 		t:SetTexture(pfl.FlashTexture)
 	end
 
-	function module:FlashScreen(c) 
+	function module:FlashScreen(c)
 		if pfl.DisableScreenFlash then return end
 		if pfl.ConstantClr then
 			local r,g,b = unpack(pfl.GlobalColor)
@@ -447,7 +448,7 @@ do
 	local function AnimationFunc(self,time)
 		local data = self.data
 		local perc = (time - data.t0) / ANIMATION_TIME
-		if perc < 0 or perc > 1 then 
+		if perc < 0 or perc > 1 then
 			self.animFunc = nil
 			self:AnchorToCenter()
 			if self.data.flashscreen then
@@ -501,8 +502,8 @@ end
 
 function prototype:RemoveFromStack(stack)
 	for i,bar in ipairs(stack) do
-		if bar == self then 
-			remove(stack,i) 
+		if bar == self then
+			remove(stack,i)
 			return
 		end
 	end
@@ -519,10 +520,10 @@ do
 		local timeleft = self.data.endTime - time
 		local data = self.data
 		data.timeleft = timeleft
-		if timeleft < 0 then 
+		if timeleft < 0 then
 			self.countFunc = nil
 			self.timer:SetTime(0)
-			return 
+			return
 		end
 		self.timer:SetTime(timeleft)
 		local value = 1 - (timeleft / data.totalTime)
@@ -539,16 +540,16 @@ do
 		local data = self.data
 		local timeleft = data.endTime - time
 		self.data.timeleft = timeleft
-		if timeleft < 0 then 
+		if timeleft < 0 then
 			self.countFunc = nil
 			self.timer:SetTime(0)
-			return 
+			return
 		end
 		self.timer:SetTime(timeleft)
 		local value = 1 - (timeleft / data.totalTime)
 		self.statusbar:SetValue(pfl.BarFillDirection == "FILL" and value or 1 - value)
-		if timeleft < data.flashTime then 
-			self.statusbar:SetStatusBarColor(util.blend(data.c1, data.c2, 0.5*(cos(timeleft*12) + 1))) 
+		if timeleft < data.flashTime then
+			self.statusbar:SetStatusBarColor(util.blend(data.c1, data.c2, 0.5*(cos(timeleft*12) + 1)))
 		end
 
 		if pfl.WarningMessages and self.bmsg and timeleft <= pfl.BeforeThreshold then
@@ -562,14 +563,14 @@ do
 		local data = self.data
 		local timeleft = data.endTime - time
 		self.data.timeleft = timeleft
-		if timeleft < 0 then 
+		if timeleft < 0 then
 			self.countFunc = nil
 			self.timer:SetTime(0)
-			return 
+			return
 		end
 		self.timer:SetTime(timeleft)
-		if timeleft < data.flashTime then 
-			self.statusbar:SetStatusBarColor(util.blend(data.c1, data.c2, 0.5*(cos(timeleft*12) + 1))) 
+		if timeleft < data.flashTime then
+			self.statusbar:SetStatusBarColor(util.blend(data.c1, data.c2, 0.5*(cos(timeleft*12) + 1)))
 		end
 	end
 
@@ -769,7 +770,7 @@ local function CreateBar()
 	self.data = {}
 
 	local statusbar = CreateFrame("StatusBar",nil,self)
-	statusbar:SetMinMaxValues(0,1) 
+	statusbar:SetMinMaxValues(0,1)
 	statusbar:SetValue(0)
 	addon:RegisterStatusBar(statusbar)
 	self.statusbar = statusbar
@@ -889,13 +890,14 @@ function module:Dropdown(id, text, totalTime, flashTime, sound, c1, c2, flashscr
 	bar:SetID(id)
 	bar:SetIcon(icon)
 	bar:SetTimeleft(totalTime)
-	bar:SetText(text) 
+	bar:SetText(text)
 	bar:SetFlashScreen(flashscreen)
 	bar:SetColor(c1Data,c2Data)
 	bar:SetSound(soundFile)
 	bar:Countdown(totalTime,flashTime)
 	bar:AnchorToTop()
-	if flashTime then 
+
+	if flashTime then
 		local waitTime = totalTime - flashTime
 		if waitTime < 0 then bar:TranslateToCenter()
 		else bar:ScheduleTimer("TranslateToCenter",waitTime) end
@@ -906,7 +908,7 @@ function module:Dropdown(id, text, totalTime, flashTime, sound, c1, c2, flashscr
 		if popup then Pour(text..L.alert[" in "]..MMSS(totalTime),icon,c1Data) end
 		if before then bar:FireBeforeMsg() end
 	end
-	
+
 	if audiocd then
 		if not audiotime then audiotime = 5 end
 		local waitTimea = totalTime - audiotime - 1
@@ -924,6 +926,7 @@ function module:CenterPopup(id, text, totalTime, flashTime, sound, c1, c2, flash
 	bar:SetText(text)
 	bar:Countdown(totalTime, flashTime)
 	bar:SetSound(soundFile)
+
 	if pfl.WarningAnchor and pfl.RedirectCenter and totalTime <= pfl.RedirectThreshold then
 		bar:AnchorToWarning()
 	else
@@ -949,17 +952,17 @@ function module:Simple(text, totalTime, sound, c1, flashscreen, icon, raidannoun
 	if flashscreen then self:FlashScreen(c1Data) end
 	if pfl.WarningBars then
 		local bar = GetBar()
-		if c1Data then 
+		if c1Data then
 			bar:SetColor(c1Data)
 			bar.statusbar:SetValue(1)
 		end
 		bar:SetIcon(icon)
-		bar:SetText(text) 
+		bar:SetText(text)
 		bar.timer:Hide()
 		bar[pfl.WarningAnchor and "AnchorToWarning" or "AnchorToCenter"](bar)
 		bar:ScheduleTimer("Fade",totalTime)
 	end
-	
+
 	if pfl.WarningMessages and pfl.WarnPopupMessage and raidannounce then Pour(text,icon,c1Data) end
 end
 
@@ -987,7 +990,7 @@ local function Absorb_OnEvent(self,_,_,eventtype,_,_,_,dstGUID,_,_,misstype,dmg,
 			-- reverse
 			local perc = data.value / data.total
 			if perc <= 0 or perc > 1 then self:Destroy() return end
-			self:SetText(data.textformat:format(abbrev(data.total - data.value),data.atotal,(1-perc) * 100)) 
+			self:SetText(data.textformat:format(abbrev(data.total - data.value),data.atotal,(1-perc) * 100))
 			self.statusbar:SetValue(1 - perc)
 		end
 	end
@@ -1045,10 +1048,10 @@ do
 	local function fire(text,time,color,icon)
 		local id = ID_PREFIX..text
 		module:QuashByPattern(id)
-		if time > DROPDOWN_THRES then 
+		if time > DROPDOWN_THRES then
 			module:Dropdown(id,text,time,DROPDOWN_THRES,pfl.CustomSound,color,nil,nil,icon)
-		else 
-			module:CenterPopup(id,text,time,nil,pfl.CustomSound,color,nil,nil,icon) 
+		else
+			module:CenterPopup(id,text,time,nil,pfl.CustomSound,color,nil,nil,icon)
 		end
 	end
 
