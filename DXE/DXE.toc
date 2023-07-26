@@ -39,6 +39,7 @@ Distributor.lua
 Versions.lua
 Window.lua
 Windows.xml
+LFGAlert.lua
 
 #@debug@
 # #Options\Options.lua
